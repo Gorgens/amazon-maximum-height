@@ -43,6 +43,20 @@ ref = uspeed
 tm_shape(uspeed) + tm_raster()
 ```
 
+```{r}
+vspeed = raster('./data/vspeed_500m.tif') %>% crop(ref)
+vspeed = raster(vals=values(vspeed),
+              ext=extent(ref), 
+              nrows=dim(ref)[1],
+              ncols=dim(ref)[2])
+
+tm_shape(vspeed) + tm_raster()
+```
+
+
+
+
+
 The SRTM layer...
 
 ```{r}
@@ -54,6 +68,59 @@ srtm = raster(vals=values(srtm),
 
 srtm[srtm <= 0] = NA
 srtm[srtm >= 1000] = NA
-tm_shape(srtm) + tm_raster(midpoint = NA, )
+tm_shape(srtm) + tm_raster()
 
 ```
+
+
+Create stack and clip values matching maximum height location...
+
+```{r}
+layers = stack(srtm, uspeed, vspeed)
+rm(srtm, uspeed, vspeed)
+names(layers) = c("srtm", "uspeed", "vspeed")
+
+explanatoryVariables = extract(layers, maximas)
+maximas@data = cbind(maximas@data, explanatoryVariables)
+
+# gráfico de dispersão altura = f(variavel)
+plot(maximas@data)
+```
+
+Principal components analysis....
+
+```{r}
+drivers = na.omit(maximas@data)
+
+input = drivers %>% select(-altura_cop)
+output = drivers %>% select(altura_cop)
+names(output) = c("height")
+inputScaled = input %>% preProcess(method = c("center", "scale")) %>% predict(input)
+
+# Ajuste dos componentes principais
+res.pca = prcomp(inputScaled)                                           
+target.coord <- cor(output, res.pca$x)                    
+p <- fviz_pca_var(res.pca, col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE)     # Avoid text overlapping)
+fviz_add(p, target.coord, color ="black", geom="arrow")                  
+```
+
+Random forest prediction model....
+
+```{r}
+# divide os trasectos em k-folds
+folds = drivers %>% row.names() %>% groupKFold(k = 15)           
+
+# parametriza os parametros de controle da função train do pacote caret
+group_fit_control = trainControl(index = folds, method = "cv")     
+# define variáveis dependentes e independentes
+rf_fit = train(height ~ .,                                         
+               data = driversScaled, # define base de dados                  
+               method='rf',          # define modelo a ser treinado
+               importance=T,         # análise de importancia para as variaveis
+               trControl = group_fit_control) # parâmetros para validação cruzada
+
+varImp(rf_fit)
+```
+
