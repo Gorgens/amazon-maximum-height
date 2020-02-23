@@ -9,12 +9,13 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 ## Material and Methods
 
-```{r, warning=FALSE}
+```{r, message=FALSE}
 require(ggplot2)
 require(raster)
 require(tidyverse)
 require(tmap)
 require(sf)
+require(sp)
 require(gridExtra)
 require(magrittr)
 
@@ -24,14 +25,35 @@ require(caret)
 ```
 
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+Transects and maximum height extraction....
 
-```{r}
-plot(cars)
+```{r, message=FALSE}
+amaz = shapefile('./data/amazbioma.shp')
+maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200222.gpkg', layer = 'pontos_wgs84'))
+maximas@data = maximas@data %>% select(3)
+tm_shape(amaz) + tm_polygons() + 
+  tm_shape(maximas) + tm_dots("altura_cop", size = 0.4, palette = "RdYlGn")
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+U-Speed wind layer...
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+```{r}
+uspeed = raster('./data/uspeed_500m.tif')
+ref = uspeed
+tm_shape(uspeed) + tm_raster()
+```
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+The SRTM layer...
+
+```{r}
+srtm = raster('./data/srtm_500m.tif') %>% crop(ref)
+srtm = raster(vals=values(srtm),
+              ext=extent(ref), 
+              nrows=dim(ref)[1],
+              ncols=dim(ref)[2])
+
+srtm[srtm <= 0] = NA
+srtm[srtm >= 1000] = NA
+tm_shape(srtm) + tm_raster(midpoint = NA, )
+
+```
