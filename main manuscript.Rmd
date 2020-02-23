@@ -9,7 +9,7 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 ## Material and Methods
 
-```{r}
+```{r, warning=FALSE}
 require(ggplot2)
 require(raster)
 require(tidyverse)
