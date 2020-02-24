@@ -35,13 +35,14 @@ tm_shape(amaz) + tm_polygons() +
   tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")
 ```
 
-U-Speed wind layer...
+Wind speed layers. Two components v-speed and u-speed...
 
 ```{r}
 uspeed = raster('./data/uspeed_500m.tif')
+uspeed = setMinMax(uspeed)
 ref = uspeed
 
-tm_shape(uspeed) + tm_raster()
+tm_shape(uspeed) + tm_raster(n = 10)
 ```
 
 ```{r}
@@ -50,8 +51,9 @@ vspeed = raster(vals=values(vspeed),
               ext=extent(ref), 
               nrows=dim(ref)[1],
               ncols=dim(ref)[2])
+vspeed = setMinMax(vspeed)
 
-tm_shape(vspeed) + tm_raster()
+tm_shape(vspeed) + tm_raster(n = 10)
 ```
 
 The SRTM layer...
@@ -65,24 +67,35 @@ srtm = raster(vals=values(srtm),
 
 srtm[srtm <= 0] = NA
 srtm[srtm >= 1000] = NA
-tm_shape(srtm) + tm_raster()
+srtm = setMinMax(srtm)
+
+tm_shape(srtm) + tm_raster(n = 10)
 
 ```
 
 ## Results
 
-Create stack and clip values matching maximum height location...
+### Varible importance
+
+Clip environmental variables matching maximum height location...
 
 ```{r}
+# cria stack das variáveis ambientais
 layers = stack(srtm, uspeed, vspeed)
+# atualiza nome das camadas
 names(layers) = c("srtm", "uspeed", "vspeed")
 
+# extrai valor das variáveis ambientais para cada altura máxima mapeada
 explanatoryVariables = extract(layers, maximas)
+# exclui o stack de camadas originais
 rm(layers)
+
+# adiciona no shapefile das alturas máximas os valores das variáveis ambientais extraídas
 maximas@data = cbind(maximas@data, explanatoryVariables)
+# exclui dataframe das variáveis ambientais temporária
 rm(explanatoryVariables)
 
-# gráfico de dispersão altura = f(variavel)
+# explora graficamente a associação entre altura maxima e variáveis ambientais
 plot(maximas@data)
 ```
 
@@ -110,14 +123,17 @@ p = fviz_pca_var(res.pca, col.var = "contrib", # Color by contributions to the P
                  repel = TRUE)     # Avoid text overlapping)
 # adiciona variável dependente no biplot
 fviz_add(p, target.coord, color ="black", geom="arrow")
-rm(p)
+rm(p, target.coord)
 ```
+
+### Modeling tree maximum height
 
 Random forest prediction model....
 
 ```{r}
 # cria base com variável dependente original com independente normalizada
 driversScaled = cbind(output, inputScaled)
+# limpa variáveis que não serão mais utilizadas
 rm(output, input, inputScaled)
 # divide os trasectos em k-folds
 folds = driversScaled %>% row.names() %>% groupKFold(k = 15)           
@@ -130,9 +146,15 @@ res.rf = train(height ~ .,
                method='rf',          # define modelo a ser treinado
                importance=T,         # análise de importancia para as variaveis
                trControl = group_fit_control) # parâmetros para validação cruzada
+
+# limpa da memória parâmetros para Random Forest
 rm(folds, group_fit_control)
+
+# apresenta importância das variáveis com base nos modelos Random Forest
 varImp(res.rf)
 ```
+
+Normaliza raster para serem input para o modelo ajustado....
 
 ```{r}
 # normaliza camada uspeed
@@ -151,7 +173,18 @@ srtmScaled = (srtm - normParam$mean['srtm']) / normParam$std['srtm']
 rm(srtm)
 
 scaledLayers = stack(srtmScaled, uspeedScaled, vspeedScaled)
+names(scaledLayers) = c("srtm", "uspeed", "vspeed")
+rm(srtmScaled, uspeedScaled, vspeedScaled)
 
+```
 
+Aplica Random Forest para stack normalizado...
+
+```{r}
+
+heightRaster = predict(scaledLayers, res.rf)
+heightRaster = setMinMax(heightRaster)
+
+tm_shape(heightRaster) + tm_raster()
 ```
 
