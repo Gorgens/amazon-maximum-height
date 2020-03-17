@@ -3,12 +3,6 @@ title: "Maximum tree height in the Amazon"
 output: html_notebook
 ---
 
-## Introduction
-
-Análise Random Forest para avaliar fatores ambientais que influenciam na distribuição das alturas emergentes.
-
-## Material and Methods
-
 ```{r, message=FALSE}
 require(ggplot2)
 require(raster)
@@ -19,7 +13,6 @@ require(leaflet)
 require(sp)
 require(gridExtra)
 require(magrittr)
-
 require(factoextra) 
 require(randomForest)
 require(caret)
@@ -47,6 +40,7 @@ ref = uspeed
 #tm_shape(uspeed) + tm_raster(n = 10)
 ```
 
+
 ```{r}
 vspeed = raster('./data/vspeed.tif') %>% crop(ref)
 vspeed = raster(vals=values(vspeed),
@@ -57,6 +51,7 @@ vspeed = setMinMax(vspeed)
 
 #tm_shape(vspeed) + tm_raster(n = 10)
 ```
+
 
 ### Elevation and freatic access
 
@@ -75,31 +70,20 @@ srtm = setMinMax(srtm)
 
 ```
 
+### Water balance
 
 ```{r}
-pdsi = raster('./data/pdsi.tif') %>% crop(ref)
-pdsi = raster(vals=values(pdsi),
+pet = raster('./data/pet.tif') %>% crop(ref)
+pet = raster(vals=values(pet),
               ext=extent(ref), 
               nrows=dim(ref)[1],
               ncols=dim(ref)[2])
-pdsi = setMinMax(pdsi)
+pet = setMinMax(pet)
 
-#tm_shape(pdsi) + tm_raster(n = 10)
+#tm_shape(pet) + tm_raster(n = 10)
 ```
-
 
 ### Radiation
-
-```{r}
-clearDays = raster('./data/clearDays.tif') %>% crop(ref)
-clearDays = raster(vals=values(clearDays),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-clearDays = setMinMax(clearDays)
-
-#tm_shape(clearDays) + tm_raster(n = 10)
-```
 
 ```{r}
 fapar = raster('./data/fapar.tif') %>% crop(ref)
@@ -114,14 +98,14 @@ fapar = setMinMax(fapar)
 
 
 ```{r}
-pet = raster('./data/pet.tif') %>% crop(ref)
-pet = raster(vals=values(pet),
+clearDays = raster('./data/clearDays.tif') %>% crop(ref)
+clearDays = raster(vals=values(clearDays),
               ext=extent(ref), 
               nrows=dim(ref)[1],
               ncols=dim(ref)[2])
-pet = setMinMax(pet)
+clearDays = setMinMax(clearDays)
 
-#tm_shape(pet) + tm_raster(n = 10)
+#tm_shape(clearDays) + tm_raster(n = 10)
 ```
 
 ### Precipitation
@@ -137,7 +121,6 @@ days20 = setMinMax(days20)
 #tm_shape(days20) + tm_raster(n = 10)
 ```
 
-
 ```{r}
 month100 = raster('./data/month100.tif') %>% crop(ref)
 month100 = raster(vals=values(month100),
@@ -149,7 +132,6 @@ month100 = setMinMax(month100)
 #tm_shape(month100) + tm_raster(n = 10)
 ```
 
-
 ```{r}
 pannual = raster('./data/pannual.tif') %>% crop(ref)
 pannual = raster(vals=values(pannual),
@@ -160,7 +142,6 @@ pannual = setMinMax(pannual)
 
 #tm_shape(pannual) + tm_raster(n = 10)
 ```
-
 
 ```{r}
 pdriest = raster('./data/pdriest.tif') %>% crop(ref)
@@ -185,7 +166,6 @@ pwettest = setMinMax(pwettest)
 #tm_shape(pwettest) + tm_raster(n = 10)
 ```
 
-
 ```{r}
 pseason = raster('./data/pseason.tif') %>% crop(ref)
 pseason = raster(vals=values(pseason),
@@ -196,7 +176,6 @@ pseason = setMinMax(pseason)
 
 #tm_shape(pseason) + tm_raster(n = 10)
 ```
-
 
 ### Temperature
 
@@ -235,7 +214,6 @@ tmax = setMinMax(tmax)
 #tm_shape(tmax) + tm_raster(n = 10)
 ```
 
-
 ### Storms
 
 ```{r}
@@ -249,50 +227,31 @@ lightning = setMinMax(lightning)
 #tm_shape(lightning) + tm_raster(n = 10)
 ```
 
+### Soil information
+
+```{r}
+clayContent = raster('./data/clayContent30m.tif') %>% crop(ref)
+clayContent = raster(vals=values(clayContent),
+              ext=extent(ref), 
+              nrows=dim(ref)[1],
+              ncols=dim(ref)[2])
+clayContent = setMinMax(clayContent)
+
+#tm_shape(clayContent) + tm_raster(n = 10)
+```
+
+```{r}
+waterContent = raster('./data/waterContent30m.tif') %>% crop(ref)
+waterContent = raster(vals=values(waterContent),
+              ext=extent(ref), 
+              nrows=dim(ref)[1],
+              ncols=dim(ref)[2])
+waterContent = setMinMax(waterContent)
+
+#tm_shape(waterContent) + tm_raster(n = 10)
+```
 
 ## Results
-
-### Maximum tree height distribution
-
-```{r}
-taller50 = maximas[maximas$altura_cop > 50,]
-tm_shape(amaz) + 
-        tm_polygons(col="grey", border.col="white") +
-        tm_shape(taller50) + tm_dots("red", size=.2) +
-        tm_grid(labels.inside.frame = FALSE, 
-                projection = "+proj=longlat", col = 'gray')
-rm(taller50)
-```
-
-```{r}
-taller60 = maximas[maximas$altura_cop > 60,]
-tm_shape(amaz) + 
-        tm_polygons(col="grey", border.col="white") +
-        tm_shape(taller60) + tm_dots("red", size=.2) +
-        tm_grid(labels.inside.frame = FALSE, 
-                projection = "+proj=longlat", col = 'gray')
-rm(taller60)
-```
-
-```{r}
-taller70 = maximas[maximas$altura_cop > 70,]
-tm_shape(amaz) + 
-        tm_polygons(col="grey", border.col="white") +
-        tm_shape(taller70) + tm_dots("red", size=.2) +
-        tm_grid(labels.inside.frame = FALSE, 
-                projection = "+proj=longlat", col = 'gray')
-rm(taller70)
-```
-
-```{r}
-taller80 = maximas[maximas$altura_cop > 80,]
-tm_shape(amaz) + 
-        tm_polygons(col="grey", border.col="white") +
-        tm_shape(taller80) + tm_dots("red", size=.2) +
-        tm_grid(labels.inside.frame = FALSE, 
-                projection = "+proj=longlat", col = 'gray')
-rm(taller80)
-```
 
 ### Varible importance
 
@@ -300,11 +259,10 @@ Clip environmental variables matching maximum height location...
 
 ```{r}
 # cria stack das variáveis ambientais
-layers = stack(srtm, uspeed, vspeed, clearDays, days20, fapar, lightning, month100, pannual, pdriest, pdsi, pet, 
-pseason, pwettest, tannual, tseason)
+layers = stack(srtm, uspeed, vspeed, clearDays, days20, fapar, lightning, month100, pannual, pdriest, pdsi, pet, pseason, pwettest, tannual, tseason, clayContent, waterContent)
 
 # atualiza nome das camadas
-names(layers) = c("srtm", "uspeed", "vspeed")
+names(layers) = c("srtm", "uspeed", "vspeed", "clearDays", "days20", "fapar", "lightning", "month100", "pannual", "pdriest", "pdsi", "pet", "pseason", "pwettest", "tannual", "tseason", "clayContent", "waterContent")
 
 # extrai valor das variáveis ambientais para cada altura máxima mapeada
 explanatoryVariables = extract(layers, maximas)
@@ -317,10 +275,9 @@ maximas@data = cbind(maximas@data, explanatoryVariables)
 rm(explanatoryVariables)
 
 # explora graficamente a associação entre altura maxima e variáveis ambientais
-plot(maximas@data)
+#plot(maximas@data)
 ```
 
-Principal components analysis....
 
 ```{r}
 # separa as variáveis explicativas
@@ -333,23 +290,8 @@ names(output) = c("height")
 inputScaled = input %>% preProcess(method = c("center", "scale")) %>% predict(input)
 # salvar parâmetros da normalização
 normParam = preProcess(input, method = c("center", "scale"))
-
-# ajusta os componentes principais
-res.pca = prcomp(inputScaled)                                           
-# calcula a correlação da variável dependente e componentes
-target.coord = cor(output, res.pca$x) 
-# cria biplot
-p = fviz_pca_var(res.pca, col.var = "contrib", # Color by contributions to the PC
-                 gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                 repel = TRUE)     # Avoid text overlapping)
-# adiciona variável dependente no biplot
-fviz_add(p, target.coord, color ="black", geom="arrow")
-rm(p, target.coord)
 ```
 
-### Modeling tree maximum height
-
-Random forest prediction model....
 
 ```{r}
 # cria base com variável dependente original com independente normalizada

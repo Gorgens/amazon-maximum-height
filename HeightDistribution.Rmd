@@ -1,0 +1,76 @@
+---
+title: "Height Distribution"
+output: html_document
+---
+
+```{r, message=FALSE}
+require(ggplot2)
+require(raster)
+require(tidyverse)
+require(tmap)
+require(sf)
+require(leaflet)
+require(sp)
+require(gridExtra)
+require(magrittr)
+
+require(factoextra) 
+require(randomForest)
+require(caret)
+```
+
+### Maximum height dataset
+
+Transects and maximum height extraction....
+
+```{r, message=FALSE}
+amaz = shapefile('./data/amazbioma.shp')
+maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200222.gpkg', layer = 'pontos_wgs84'))
+maximas@data = maximas@data %>% select(3)
+tm_shape(amaz) + tm_polygons() + 
+  tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")
+```
+
+## Results
+
+### Maximum tree height distribution
+
+```{r}
+taller50 = maximas[maximas$altura_cop > 50,]
+tm_shape(amaz) + 
+        tm_polygons(col="grey", border.col="white") +
+        tm_shape(taller50) + tm_dots("red", size=.2) +
+        tm_grid(labels.inside.frame = FALSE, 
+                projection = "+proj=longlat", col = 'gray')
+rm(taller50)
+```
+
+```{r}
+taller60 = maximas[maximas$altura_cop > 60,]
+tm_shape(amaz) + 
+        tm_polygons(col="grey", border.col="white") +
+        tm_shape(taller60) + tm_dots("red", size=.2) +
+        tm_grid(labels.inside.frame = FALSE, 
+                projection = "+proj=longlat", col = 'gray')
+rm(taller60)
+```
+
+```{r}
+taller70 = maximas[maximas$altura_cop > 70,]
+tm_shape(amaz) + 
+        tm_polygons(col="grey", border.col="white") +
+        tm_shape(taller70) + tm_dots("red", size=.2) +
+        tm_grid(labels.inside.frame = FALSE, 
+                projection = "+proj=longlat", col = 'gray')
+rm(taller70)
+```
+
+```{r}
+taller80 = maximas[maximas$altura_cop > 80,]
+tm_shape(amaz) + 
+        tm_polygons(col="grey", border.col="white") +
+        tm_shape(taller80) + tm_dots("red", size=.2) +
+        tm_grid(labels.inside.frame = FALSE, 
+                projection = "+proj=longlat", col = 'gray')
+rm(taller80)
+```
