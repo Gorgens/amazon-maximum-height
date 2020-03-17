@@ -1188,6 +1188,7 @@ normParam = preProcess(input, method = c("center", "scale"))
 
 # ajusta os componentes principais
 res.pca = prcomp(inputScaled)                                           
+#res.pca = prcomp(input)                                           
 # calcula a correlação da variável dependente e componentes
 target.coord = cor(output, res.pca$x) 
 # cria biplot

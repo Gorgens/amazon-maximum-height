@@ -1,6 +1,8 @@
 ---
 title: "Maximum tree height in the Amazon"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r, message=FALSE}
@@ -259,15 +261,15 @@ Clip environmental variables matching maximum height location...
 
 ```{r}
 # cria stack das variáveis ambientais
-layers = stack(srtm, uspeed, vspeed, clearDays, days20, fapar, lightning, month100, pannual, pdriest, pdsi, pet, pseason, pwettest, tannual, tseason, clayContent, waterContent)
+layers = stack(srtm, uspeed, vspeed, clearDays, days20, fapar, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, clayContent, waterContent)
 
 # atualiza nome das camadas
-names(layers) = c("srtm", "uspeed", "vspeed", "clearDays", "days20", "fapar", "lightning", "month100", "pannual", "pdriest", "pdsi", "pet", "pseason", "pwettest", "tannual", "tseason", "clayContent", "waterContent")
+names(layers) = c("srtm", "uspeed", "vspeed", "clearDays", "days20", "fapar", "lightning", "month100", "pannual", "pdriest", "pet", "pseason", "pwettest", "tannual", "tseason", "clayContent", "waterContent")
 
 # extrai valor das variáveis ambientais para cada altura máxima mapeada
 explanatoryVariables = extract(layers, maximas)
 # exclui o stack de camadas originais
-rm(layers)
+#rm(layers)
 
 # adiciona no shapefile das alturas máximas os valores das variáveis ambientais extraídas
 maximas@data = cbind(maximas@data, explanatoryVariables)
@@ -287,25 +289,28 @@ output = maximas@data %>% na.omit() %>% select(altura_cop)
 # renomeia a variável
 names(output) = c("height")
 # normaliza as variáveis explicativas
-inputScaled = input %>% preProcess(method = c("center", "scale")) %>% predict(input)
+#inputScaled = input %>% preProcess(method = c("center", "scale")) %>% predict(input)
 # salvar parâmetros da normalização
-normParam = preProcess(input, method = c("center", "scale"))
+#normParam = preProcess(input, method = c("center", "scale"))
 ```
 
 
 ```{r}
 # cria base com variável dependente original com independente normalizada
-driversScaled = cbind(output, inputScaled)
+#driversScaled = cbind(output, inputScaled)
+drivers = cbind(output, input)
 # limpa variáveis que não serão mais utilizadas
 rm(output, input, inputScaled)
 # divide os trasectos em k-folds
-folds = driversScaled %>% row.names() %>% groupKFold(k = 15)           
+#folds = driversScaled %>% row.names() %>% groupKFold(k = 15)           
+folds = drivers %>% row.names() %>% groupKFold(k = 15)           
 
 # parametriza os parametros de controle da função train do pacote caret
 group_fit_control = trainControl(index = folds, method = "cv")     
 # define variáveis dependentes e independentes
 res.rf = train(height ~ .,                                         
-               data = driversScaled, # define base de dados                  
+               #data = driversScaled, # define base de dados
+               data = drivers,
                method='rf',          # define modelo a ser treinado
                importance=T,         # análise de importancia para as variaveis
                trControl = group_fit_control) # parâmetros para validação cruzada
@@ -321,23 +326,23 @@ Normaliza raster para serem input para o modelo ajustado....
 
 ```{r}
 # normaliza camada uspeed
-uspeedScaled = (uspeed - normParam$mean['uspeed']) / normParam$std['uspeed']
+#uspeedScaled = (uspeed - normParam$mean['uspeed']) / normParam$std['uspeed']
 # remove raster original uspeed
-rm(uspeed)
+#rm(uspeed)
 
 # normaliza camada vspeed
-vspeedScaled = (vspeed - normParam$mean['vspeed']) / normParam$std['vspeed']
+#vspeedScaled = (vspeed - normParam$mean['vspeed']) / normParam$std['vspeed']
 # remove raster original uspeed
-rm(vspeed)
+#rm(vspeed)
 
 # normaliza camada uspeed
-srtmScaled = (srtm - normParam$mean['srtm']) / normParam$std['srtm']
+#srtmScaled = (srtm - normParam$mean['srtm']) / normParam$std['srtm']
 # remove raster original uspeed
-rm(srtm)
+#rm(srtm)
 
-scaledLayers = stack(srtmScaled, uspeedScaled, vspeedScaled)
-names(scaledLayers) = c("srtm", "uspeed", "vspeed")
-rm(srtmScaled, uspeedScaled, vspeedScaled)
+#scaledLayers = stack(srtmScaled, uspeedScaled, vspeedScaled)
+#names(scaledLayers) = c("srtm", "uspeed", "vspeed")
+#rm(srtmScaled, uspeedScaled, vspeedScaled)
 
 ```
 
@@ -345,7 +350,8 @@ Aplica Random Forest para stack normalizado...
 
 ```{r}
 
-heightRaster = predict(scaledLayers, res.rf)
+#heightRaster = predict(scaledLayers, res.rf)
+heightRaster = predict(layers, res.rf)
 heightRaster = setMinMax(heightRaster)
 
 tm_shape(heightRaster) + tm_raster()
