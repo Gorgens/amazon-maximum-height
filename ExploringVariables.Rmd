@@ -1153,10 +1153,10 @@ Clip environmental variables matching maximum height location...
 
 ```{r}
 # cria stack das variáveis ambientais
-layers = stack(srtm, uspeed, vspeed, clearDays, days20, fapar, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, clayContent, waterContent)
+layers = stack(srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, clayContent, waterContent)
 
 # atualiza nome das camadas
-names(layers) = c("srtm", "uspeed", "vspeed", "clearDays", "days20", "fapar", "lightning", "month100", "pannual", "pdriest", "pet", "pseason", "pwettest", "tannual", "tseason", "clayContent", "waterContent")
+names(layers) = c("srtm", "uspeed", "vspeed", "clearDays", "days20", "lightning", "month100", "pannual", "pdriest", "pet", "pseason", "pwettest", "tannual", "tseason", "clayContent", "waterContent")
 
 # extrai valor das variáveis ambientais para cada altura máxima mapeada
 explanatoryVariables = extract(layers, maximas)
