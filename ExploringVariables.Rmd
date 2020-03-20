@@ -1174,7 +1174,7 @@ rm(explanatoryVariables)
 
 Principal components analysis....
 
-```{r}
+```{r eval = FALSE}
 # separa as variáveis explicativas
 input = maximas@data %>% na.omit() %>% select(-altura_cop)
 # separa a variável altura maxima
@@ -1198,4 +1198,70 @@ p = fviz_pca_var(res.pca, col.var = "contrib", # Color by contributions to the P
 # adiciona variável dependente no biplot
 fviz_add(p, target.coord, color ="black", geom="arrow")
 rm(p, target.coord)
+```
+
+
+### Explora gráficos bivariados
+
+```{r}
+
+temp = maximas@data
+temp = na.omit(temp)
+
+rangeT = range(temp$srtm)
+nbins = 20
+bins = seq(rangeT[1], rangeT[2], length.out = nbins)
+
+efficientBorder = data.frame()
+for(b in seq(1, nbins-1, 1)){
+  tempB = temp[temp$srtm > bins[b] & temp$srtm <= bins[b+1],]
+  tempB = arrange(tempB, altura_cop)
+  efficientBorder = rbind(efficientBorder, tail(tempB, 1))
+}
+
+efficientBorderFiltered = data.frame()
+n = 0
+while(dim(efficientBorder)[1] != dim(efficientBorderFiltered)[1]){
+  
+  if(n != 0){efficientBorder = arrange(efficientBorderFiltered, srtm)}
+  
+  efficientBorderFiltered = data.frame()
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[1, ])
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[ dim(efficientBorder)[1], ])
+  
+  for (i in seq(2, dim(efficientBorder)[1]-1, 1)){
+    if(efficientBorder[i, "altura_cop"] <= efficientBorder[i+1, "altura_cop"] & efficientBorder[i, "altura_cop"] <= efficientBorder[i-1, "altura_cop"]) {
+      
+    } else {
+      
+      efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[i, ])
+      
+    }
+  }
+  n = n+1
+}
+
+# chute inicial dos parâmetros
+pars <- c(a=10, b=180, d = 10000)
+require(minpack.lm)
+res2 = nlsLM(altura_cop ~ d * ((a/b) * ((srtm/b)^(a-1)) * exp(-(srtm/b)^a)),
+            data=efficientBorderFiltered,
+            start=pars)
+
+eq.weibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], x){
+  return(d*((a/b) * ((x/b)^(a-1)) * exp(-(x/b)^a)))
+}
+
+estHeight = data.frame(srtm = seq(min(temp$srtm), max(temp$srtm), length.out = 100), altura_cop = eq.weibull(x = seq(min(temp$srtm), max(temp$srtm), length.out = 100)))
+
+ggplot(temp, aes(srtm, altura_cop)) + 
+  geom_point(colour = 'darkgray') +
+  geom_point(data = efficientBorderFiltered, colour = "black") +
+  geom_line(data = estHeight, aes(srtm, altura_cop)) +
+  xlab('Elevation (m)') + ylab('Height (m)') + ylim(c(0, 100)) +
+  theme_bw() + theme(panel.grid.major = element_blank(), 
+                     panel.grid.minor = element_blank(),
+                     panel.background = element_blank(), 
+                     axis.line = element_line(colour = "black"))
+
 ```
