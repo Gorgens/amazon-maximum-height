@@ -18,11 +18,10 @@ require(magrittr)
 require(factoextra) 
 require(randomForest)
 require(caret)
+require(minpack.lm)
 ```
 
-### Maximum height dataset
-
-Transects and maximum height extraction....
+## Importing maximum height dataset
 
 ```{r, message=FALSE}
 amaz = shapefile('./data/amazbioma.shp')
@@ -31,6 +30,8 @@ maximas@data = maximas@data %>% select(3)
 tm_shape(amaz) + tm_polygons() + 
   tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")
 ```
+
+## Importing raster files
 
 ### Wind speed
 
@@ -219,7 +220,7 @@ srtm = setMinMax(srtm)
 
 ```
 
-### Water balance
+### Energy balance
 
 ```{javaScript eval=FALSE}
 var AMAZ = ee.FeatureCollection("users/egorgens/eba/amazbioma"),
@@ -1145,11 +1146,7 @@ waterContent = setMinMax(waterContent)
 #tm_shape(waterContent) + tm_raster(n = 10)
 ```
 
-## Results
-
-### Varible importance
-
-Clip environmental variables matching maximum height location...
+## Cliping stack by maximum height location
 
 ```{r}
 # cria stack das variáveis ambientais
@@ -1172,7 +1169,7 @@ rm(explanatoryVariables)
 #plot(maximas@data)
 ```
 
-Principal components analysis....
+## Principal components analysis
 
 ```{r eval = FALSE}
 # separa as variáveis explicativas
@@ -1201,9 +1198,11 @@ rm(p, target.coord)
 ```
 
 
-### Explora gráficos bivariados
+## Efficience frontier by variable
 
-```{r}
+### SRTM
+
+```{r bounderySrtm}
 
 temp = maximas@data
 temp = na.omit(temp)
@@ -1228,6 +1227,66 @@ while(dim(efficientBorder)[1] != dim(efficientBorderFiltered)[1]){
   efficientBorderFiltered = data.frame()
   efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[1, ])
   efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[ dim(efficientBorder)[1], ])
+  for (i in seq(2, dim(efficientBorder)[1]-1, 1)){
+    if(efficientBorder[i, "altura_cop"] <= efficientBorder[i+1, "altura_cop"] & efficientBorder[i, "altura_cop"] <= efficientBorder[i-1, "altura_cop"]) {} else {
+      efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[i, ])
+    }
+  }
+  n = n+1
+}
+
+# chute inicial dos parâmetros
+pars <- c(a=10, b=180, d = 10000)
+res2 = nlsLM(altura_cop ~ d * ((a/b) * ((srtm/b)^(a-1)) * exp(-(srtm/b)^a)),
+            data=efficientBorderFiltered,
+            start=pars)
+
+srtmWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], x){
+  return(d*((a/b) * ((x/b)^(a-1)) * exp(-(x/b)^a)))
+}
+
+estHeight = data.frame(srtm = seq(min(temp$srtm), max(temp$srtm), length.out = 100), altura_cop = srtmWeibull(x = seq(min(temp$srtm), max(temp$srtm), length.out = 100)))
+
+ggplot(temp, aes(srtm, altura_cop)) + 
+  geom_point(colour = 'darkgray') +
+  geom_point(data = efficientBorderFiltered, colour = "black") +
+  geom_line(data = estHeight, aes(srtm, altura_cop)) +
+  xlab('Elevation (m)') + ylab('Height (m)') + ylim(c(0, 100)) +
+  theme_bw() + theme(panel.grid.major = element_blank(), 
+                     panel.grid.minor = element_blank(),
+                     panel.background = element_blank(), 
+                     axis.line = element_line(colour = "black"))
+
+```
+
+
+### u-Speed
+
+```{r bounderyUspeed}
+
+temp = maximas@data
+temp = na.omit(temp)
+
+rangeT = range(temp$uspeed)
+nbins = 20
+bins = seq(rangeT[1]-0.1, rangeT[2], length.out = nbins)
+
+efficientBorder = data.frame()
+for(b in seq(1, nbins-1, 1)){
+  tempB = temp[temp$uspeed > bins[b] & temp$uspeed <= bins[b+1],]
+  tempB = arrange(tempB, altura_cop)
+  efficientBorder = rbind(efficientBorder, tail(tempB, 1))
+}
+
+efficientBorderFiltered = data.frame()
+n = 0
+while(dim(efficientBorder)[1] != dim(efficientBorderFiltered)[1]){
+  
+  if(n != 0){efficientBorder = arrange(efficientBorderFiltered, uspeed)}
+  
+  efficientBorderFiltered = data.frame()
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[1, ])
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[ dim(efficientBorder)[1], ])
   
   for (i in seq(2, dim(efficientBorder)[1]-1, 1)){
     if(efficientBorder[i, "altura_cop"] <= efficientBorder[i+1, "altura_cop"] & efficientBorder[i, "altura_cop"] <= efficientBorder[i-1, "altura_cop"]) {
@@ -1242,23 +1301,148 @@ while(dim(efficientBorder)[1] != dim(efficientBorderFiltered)[1]){
 }
 
 # chute inicial dos parâmetros
-pars <- c(a=10, b=180, d = 10000)
-require(minpack.lm)
-res2 = nlsLM(altura_cop ~ d * ((a/b) * ((srtm/b)^(a-1)) * exp(-(srtm/b)^a)),
+res2 = lm(altura_cop ~ uspeed, data=efficientBorderFiltered)
+uspeedLm = function(a = coef(res2)[1], b = coef(res2)[2], x){
+  return(a + b*x)
+}
+
+estHeight = data.frame(uspeed = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100), altura_cop = uspeedLm(x = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100)))
+
+ggplot(temp, aes(uspeed, altura_cop)) + 
+  geom_point(colour = 'darkgray') +
+  geom_point(data = efficientBorderFiltered, colour = "black") +
+  geom_line(data = estHeight, aes(uspeed, altura_cop)) +
+  xlab('Speed (m/s)') + ylab('Height (m)') + ylim(c(0, 100)) +
+  theme_bw() + theme(panel.grid.major = element_blank(), 
+                     panel.grid.minor = element_blank(),
+                     panel.background = element_blank(), 
+                     axis.line = element_line(colour = "black"))
+
+```
+
+
+### v-Speed
+
+```{r bounderyVspeed}
+
+temp = maximas@data
+temp = na.omit(temp)
+
+rangeT = range(temp$vspeed)
+nbins = 20
+bins = seq(rangeT[1]-0.1, rangeT[2], length.out = nbins)
+
+efficientBorder = data.frame()
+for(b in seq(1, nbins-1, 1)){
+  tempB = temp[temp$vspeed > bins[b] & temp$vspeed <= bins[b+1],]
+  tempB = arrange(tempB, altura_cop)
+  efficientBorder = rbind(efficientBorder, tail(tempB, 1))
+}
+
+efficientBorderFiltered = data.frame()
+n = 0
+while(dim(efficientBorder)[1] != dim(efficientBorderFiltered)[1]){
+  
+  if(n != 0){efficientBorder = arrange(efficientBorderFiltered, vspeed)}
+  
+  efficientBorderFiltered = data.frame()
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[1, ])
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[ dim(efficientBorder)[1], ])
+  
+  for (i in seq(2, dim(efficientBorder)[1]-1, 1)){
+    if(efficientBorder[i, "altura_cop"] <= efficientBorder[i+1, "altura_cop"] & efficientBorder[i, "altura_cop"] <= efficientBorder[i-1, "altura_cop"]) {
+      
+    } else {
+      
+      efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[i, ])
+      
+    }
+  }
+  n = n+1
+}
+
+# ajuste dos parâmetros weibull
+pars <- c(a=1, b=mean(efficientBorderFiltered$vspeed), d = 10000)
+res2 = nlsLM(altura_cop ~ d * ((a/b) * ((vspeed/b)^(a-1)) * exp(-(vspeed/b)^a)),
             data=efficientBorderFiltered,
             start=pars)
 
-eq.weibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], x){
+vspeedWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], x){
   return(d*((a/b) * ((x/b)^(a-1)) * exp(-(x/b)^a)))
 }
 
-estHeight = data.frame(srtm = seq(min(temp$srtm), max(temp$srtm), length.out = 100), altura_cop = eq.weibull(x = seq(min(temp$srtm), max(temp$srtm), length.out = 100)))
+estHeight = data.frame(vspeed = seq(min(temp$vspeed), max(temp$vspeed), length.out = 100), altura_cop = vspeedWeibull(x = seq(min(temp$vspeed), max(temp$vspeed), length.out = 100)))
 
-ggplot(temp, aes(srtm, altura_cop)) + 
+ggplot(temp, aes(vspeed, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(srtm, altura_cop)) +
-  xlab('Elevation (m)') + ylab('Height (m)') + ylim(c(0, 100)) +
+  geom_line(data = estHeight, aes(vspeed, altura_cop)) +
+  xlab('Speed (m/s)') + ylab('Height (m)') + ylim(c(0, 100)) +
+  theme_bw() + theme(panel.grid.major = element_blank(), 
+                     panel.grid.minor = element_blank(),
+                     panel.background = element_blank(), 
+                     axis.line = element_line(colour = "black"))
+
+```
+
+
+### Clear days
+
+```{r bounderyCleardays}
+
+temp = maximas@data
+temp = na.omit(temp)
+
+rangeT = range(temp$clearDays)
+nbins = 20
+bins = seq(rangeT[1]-0.1, rangeT[2], length.out = nbins)
+
+efficientBorder = data.frame()
+for(b in seq(1, nbins-1, 1)){
+  tempB = temp[temp$clearDays > bins[b] & temp$clearDays <= bins[b+1],]
+  tempB = arrange(tempB, altura_cop)
+  efficientBorder = rbind(efficientBorder, tail(tempB, 1))
+}
+
+efficientBorderFiltered = data.frame()
+n = 0
+while(dim(efficientBorder)[1] != dim(efficientBorderFiltered)[1]){
+  
+  if(n != 0){efficientBorder = arrange(efficientBorderFiltered, clearDays)}
+  
+  efficientBorderFiltered = data.frame()
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[1, ])
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[ dim(efficientBorder)[1], ])
+  
+  for (i in seq(2, dim(efficientBorder)[1]-1, 1)){
+    if(efficientBorder[i, "altura_cop"] <= efficientBorder[i+1, "altura_cop"] & efficientBorder[i, "altura_cop"] <= efficientBorder[i-1, "altura_cop"]) {
+      
+    } else {
+      
+      efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[i, ])
+      
+    }
+  }
+  n = n+1
+}
+
+# ajuste dos parâmetros weibull
+pars <- c(a=1, b=mean(efficientBorderFiltered$clearDays), d = 10000)
+res2 = nlsLM(altura_cop ~ d * ((a/b) * ((clearDays/b)^(a-1)) * exp(-(clearDays/b)^a)),
+            data=efficientBorderFiltered,
+            start=pars)
+
+clearDaysWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], x){
+  return(d*((a/b) * ((x/b)^(a-1)) * exp(-(x/b)^a)))
+}
+
+estHeight = data.frame(clearDays = seq(min(temp$clearDays), max(temp$clearDays), length.out = 100), altura_cop = clearDaysWeibull(x = seq(min(temp$clearDays), max(temp$clearDays), length.out = 100)))
+
+ggplot(temp, aes(clearDays, altura_cop)) + 
+  geom_point(colour = 'darkgray') +
+  geom_point(data = efficientBorderFiltered, colour = "black") +
+  geom_line(data = estHeight, aes(clearDays, altura_cop)) +
+  xlab('Number of clear days (days)') + ylab('Height (m)') + ylim(c(0, 100)) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
