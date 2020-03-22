@@ -25,7 +25,7 @@ require(minpack.lm)
 
 ```{r, message=FALSE}
 amaz = shapefile('./data/amazbioma.shp')
-maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200222.gpkg', layer = 'pontos_wgs84'))
+maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200321.gpkg', layer = 'pontos_wgs84'))
 maximas@data = maximas@data %>% select(3)
 tm_shape(amaz) + tm_polygons() + 
   tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")
@@ -152,7 +152,6 @@ vspeed = setMinMax(vspeed)
 
 #tm_shape(vspeed) + tm_raster(n = 10)
 ```
-
 
 ### Elevation and freatic access
 
@@ -1146,14 +1145,84 @@ waterContent = setMinMax(waterContent)
 #tm_shape(waterContent) + tm_raster(n = 10)
 ```
 
+### Vegetation quality
+
+```{javaScript eval=FALSE}
+var AMAZ = ee.FeatureCollection("users/egorgens/eba/amazbioma"),
+    EBA = ee.FeatureCollection("users/egorgens/eba/maximas_eba"),
+    NOAA = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V4");
+    
+/* Fraction of absorbed photosynthetic active radiation */
+
+var fpar = NOAA
+  .select('FAPAR')
+  .filterDate('2016-01-01', '2018-12-31')
+  .reduce(ee.Reducer.median());
+fpar = fpar.divide(10); 
+
+Map.addLayer(fpar.clip(AMAZ), 
+  {min: 70.0, max: 90.0, 
+    palette: ['3b0200', '977705', 'ca9f06', 'ffca09', '006a03', '003b02']}, 
+  'FAPAR', 
+  false);
+
+Export.image.toDrive({
+  image: fpar.clip(AMAZ),
+  description: 'fapar',
+  scale: 500,
+  region: AMAZ,
+  folder: 'export_dominantHeight'
+});
+
+// Export.image.toAsset({
+//   image: fpar.clip(AMAZ),
+//   description: 'fpar1k',
+//   assetId: 'fpar1k',
+//   scale: 1000,
+//   region: AMAZ,
+//   maxPixels: 1e10
+// });
+  
+//chart fpar
+
+// var fpar2Chart = fpar.reduceRegions({
+//   collection: EBA,
+//   reducer: ee.Reducer.mean(),
+//   scale: 30,
+// });
+
+// var fparChart = ui.Chart.feature.byFeature(fpar2Chart, 'mean', ['altura cop'])
+//   .setChartType('ScatterChart')
+//   .setOptions({ pointSize: 2, width: 300, height: 300, 
+//   titleX: 'FPAR', titleY: 'Height (m)', 
+//   legend: {position: 'none'}});
+   
+// print(fparChart);
+
+```
+
+```{r}
+fapar = raster('./data/fapar.tif') %>% crop(ref)
+fapar = raster(vals=values(fapar),
+              ext=extent(ref), 
+              nrows=dim(ref)[1],
+              ncols=dim(ref)[2])
+fapar = setMinMax(fapar)
+
+#tm_shape(fapar) + tm_raster(n = 10)
+```
+
+
 ## Cliping stack by maximum height location
 
 ```{r}
 # cria stack das variáveis ambientais
-layers = stack(srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, clayContent, waterContent)
+layers = stack(srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, clayContent, waterContent, fapar)
+
+layers = approxNA(layers)
 
 # atualiza nome das camadas
-names(layers) = c("srtm", "uspeed", "vspeed", "clearDays", "days20", "lightning", "month100", "pannual", "pdriest", "pet", "pseason", "pwettest", "tannual", "tseason", "clayContent", "waterContent")
+names(layers) = c("srtm", "uspeed", "vspeed", "clearDays", "days20", "lightning", "month100", "pannual", "pdriest", "pet", "pseason", "pwettest", "tannual", "tseason", "clayContent", "waterContent", "fapar")
 
 # extrai valor das variáveis ambientais para cada altura máxima mapeada
 explanatoryVariables = extract(layers, maximas)
@@ -1259,7 +1328,6 @@ ggplot(temp, aes(srtm, altura_cop)) +
 
 ```
 
-
 ### u-Speed
 
 ```{r bounderyUspeed}
@@ -1319,7 +1387,6 @@ ggplot(temp, aes(uspeed, altura_cop)) +
                      axis.line = element_line(colour = "black"))
 
 ```
-
 
 ### v-Speed
 
@@ -1385,7 +1452,6 @@ ggplot(temp, aes(vspeed, altura_cop)) +
 
 ```
 
-
 ### Clear days
 
 ```{r bounderyCleardays}
@@ -1449,3 +1515,69 @@ ggplot(temp, aes(clearDays, altura_cop)) +
                      axis.line = element_line(colour = "black"))
 
 ```
+
+### Days with 20 mm or more
+
+```{r bounderyDays20}
+
+temp = maximas@data
+temp = na.omit(temp)
+
+rangeT = range(temp$days20)
+nbins = 20
+bins = seq(rangeT[1]-0.1, rangeT[2], length.out = nbins)
+
+efficientBorder = data.frame()
+for(b in seq(1, nbins-1, 1)){
+  tempB = temp[temp$days20 > bins[b] & temp$days20 <= bins[b+1],]
+  tempB = arrange(tempB, altura_cop)
+  efficientBorder = rbind(efficientBorder, tail(tempB, 1))
+}
+
+efficientBorderFiltered = data.frame()
+n = 0
+while(dim(efficientBorder)[1] != dim(efficientBorderFiltered)[1]){
+  
+  if(n != 0){efficientBorder = arrange(efficientBorderFiltered, days20)}
+  
+  efficientBorderFiltered = data.frame()
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[1, ])
+  efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[ dim(efficientBorder)[1], ])
+  
+  for (i in seq(2, dim(efficientBorder)[1]-1, 1)){
+    if(efficientBorder[i, "altura_cop"] <= efficientBorder[i+1, "altura_cop"] & efficientBorder[i, "altura_cop"] <= efficientBorder[i-1, "altura_cop"]) {
+      
+    } else {
+      
+      efficientBorderFiltered = rbind(efficientBorderFiltered, efficientBorder[i, ])
+      
+    }
+  }
+  n = n+1
+}
+
+# ajuste dos parâmetros weibull
+pars <- c(a=1, b=mean(efficientBorderFiltered$days20), d = 10000)
+res2 = nlsLM(altura_cop ~ d * ((a/b) * ((days20/b)^(a-1)) * exp(-(days20/b)^a)),
+            data=efficientBorderFiltered,
+            start=pars)
+
+days20Weibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], x){
+  return(d*((a/b) * ((x/b)^(a-1)) * exp(-(x/b)^a)))
+}
+
+estHeight = data.frame(days20 = seq(min(temp$days20), max(temp$days20), length.out = 100), altura_cop = days20Weibull(x = seq(min(temp$days20), max(temp$days20), length.out = 100)))
+
+ggplot(temp, aes(days20, altura_cop)) + 
+  geom_point(colour = 'darkgray') +
+  geom_point(data = efficientBorderFiltered, colour = "black") +
+  geom_line(data = estHeight, aes(days20, altura_cop)) +
+  xlab('Number of days > 20 mm (days)') + ylab('Height (m)') + ylim(c(0, 100)) +
+  theme_bw() + theme(panel.grid.major = element_blank(), 
+                     panel.grid.minor = element_blank(),
+                     panel.background = element_blank(), 
+                     axis.line = element_line(colour = "black"))
+
+```
+
+

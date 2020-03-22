@@ -19,13 +19,11 @@ require(randomForest)
 require(caret)
 ```
 
-### Maximum height dataset
-
-Transects and maximum height extraction....
+## Importing maximum height dataset
 
 ```{r, message=FALSE}
 amaz = shapefile('./data/amazbioma.shp')
-maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200222.gpkg', layer = 'pontos_wgs84'))
+maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200321.gpkg', layer = 'pontos_wgs84'))
 maximas@data = maximas@data %>% select(3)
 tm_shape(amaz) + tm_polygons() + 
   tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")
