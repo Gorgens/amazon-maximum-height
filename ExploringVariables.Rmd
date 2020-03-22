@@ -27,13 +27,13 @@ require(minpack.lm)
 amaz = shapefile('./data/amazbioma.shp')
 maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200321.gpkg', layer = 'pontos_wgs84'))
 maximas@data = maximas@data %>% select(3)
-tm_shape(amaz) + tm_polygons() + 
-  tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")
+# tm_shape(amaz) + tm_polygons() + 
+#   tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")
 ```
 
 ## Importing raster files
 
-### Wind speed
+### Storms and winds
 
 ```{javaScript eval=FALSE}
 var AMAZ = ee.FeatureCollection("users/egorgens/eba/amazbioma"),
@@ -153,7 +153,78 @@ vspeed = setMinMax(vspeed)
 #tm_shape(vspeed) + tm_raster(n = 10)
 ```
 
-### Elevation and freatic access
+```{javaScript eval=FALSE}
+
+var AMAZ = ee.FeatureCollection("users/egorgens/eba/amazbioma"),
+    EBA = ee.FeatureCollection("users/egorgens/eba/maximas_eba"),
+    LIGHTNING = ee.Image("users/egorgens/eba/lightning");
+    
+/* Lightning */
+
+Map.addLayer(LIGHTNING.clip(AMAZ), 
+  {min: 0, max: 35, palette: ['white', 'yellow', 'red']}, 
+  'Lightning', 
+  false);
+  
+// Export.image.toDrive({
+//   image: LIGHTNING.clip(AMAZ),
+//   description: 'lightning_500m',
+//   scale: 500,
+//   region: AMAZ
+// });
+  
+// Export.image.toAsset({
+//   image: LIGHTNING.clip(AMAZ),
+//   description: 'lightning1k',
+//   assetId: 'lightning1k',
+//   scale: 1000,
+//   region: AMAZ,
+//   maxPixels: 1e10
+// });
+  
+// chart lightning 
+
+var lightning2Chart = LIGHTNING.reduceRegions({
+  collection: EBA,
+  reducer: ee.Reducer.mean(),
+  scale: 30,
+});
+
+var lightningChart = ui.Chart.feature.byFeature(lightning2Chart, 
+  'mean', 
+  ['altura cop'])
+  .setChartType('ScatterChart')
+  .setOptions({ pointSize: 2, width: 300, height: 300, 
+  titleX: 'Lightning (Flash rate)', titleY: 'Height (m)', 
+  legend: {position: 'none'} });
+   
+print(lightningChart);
+
+```
+
+```{r}
+lightning = raster('./data/lightning.tif') %>% crop(ref)
+lightning = raster(vals=values(lightning),
+              ext=extent(ref), 
+              nrows=dim(ref)[1],
+              ncols=dim(ref)[2])
+lightning = setMinMax(lightning)
+
+#tm_shape(lightning) + tm_raster(n = 10)
+```
+
+```{r}
+days20 = raster('./data/days20.tif') %>% crop(ref)
+days20 = raster(vals=values(days20),
+              ext=extent(ref), 
+              nrows=dim(ref)[1],
+              ncols=dim(ref)[2])
+days20 = setMinMax(days20)
+
+#tm_shape(days20) + tm_raster(n = 10)
+```
+
+### Elevation
 
 ```{javaScript eval=FALSE}
 var AMAZ = ee.FeatureCollection("users/egorgens/eba/amazbioma"),
@@ -613,18 +684,6 @@ Export.image.toDrive({
 
 
 ```{r}
-days20 = raster('./data/days20.tif') %>% crop(ref)
-days20 = raster(vals=values(days20),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-days20 = setMinMax(days20)
-
-#tm_shape(days20) + tm_raster(n = 10)
-```
-
-
-```{r}
 month100 = raster('./data/month100.tif') %>% crop(ref)
 month100 = raster(vals=values(month100),
               ext=extent(ref), 
@@ -994,67 +1053,7 @@ tmax = setMinMax(tmax)
 ```
 
 
-### Storms
 
-```{javaScript eval=FALSE}
-
-var AMAZ = ee.FeatureCollection("users/egorgens/eba/amazbioma"),
-    EBA = ee.FeatureCollection("users/egorgens/eba/maximas_eba"),
-    LIGHTNING = ee.Image("users/egorgens/eba/lightning");
-    
-/* Lightning */
-
-Map.addLayer(LIGHTNING.clip(AMAZ), 
-  {min: 0, max: 35, palette: ['white', 'yellow', 'red']}, 
-  'Lightning', 
-  false);
-  
-// Export.image.toDrive({
-//   image: LIGHTNING.clip(AMAZ),
-//   description: 'lightning_500m',
-//   scale: 500,
-//   region: AMAZ
-// });
-  
-// Export.image.toAsset({
-//   image: LIGHTNING.clip(AMAZ),
-//   description: 'lightning1k',
-//   assetId: 'lightning1k',
-//   scale: 1000,
-//   region: AMAZ,
-//   maxPixels: 1e10
-// });
-  
-// chart lightning 
-
-var lightning2Chart = LIGHTNING.reduceRegions({
-  collection: EBA,
-  reducer: ee.Reducer.mean(),
-  scale: 30,
-});
-
-var lightningChart = ui.Chart.feature.byFeature(lightning2Chart, 
-  'mean', 
-  ['altura cop'])
-  .setChartType('ScatterChart')
-  .setOptions({ pointSize: 2, width: 300, height: 300, 
-  titleX: 'Lightning (Flash rate)', titleY: 'Height (m)', 
-  legend: {position: 'none'} });
-   
-print(lightningChart);
-
-```
-
-```{r}
-lightning = raster('./data/lightning.tif') %>% crop(ref)
-lightning = raster(vals=values(lightning),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-lightning = setMinMax(lightning)
-
-#tm_shape(lightning) + tm_raster(n = 10)
-```
 
 ### Soil information
 
@@ -1145,74 +1144,6 @@ waterContent = setMinMax(waterContent)
 #tm_shape(waterContent) + tm_raster(n = 10)
 ```
 
-### Vegetation quality
-
-```{javaScript eval=FALSE}
-var AMAZ = ee.FeatureCollection("users/egorgens/eba/amazbioma"),
-    EBA = ee.FeatureCollection("users/egorgens/eba/maximas_eba"),
-    NOAA = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V4");
-    
-/* Fraction of absorbed photosynthetic active radiation */
-
-var fpar = NOAA
-  .select('FAPAR')
-  .filterDate('2016-01-01', '2018-12-31')
-  .reduce(ee.Reducer.median());
-fpar = fpar.divide(10); 
-
-Map.addLayer(fpar.clip(AMAZ), 
-  {min: 70.0, max: 90.0, 
-    palette: ['3b0200', '977705', 'ca9f06', 'ffca09', '006a03', '003b02']}, 
-  'FAPAR', 
-  false);
-
-Export.image.toDrive({
-  image: fpar.clip(AMAZ),
-  description: 'fapar',
-  scale: 500,
-  region: AMAZ,
-  folder: 'export_dominantHeight'
-});
-
-// Export.image.toAsset({
-//   image: fpar.clip(AMAZ),
-//   description: 'fpar1k',
-//   assetId: 'fpar1k',
-//   scale: 1000,
-//   region: AMAZ,
-//   maxPixels: 1e10
-// });
-  
-//chart fpar
-
-// var fpar2Chart = fpar.reduceRegions({
-//   collection: EBA,
-//   reducer: ee.Reducer.mean(),
-//   scale: 30,
-// });
-
-// var fparChart = ui.Chart.feature.byFeature(fpar2Chart, 'mean', ['altura cop'])
-//   .setChartType('ScatterChart')
-//   .setOptions({ pointSize: 2, width: 300, height: 300, 
-//   titleX: 'FPAR', titleY: 'Height (m)', 
-//   legend: {position: 'none'}});
-   
-// print(fparChart);
-
-```
-
-```{r}
-fapar = raster('./data/fapar.tif') %>% crop(ref)
-fapar = raster(vals=values(fapar),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-fapar = setMinMax(fapar)
-
-#tm_shape(fapar) + tm_raster(n = 10)
-```
-
-
 ## Cliping stack by maximum height location
 
 ```{r}
@@ -1226,16 +1157,19 @@ names(layers) = c("srtm", "uspeed", "vspeed", "clearDays", "days20", "lightning"
 
 # extrai valor das variáveis ambientais para cada altura máxima mapeada
 explanatoryVariables = extract(layers, maximas)
-# exclui o stack de camadas originais
-rm(layers)
 
 # adiciona no shapefile das alturas máximas os valores das variáveis ambientais extraídas
 maximas@data = cbind(maximas@data, explanatoryVariables)
-# exclui dataframe das variáveis ambientais temporária
-rm(explanatoryVariables)
 
 # explora graficamente a associação entre altura maxima e variáveis ambientais
 #plot(maximas@data)
+```
+
+```{r}
+# exclui o stack de camadas originais
+rm(explanatoryVariables)
+rm(srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, clayContent, waterContent, fapar)
+
 ```
 
 ## Principal components analysis
@@ -1368,13 +1302,27 @@ while(dim(efficientBorder)[1] != dim(efficientBorderFiltered)[1]){
   n = n+1
 }
 
-# chute inicial dos parâmetros
-res2 = lm(altura_cop ~ uspeed, data=efficientBorderFiltered)
-uspeedLm = function(a = coef(res2)[1], b = coef(res2)[2], x){
-  return(a + b*x)
+# chute inicial dos parâmetros modelo linear
+# res2 = lm(altura_cop ~ uspeed, data=efficientBorderFiltered)
+# uspeedLm = function(a = coef(res2)[1], b = coef(res2)[2], x){
+#   return(a + b*x)
+# }
+# 
+# 
+# estHeight = data.frame(uspeed = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100), altura_cop = uspeedLm(x = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100)))
+
+# ajuste dos parâmetros weibull
+pars <- c(a=1, b=mean(efficientBorderFiltered$uspeed), d = 10000)
+res2 = nlsLM(altura_cop ~ d * ((a/b) * ((uspeed/b)^(a-1)) * exp(-(uspeed/b)^a)),
+            data=efficientBorderFiltered,
+            start=pars)
+
+uspeedWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], x){
+  return(d*((a/b) * ((x/b)^(a-1)) * exp(-(x/b)^a)))
 }
 
-estHeight = data.frame(uspeed = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100), altura_cop = uspeedLm(x = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100)))
+estHeight = data.frame(uspeed = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100), altura_cop = uspeedWeibull(x = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100)))
+
 
 ggplot(temp, aes(uspeed, altura_cop)) + 
   geom_point(colour = 'darkgray') +

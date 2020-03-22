@@ -13,7 +13,6 @@ require(leaflet)
 require(sp)
 require(gridExtra)
 require(magrittr)
-
 require(factoextra) 
 require(randomForest)
 require(caret)

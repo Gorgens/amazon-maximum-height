@@ -5,6 +5,9 @@ date: "3/17/2020"
 output: html_document
 ---
 
+```{r}
+gc()
+```
 
 Mapa das maiores árvores de cada transecto... o surpreendente encontro de indivíduos gigantes... e distribuição das alturas na bacia amazônica... comportamento leste/oeste da distribuição.
 
