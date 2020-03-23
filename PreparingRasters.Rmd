@@ -458,7 +458,7 @@ Export.image.toDrive({
 // print(fparChart);
 ```
 
-```{r}
+```{r importFapar2modeling}
 fapar = raster('./data/fapar.tif') %>% crop(ref)
 
 fapar = raster(vals=values(fapar),
@@ -468,6 +468,42 @@ fapar = raster(vals=values(fapar),
 fapar = setMinMax(fapar)
 
 # tm_shape(faparMedian) + tm_raster(n = 10)
+```
+
+```{r fillGapsFapar eval=FALSE}
+
+fapar = raster('./data/fapar.tif') %>% crop(ref)
+summary(getValues(fapar))
+tm_shape(fapar) + tm_raster(n = 10)
+
+fill.na <- function(x) {
+  center = 0.5 + (width*width/2) 
+  if( is.na(x)[center] ) {
+    return( median(x, na.rm=TRUE) )
+  } else {
+    return( x[center] )
+  }
+} 
+
+fapar2 = fapar
+before = summary(getValues(fapar2))[7]
+print(before)
+for(i in seq(1, 10, 1)){
+  width = 9
+  fapar2 = focal(fapar2, w = matrix(1,width,width), fun = fill.na, pad = TRUE, na.rm = FALSE) %>% crop(ref)
+  after = summary(getValues(fapar2))[7]
+  print(after)
+}
+
+fapar2 = raster(vals=values(fapar2),
+               ext=extent(ref), 
+               nrows=dim(ref)[1],
+               ncols=dim(ref)[2])
+fapar2 = setMinMax(fapar2)
+
+writeRaster(fapar2, "./data/faparProcessed.tif", overwrite=TRUE)
+
+tm_shape(fapar2) + tm_raster(n = 10)
 ```
 
 ```{javaScript eval=FALSE}
