@@ -9,6 +9,8 @@ output: html_document
 gc()
 ```
 
+MEdiar altura em floresta tropical foi sempre um desafio... mas agora, com o LiDAR, a formações florestais estão podendo ser vista por outra pesrpectiva.
+
 Mapa das maiores árvores de cada transecto... o surpreendente encontro de indivíduos gigantes... e distribuição das alturas na bacia amazônica... comportamento leste/oeste da distribuição.
 
 Importância da variável altura para compreensão do sítio... drivers que determinam a distribuição e o potencial do desenvolvimento em altura.... Crescente disponibilidade de sensores remotos em escala amazônica...

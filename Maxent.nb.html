@@ -1749,15 +1749,9 @@ summary {
 
 
 <!-- rnb-text-begin -->
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>Análise Random Forest para avaliar fatores ambientais que influenciam na distribuição das alturas emergentes.</p>
-</div>
-<div id="material-and-methods" class="section level2">
-<h2>Material and Methods</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVxdWlyZShnZ3Bsb3QyKVxucmVxdWlyZShyYXN0ZXIpXG5yZXF1aXJlKHRpZHl2ZXJzZSlcbnJlcXVpcmUodG1hcClcbnJlcXVpcmUoc2YpXG5yZXF1aXJlKGxlYWZsZXQpXG5yZXF1aXJlKHNwKVxucmVxdWlyZShncmlkRXh0cmEpXG5yZXF1aXJlKG1hZ3JpdHRyKVxucmVxdWlyZShmYWN0b2V4dHJhKSBcbnJlcXVpcmUocmFuZG9tRm9yZXN0KVxucmVxdWlyZShjYXJldClcbnJlcXVpcmUobWFwdG9vbHMpXG5yZXF1aXJlKGRpc21vKVxubGlicmFyeShyZ2RhbClcbmxpYnJhcnkobWFwcylcbmxpYnJhcnkobWFwZGF0YSlcbmxpYnJhcnkoZGlzbW8pICBcbiNsaWJyYXJ5KHJKYXZhKSAgXG5saWJyYXJ5KGpzb25saXRlKVxuXG4jIFxuU3lzLnNldGVudihKQVZBX0hPTUU9J0M6XFxcXFByb2dyYW0gRmlsZXNcXFxcSmF2YVxcXFxqcmUxLjguMF8yNDEnKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVxdWlyZShnZ3Bsb3QyKVxucmVxdWlyZShyYXN0ZXIpXG5yZXF1aXJlKHRpZHl2ZXJzZSlcbnJlcXVpcmUodG1hcClcbnJlcXVpcmUoc2YpXG5yZXF1aXJlKGxlYWZsZXQpXG5yZXF1aXJlKHNwKVxucmVxdWlyZShncmlkRXh0cmEpXG5yZXF1aXJlKG1hZ3JpdHRyKVxucmVxdWlyZShmYWN0b2V4dHJhKSBcbnJlcXVpcmUocmFuZG9tRm9yZXN0KVxucmVxdWlyZShjYXJldClcbnJlcXVpcmUobWFwdG9vbHMpXG5yZXF1aXJlKGRpc21vKVxubGlicmFyeShyZ2RhbClcbmxpYnJhcnkobWFwcylcbmxpYnJhcnkobWFwZGF0YSlcbmxpYnJhcnkoZGlzbW8pICBcbiNsaWJyYXJ5KHJKYXZhKSAgXG5saWJyYXJ5KGpzb25saXRlKVxuXG5TeXMuc2V0ZW52KEpBVkFfSE9NRT0nQzpcXFxcUHJvZ3JhbSBGaWxlc1xcXFxKYXZhXFxcXGpyZTEuOC4wXzI0MScpXG5gYGAifQ== -->
 <pre class="r"><code>require(ggplot2)
 require(raster)
 require(tidyverse)
@@ -1779,374 +1773,16 @@ library(dismo)
 #library(rJava)  
 library(jsonlite)
 
-# 
 Sys.setenv(JAVA_HOME=&#39;C:\\Program Files\\Java\\jre1.8.0_241&#39;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
-<div id="importing-maximum-height-dataset" class="section level2">
-<h2>Importing maximum height dataset</h2>
+<div id="envelop-by-maxent" class="section level3">
+<h3>Envelop by MaxEnt</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW1heiA9IHNoYXBlZmlsZSgnLi9kYXRhL2FtYXpiaW9tYS5zaHAnKVxubWF4aW1hcyA9IHNmOjphc19TcGF0aWFsKHN0X3JlYWQoZHNuID0gJy4vZGF0YS9tYXhpbXVtIGhlaWdodCAyMDAzMjEuZ3BrZycsIGxheWVyID0gJ3BvbnRvc193Z3M4NCcpKVxubWF4aW1hc0BkYXRhID0gbWF4aW1hc0BkYXRhICU+JSBzZWxlY3QoMylcbnRtX3NoYXBlKGFtYXopICsgdG1fcG9seWdvbnMoKSArIFxuICB0bV9zaGFwZShtYXhpbWFzKSArIHRtX2RvdHMoXCJhbHR1cmFfY29wXCIsIHNpemUgPSAwLjIsIHBhbGV0dGUgPSBcIlJkWWxHblwiKVxuYGBgIn0= -->
-<pre class="r"><code>amaz = shapefile(&#39;./data/amazbioma.shp&#39;)
-maximas = sf::as_Spatial(st_read(dsn = &#39;./data/maximum height 200321.gpkg&#39;, layer = &#39;pontos_wgs84&#39;))
-maximas@data = maximas@data %&gt;% select(3)
-tm_shape(amaz) + tm_polygons() + 
-  tm_shape(maximas) + tm_dots(&quot;altura_cop&quot;, size = 0.2, palette = &quot;RdYlGn&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<div id="wind-speed" class="section level3">
-<h3>Wind speed</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXNwZWVkID0gcmFzdGVyKCcuL2RhdGEvdXNwZWVkLnRpZicpXG51c3BlZWQgPSBzZXRNaW5NYXgodXNwZWVkKVxucmVmID0gdXNwZWVkXG5cbiN0bV9zaGFwZSh1c3BlZWQpICsgdG1fcmFzdGVyKG4gPSAxMClcbmBgYCJ9 -->
-<pre class="r"><code>uspeed = raster(&#39;./data/uspeed.tif&#39;)
-uspeed = setMinMax(uspeed)
-ref = uspeed
-
-#tm_shape(uspeed) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudnNwZWVkID0gcmFzdGVyKCcuL2RhdGEvdnNwZWVkLnRpZicpICU+JSBjcm9wKHJlZilcbnZzcGVlZCA9IHJhc3Rlcih2YWxzPXZhbHVlcyh2c3BlZWQpLFxuICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIFxuICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSxcbiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pXG52c3BlZWQgPSBzZXRNaW5NYXgodnNwZWVkKVxuXG4jdG1fc2hhcGUodnNwZWVkKSArIHRtX3Jhc3RlcihuID0gMTApXG5gYGAifQ== -->
-<pre class="r"><code>vspeed = raster(&#39;./data/vspeed.tif&#39;) %&gt;% crop(ref)
-vspeed = raster(vals=values(vspeed),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-vspeed = setMinMax(vspeed)
-
-#tm_shape(vspeed) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="elevation-and-freatic-access" class="section level3">
-<h3>Elevation and freatic access</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3J0bSA9IHJhc3RlcignLi9kYXRhL3NydG0udGlmJykgJT4lIGNyb3AocmVmKVxuc3J0bSA9IHJhc3Rlcih2YWxzPXZhbHVlcyhzcnRtKSxcbiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCBcbiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sXG4gICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKVxuXG5zcnRtW3NydG0gPD0gMF0gPSBOQVxuc3J0bVtzcnRtID49IDEwMDBdID0gTkFcbnNydG0gPSBzZXRNaW5NYXgoc3J0bSlcblxuI3RtX3NoYXBlKHNydG0pICsgdG1fcmFzdGVyKG4gPSAxMClcblxuYGBgIn0= -->
-<pre class="r"><code>srtm = raster(&#39;./data/srtm.tif&#39;) %&gt;% crop(ref)
-srtm = raster(vals=values(srtm),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-
-srtm[srtm &lt;= 0] = NA
-srtm[srtm &gt;= 1000] = NA
-srtm = setMinMax(srtm)
-
-#tm_shape(srtm) + tm_raster(n = 10)
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="radiation" class="section level3">
-<h3>Radiation</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYXJEYXlzID0gcmFzdGVyKCcuL2RhdGEvY2xlYXJEYXlzLnRpZicpICU+JSBjcm9wKHJlZilcbmNsZWFyRGF5cyA9IHJhc3Rlcih2YWxzPXZhbHVlcyhjbGVhckRheXMpLFxuICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIFxuICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSxcbiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pXG5jbGVhckRheXMgPSBzZXRNaW5NYXgoY2xlYXJEYXlzKVxuXG4jdG1fc2hhcGUoY2xlYXJEYXlzKSArIHRtX3Jhc3RlcihuID0gMTApXG5gYGAifQ== -->
-<pre class="r"><code>clearDays = raster(&#39;./data/clearDays.tif&#39;) %&gt;% crop(ref)
-clearDays = raster(vals=values(clearDays),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-clearDays = setMinMax(clearDays)
-
-#tm_shape(clearDays) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmFwYXIgPSByYXN0ZXIoJy4vZGF0YS9mYXBhci50aWYnKSAlPiUgY3JvcChyZWYpXG5mYXBhciA9IHJhc3Rlcih2YWxzPXZhbHVlcyhmYXBhciksXG4gICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgXG4gICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLFxuICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSlcbmZhcGFyID0gc2V0TWluTWF4KGZhcGFyKVxuXG4jdG1fc2hhcGUoZmFwYXIpICsgdG1fcmFzdGVyKG4gPSAxMClcbmBgYCJ9 -->
-<pre class="r"><code>fapar = raster(&#39;./data/fapar.tif&#39;) %&gt;% crop(ref)
-fapar = raster(vals=values(fapar),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-fapar = setMinMax(fapar)
-
-#tm_shape(fapar) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGV0ID0gcmFzdGVyKCcuL2RhdGEvcGV0LnRpZicpICU+JSBjcm9wKHJlZilcbnBldCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhwZXQpLFxuICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIFxuICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSxcbiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pXG5wZXQgPSBzZXRNaW5NYXgocGV0KVxuXG4jdG1fc2hhcGUocGV0KSArIHRtX3Jhc3RlcihuID0gMTApXG5gYGAifQ== -->
-<pre class="r"><code>pet = raster(&#39;./data/pet.tif&#39;) %&gt;% crop(ref)
-pet = raster(vals=values(pet),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-pet = setMinMax(pet)
-
-#tm_shape(pet) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="precipitation" class="section level3">
-<h3>Precipitation</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF5czIwID0gcmFzdGVyKCcuL2RhdGEvZGF5czIwLnRpZicpICU+JSBjcm9wKHJlZilcbmRheXMyMCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhkYXlzMjApLFxuICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIFxuICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSxcbiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pXG5kYXlzMjAgPSBzZXRNaW5NYXgoZGF5czIwKVxuXG4jdG1fc2hhcGUoZGF5czIwKSArIHRtX3Jhc3RlcihuID0gMTApXG5gYGAifQ== -->
-<pre class="r"><code>days20 = raster(&#39;./data/days20.tif&#39;) %&gt;% crop(ref)
-days20 = raster(vals=values(days20),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-days20 = setMinMax(days20)
-
-#tm_shape(days20) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9udGgxMDAgPSByYXN0ZXIoJy4vZGF0YS9tb250aDEwMC50aWYnKSAlPiUgY3JvcChyZWYpXG5tb250aDEwMCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhtb250aDEwMCksXG4gICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgXG4gICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLFxuICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSlcbm1vbnRoMTAwID0gc2V0TWluTWF4KG1vbnRoMTAwKVxuXG4jdG1fc2hhcGUobW9udGgxMDApICsgdG1fcmFzdGVyKG4gPSAxMClcbmBgYCJ9 -->
-<pre class="r"><code>month100 = raster(&#39;./data/month100.tif&#39;) %&gt;% crop(ref)
-month100 = raster(vals=values(month100),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-month100 = setMinMax(month100)
-
-#tm_shape(month100) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFubnVhbCA9IHJhc3RlcignLi9kYXRhL3Bhbm51YWwudGlmJykgJT4lIGNyb3AocmVmKVxucGFubnVhbCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhwYW5udWFsKSxcbiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCBcbiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sXG4gICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKVxucGFubnVhbCA9IHNldE1pbk1heChwYW5udWFsKVxuXG4jdG1fc2hhcGUocGFubnVhbCkgKyB0bV9yYXN0ZXIobiA9IDEwKVxuYGBgIn0= -->
-<pre class="r"><code>pannual = raster(&#39;./data/pannual.tif&#39;) %&gt;% crop(ref)
-pannual = raster(vals=values(pannual),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-pannual = setMinMax(pannual)
-
-#tm_shape(pannual) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGRyaWVzdCA9IHJhc3RlcignLi9kYXRhL3Bkcmllc3QudGlmJykgJT4lIGNyb3AocmVmKVxucGRyaWVzdCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhwZHJpZXN0KSxcbiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCBcbiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sXG4gICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKVxucGRyaWVzdCA9IHNldE1pbk1heChwZHJpZXN0KVxuXG4jdG1fc2hhcGUocGRyaWVzdCkgKyB0bV9yYXN0ZXIobiA9IDEwKVxuYGBgIn0= -->
-<pre class="r"><code>pdriest = raster(&#39;./data/pdriest.tif&#39;) %&gt;% crop(ref)
-pdriest = raster(vals=values(pdriest),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-pdriest = setMinMax(pdriest)
-
-#tm_shape(pdriest) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHdldHRlc3QgPSByYXN0ZXIoJy4vZGF0YS9wd2V0dGVzdC50aWYnKSAlPiUgY3JvcChyZWYpXG5wd2V0dGVzdCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhwd2V0dGVzdCksXG4gICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgXG4gICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLFxuICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSlcbnB3ZXR0ZXN0ID0gc2V0TWluTWF4KHB3ZXR0ZXN0KVxuXG4jdG1fc2hhcGUocHdldHRlc3QpICsgdG1fcmFzdGVyKG4gPSAxMClcbmBgYCJ9 -->
-<pre class="r"><code>pwettest = raster(&#39;./data/pwettest.tif&#39;) %&gt;% crop(ref)
-pwettest = raster(vals=values(pwettest),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-pwettest = setMinMax(pwettest)
-
-#tm_shape(pwettest) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHNlYXNvbiA9IHJhc3RlcignLi9kYXRhL3BzZWFzb24udGlmJykgJT4lIGNyb3AocmVmKVxucHNlYXNvbiA9IHJhc3Rlcih2YWxzPXZhbHVlcyhwc2Vhc29uKSxcbiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCBcbiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sXG4gICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKVxucHNlYXNvbiA9IHNldE1pbk1heChwc2Vhc29uKVxuXG4jdG1fc2hhcGUocHNlYXNvbikgKyB0bV9yYXN0ZXIobiA9IDEwKVxuYGBgIn0= -->
-<pre class="r"><code>pseason = raster(&#39;./data/pseason.tif&#39;) %&gt;% crop(ref)
-pseason = raster(vals=values(pseason),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-pseason = setMinMax(pseason)
-
-#tm_shape(pseason) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="temperature" class="section level3">
-<h3>Temperature</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHNlYXNvbiA9IHJhc3RlcignLi9kYXRhL3RzZWFzb24udGlmJykgJT4lIGNyb3AocmVmKVxudHNlYXNvbiA9IHJhc3Rlcih2YWxzPXZhbHVlcyh0c2Vhc29uKSxcbiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCBcbiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sXG4gICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKVxudHNlYXNvbiA9IHNldE1pbk1heCh0c2Vhc29uKVxuXG4jdG1fc2hhcGUodHNlYXNvbikgKyB0bV9yYXN0ZXIobiA9IDEwKVxuYGBgIn0= -->
-<pre class="r"><code>tseason = raster(&#39;./data/tseason.tif&#39;) %&gt;% crop(ref)
-tseason = raster(vals=values(tseason),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-tseason = setMinMax(tseason)
-
-#tm_shape(tseason) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFubnVhbCA9IHJhc3RlcignLi9kYXRhL3Rhbm51YWwudGlmJykgJT4lIGNyb3AocmVmKVxudGFubnVhbCA9IHJhc3Rlcih2YWxzPXZhbHVlcyh0YW5udWFsKSxcbiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCBcbiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sXG4gICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKVxudGFubnVhbCA9IHNldE1pbk1heCh0YW5udWFsKVxuXG4jdG1fc2hhcGUodGFubnVhbCkgKyB0bV9yYXN0ZXIobiA9IDEwKVxuYGBgIn0= -->
-<pre class="r"><code>tannual = raster(&#39;./data/tannual.tif&#39;) %&gt;% crop(ref)
-tannual = raster(vals=values(tannual),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-tannual = setMinMax(tannual)
-
-#tm_shape(tannual) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG1heCA9IHJhc3RlcignLi9kYXRhL3RtYXgudGlmJykgJT4lIGNyb3AocmVmKVxudG1heCA9IHJhc3Rlcih2YWxzPXZhbHVlcyh0bWF4KSxcbiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCBcbiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sXG4gICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKVxudG1heCA9IHNldE1pbk1heCh0bWF4KVxuXG4jdG1fc2hhcGUodG1heCkgKyB0bV9yYXN0ZXIobiA9IDEwKVxuYGBgIn0= -->
-<pre class="r"><code>tmax = raster(&#39;./data/tmax.tif&#39;) %&gt;% crop(ref)
-tmax = raster(vals=values(tmax),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-tmax = setMinMax(tmax)
-
-#tm_shape(tmax) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="storms" class="section level3">
-<h3>Storms</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlnaHRuaW5nID0gcmFzdGVyKCcuL2RhdGEvbGlnaHRuaW5nLnRpZicpICU+JSBjcm9wKHJlZilcbmxpZ2h0bmluZyA9IHJhc3Rlcih2YWxzPXZhbHVlcyhsaWdodG5pbmcpLFxuICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIFxuICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSxcbiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pXG5saWdodG5pbmcgPSBzZXRNaW5NYXgobGlnaHRuaW5nKVxuXG4jdG1fc2hhcGUobGlnaHRuaW5nKSArIHRtX3Jhc3RlcihuID0gMTApXG5gYGAifQ== -->
-<pre class="r"><code>lightning = raster(&#39;./data/lightning.tif&#39;) %&gt;% crop(ref)
-lightning = raster(vals=values(lightning),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-lightning = setMinMax(lightning)
-
-#tm_shape(lightning) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="clay-content" class="section level3">
-<h3>Clay content</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xheWNvbnRlbnQgPSByYXN0ZXIoJy4vZGF0YS9jbGF5Q29udGVudDMwbS50aWYnKSAlPiUgY3JvcChyZWYpXG5jbGF5Y29udGVudCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhjbGF5Y29udGVudCksXG4gICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgXG4gICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLFxuICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSlcbmNsYXljb250ZW50ID0gc2V0TWluTWF4KGNsYXljb250ZW50KVxuXG4jdG1fc2hhcGUoY2xheWNvbnRlbnQpICsgdG1fcmFzdGVyKG4gPSAxMClcbmBgYCJ9 -->
-<pre class="r"><code>claycontent = raster(&#39;./data/clayContent30m.tif&#39;) %&gt;% crop(ref)
-claycontent = raster(vals=values(claycontent),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-claycontent = setMinMax(claycontent)
-
-#tm_shape(claycontent) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-</div>
-<div id="water-content-in-soil" class="section level1">
-<h1>Water Content in soil</h1>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG53YXRlckNvbnRlbnQgPSByYXN0ZXIoJy4vZGF0YS93YXRlckNvbnRlbnQzMG0udGlmJykgJT4lIGNyb3AocmVmKVxud2F0ZXJDb250ZW50ID0gcmFzdGVyKHZhbHM9dmFsdWVzKHdhdGVyQ29udGVudCksXG4gICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgXG4gICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLFxuICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSlcbndhdGVyQ29udGVudDMwbSA9IHNldE1pbk1heCh3YXRlckNvbnRlbnQpXG5cbiN0bV9zaGFwZSh3YXRlckNvbnRlbnQpICsgdG1fcmFzdGVyKG4gPSAxMClcbmBgYCJ9 -->
-<pre class="r"><code>
-waterContent = raster(&#39;./data/waterContent30m.tif&#39;) %&gt;% crop(ref)
-waterContent = raster(vals=values(waterContent),
-              ext=extent(ref), 
-              nrows=dim(ref)[1],
-              ncols=dim(ref)[2])
-waterContent30m = setMinMax(waterContent)
-
-#tm_shape(waterContent) + tm_raster(n = 10)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<div id="results" class="section level2">
-<h2>Results</h2>
-<div id="maximum-tree-height-distribution" class="section level3">
-<h3>Maximum tree height distribution</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFsbGVyNTAgPSBtYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcCA+IDUwLF1cbnRtX3NoYXBlKGFtYXopICsgXG4gICAgICAgIHRtX3BvbHlnb25zKGNvbD1cImdyZXlcIiwgYm9yZGVyLmNvbD1cIndoaXRlXCIpICtcbiAgICAgICAgdG1fc2hhcGUodGFsbGVyNTApICsgdG1fZG90cyhcInJlZFwiLCBzaXplPS4yKSArXG4gICAgICAgIHRtX2dyaWQobGFiZWxzLmluc2lkZS5mcmFtZSA9IEZBTFNFLCBcbiAgICAgICAgICAgICAgICBwcm9qZWN0aW9uID0gXCIrcHJvaj1sb25nbGF0XCIsIGNvbCA9ICdncmF5JylcbiNybSh0YWxsZXI1MClcbmBgYCJ9 -->
-<pre class="r"><code>taller50 = maximas[maximas$altura_cop &gt; 50,]
-tm_shape(amaz) + 
-        tm_polygons(col=&quot;grey&quot;, border.col=&quot;white&quot;) +
-        tm_shape(taller50) + tm_dots(&quot;red&quot;, size=.2) +
-        tm_grid(labels.inside.frame = FALSE, 
-                projection = &quot;+proj=longlat&quot;, col = &#39;gray&#39;)
-#rm(taller50)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFsbGVyNjAgPSBtYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcCA+IDYwLF1cbnRtX3NoYXBlKGFtYXopICsgXG4gICAgICAgIHRtX3BvbHlnb25zKGNvbD1cImdyZXlcIiwgYm9yZGVyLmNvbD1cIndoaXRlXCIpICtcbiAgICAgICAgdG1fc2hhcGUodGFsbGVyNjApICsgdG1fZG90cyhcInJlZFwiLCBzaXplPS4yKSArXG4gICAgICAgIHRtX2dyaWQobGFiZWxzLmluc2lkZS5mcmFtZSA9IEZBTFNFLCBcbiAgICAgICAgICAgICAgICBwcm9qZWN0aW9uID0gXCIrcHJvaj1sb25nbGF0XCIsIGNvbCA9ICdncmF5JylcbiNybSh0YWxsZXI2MClcbmBgYCJ9 -->
-<pre class="r"><code>taller60 = maximas[maximas$altura_cop &gt; 60,]
-tm_shape(amaz) + 
-        tm_polygons(col=&quot;grey&quot;, border.col=&quot;white&quot;) +
-        tm_shape(taller60) + tm_dots(&quot;red&quot;, size=.2) +
-        tm_grid(labels.inside.frame = FALSE, 
-                projection = &quot;+proj=longlat&quot;, col = &#39;gray&#39;)
-#rm(taller60)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFsbGVyNzAgPSBtYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcCA+IDcwLF1cbnRtX3NoYXBlKGFtYXopICsgXG4gICAgICAgIHRtX3BvbHlnb25zKGNvbD1cImdyZXlcIiwgYm9yZGVyLmNvbD1cIndoaXRlXCIpICtcbiAgICAgICAgdG1fc2hhcGUodGFsbGVyNzApICsgdG1fZG90cyhcInJlZFwiLCBzaXplPS4yKSArXG4gICAgICAgIHRtX2dyaWQobGFiZWxzLmluc2lkZS5mcmFtZSA9IEZBTFNFLCBcbiAgICAgICAgICAgICAgICBwcm9qZWN0aW9uID0gXCIrcHJvaj1sb25nbGF0XCIsIGNvbCA9ICdncmF5JylcbnJtKHRhbGxlcjcwKVxuYGBgIn0= -->
-<pre class="r"><code>taller70 = maximas[maximas$altura_cop &gt; 70,]
-tm_shape(amaz) + 
-        tm_polygons(col=&quot;grey&quot;, border.col=&quot;white&quot;) +
-        tm_shape(taller70) + tm_dots(&quot;red&quot;, size=.2) +
-        tm_grid(labels.inside.frame = FALSE, 
-                projection = &quot;+proj=longlat&quot;, col = &#39;gray&#39;)
-rm(taller70)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFsbGVyODAgPSBtYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcCA+IDgwLF1cbnRtX3NoYXBlKGFtYXopICsgXG4gICAgICAgIHRtX3BvbHlnb25zKGNvbD1cImdyZXlcIiwgYm9yZGVyLmNvbD1cIndoaXRlXCIpICtcbiAgICAgICAgdG1fc2hhcGUodGFsbGVyODApICsgdG1fZG90cyhcInJlZFwiLCBzaXplPS4yKSArXG4gICAgICAgIHRtX2dyaWQobGFiZWxzLmluc2lkZS5mcmFtZSA9IEZBTFNFLCBcbiAgICAgICAgICAgICAgICBwcm9qZWN0aW9uID0gXCIrcHJvaj1sb25nbGF0XCIsIGNvbCA9ICdncmF5JylcbnJtKHRhbGxlcjgwKVxuYGBgIn0= -->
-<pre class="r"><code>taller80 = maximas[maximas$altura_cop &gt; 80,]
-tm_shape(amaz) + 
-        tm_polygons(col=&quot;grey&quot;, border.col=&quot;white&quot;) +
-        tm_shape(taller80) + tm_dots(&quot;red&quot;, size=.2) +
-        tm_grid(labels.inside.frame = FALSE, 
-                projection = &quot;+proj=longlat&quot;, col = &#39;gray&#39;)
-rm(taller80)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="varible-importance" class="section level3">
-<h3>Varible importance</h3>
-<p>Clip environmental variables matching maximum height location…</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjcmlhIHN0YWNrIGRhcyB2YXJpw6F2ZWlzIGFtYmllbnRhaXNcbmxheWVycyA9IHN0YWNrKHNydG0sIHVzcGVlZCwgdnNwZWVkLCBjbGVhckRheXMsIGRheXMyMCwgZmFwYXIsIGxpZ2h0bmluZywgbW9udGgxMDAsIHBhbm51YWwsIHBkcmllc3QsIHBldCwgXG5wc2Vhc29uLCBwd2V0dGVzdCwgdGFubnVhbCwgdHNlYXNvbixjbGF5Y29udGVudCx3YXRlckNvbnRlbnQpXG5cbiMgTm9tZWHDp8OjbyBkYXMgdmFyacOhdmVpc1xubmFtZXMobGF5ZXJzKSA9IGMoXCJzcnRtXCIsIFwidXNwZWVkXCIsIFwidnNwZWVkXCIsIFwiY2xlYXJEYXlzXCIsIFwiZGF5czIwXCIsIFwiZmFwYXJcIiwgXCJsaWdodG5pbmdcIiwgXCJtb250aDEwMFwiLCBcInBhbm51YWxcIiwgXCJwZHJpZXN0XCIsIFwicGV0XCIsIFxuXCJwc2Vhc29uXCIsIFwicHdldHRlc3RcIiwgXCJ0YW5udWFsXCIsIFwidHNlYXNvblwiLFwiY2xheWNvbnRlbnRcIixcIndhdGVyQ29udGVudFwiKVxubW9kZWxFbnY8LWxheWVyc1xuXG4jIEFsdHVyYXMgY29tIGxpbWl0ZXMgZXN0YWJlbGVjaWRvcyAoPjUwbSwgPjYwbSwgPjcwbSBlID43NW0pXG5tYXhpbWFzXzUwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD41MCxdXG5tYXhpbWFzXzYwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD42MCxdXG5tYXhpbWFzXzcwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD43MCxdXG5tYXhpbWFzXzc1PC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD43NSxdXG5WaWV3KG1heGltYXMpXG5gYGAifQ== -->
-<pre class="r"><code># cria stack das variáveis ambientais
-layers = stack(srtm, uspeed, vspeed, clearDays, days20, fapar, lightning, month100, pannual, pdriest, pet, 
-pseason, pwettest, tannual, tseason,claycontent,waterContent)
-
-# Nomeação das variáveis
-names(layers) = c(&quot;srtm&quot;, &quot;uspeed&quot;, &quot;vspeed&quot;, &quot;clearDays&quot;, &quot;days20&quot;, &quot;fapar&quot;, &quot;lightning&quot;, &quot;month100&quot;, &quot;pannual&quot;, &quot;pdriest&quot;, &quot;pet&quot;, 
-&quot;pseason&quot;, &quot;pwettest&quot;, &quot;tannual&quot;, &quot;tseason&quot;,&quot;claycontent&quot;,&quot;waterContent&quot;)
-modelEnv&lt;-layers
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWxFbnY8LWxheWVyc1xuXG4jIEFsdHVyYXMgY29tIGxpbWl0ZXMgZXN0YWJlbGVjaWRvcyAoPjUwbSwgPjYwbSwgPjcwbSBlID43NW0pXG5tYXhpbWFzXzUwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD41MCxdXG5tYXhpbWFzXzYwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD42MCxdXG5tYXhpbWFzXzcwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD43MCxdXG5tYXhpbWFzXzc1PC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD43NSxdXG5WaWV3KG1heGltYXMpXG5gYGAifQ== -->
+<pre class="r"><code>modelEnv&lt;-layers
 
 # Alturas com limites estabelecidos (&gt;50m, &gt;60m, &gt;70m e &gt;75m)
 maximas_50&lt;-maximas[maximas$altura_cop&gt;50,]
@@ -2190,8 +1826,6 @@ points(maximas_50$coords.x1, maximas_50$coords.x2, pch=&quot;+&quot;, cex=1)
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
-</div>
 </div>
 <div id="tree-60-m" class="section level1">
 <h1>Tree &gt;60 m</h1>
@@ -2314,7 +1948,7 @@ m</code></pre>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIk1heGltdW0gdHJlZSBoZWlnaHQgaW4gdGhlIEFtYXpvbiINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCiMjIEludHJvZHVjdGlvbg0KDQpBbsOhbGlzZSBSYW5kb20gRm9yZXN0IHBhcmEgYXZhbGlhciBmYXRvcmVzIGFtYmllbnRhaXMgcXVlIGluZmx1ZW5jaWFtIG5hIGRpc3RyaWJ1acOnw6NvIGRhcyBhbHR1cmFzIGVtZXJnZW50ZXMuDQoNCiMjIE1hdGVyaWFsIGFuZCBNZXRob2RzDQoNCmBgYHtyLCBtZXNzYWdlPUZBTFNFfQ0KcmVxdWlyZShnZ3Bsb3QyKQ0KcmVxdWlyZShyYXN0ZXIpDQpyZXF1aXJlKHRpZHl2ZXJzZSkNCnJlcXVpcmUodG1hcCkNCnJlcXVpcmUoc2YpDQpyZXF1aXJlKGxlYWZsZXQpDQpyZXF1aXJlKHNwKQ0KcmVxdWlyZShncmlkRXh0cmEpDQpyZXF1aXJlKG1hZ3JpdHRyKQ0KcmVxdWlyZShmYWN0b2V4dHJhKSANCnJlcXVpcmUocmFuZG9tRm9yZXN0KQ0KcmVxdWlyZShjYXJldCkNCnJlcXVpcmUobWFwdG9vbHMpDQpyZXF1aXJlKGRpc21vKQ0KbGlicmFyeShyZ2RhbCkNCmxpYnJhcnkobWFwcykNCmxpYnJhcnkobWFwZGF0YSkNCmxpYnJhcnkoZGlzbW8pICANCiNsaWJyYXJ5KHJKYXZhKSAgDQpsaWJyYXJ5KGpzb25saXRlKQ0KDQojIA0KU3lzLnNldGVudihKQVZBX0hPTUU9J0M6XFxQcm9ncmFtIEZpbGVzXFxKYXZhXFxqcmUxLjguMF8yNDEnKQ0KYGBgDQoNCiMjIEltcG9ydGluZyBtYXhpbXVtIGhlaWdodCBkYXRhc2V0DQoNCmBgYHtyLCBtZXNzYWdlPUZBTFNFfQ0KYW1heiA9IHNoYXBlZmlsZSgnLi9kYXRhL2FtYXpiaW9tYS5zaHAnKQ0KbWF4aW1hcyA9IHNmOjphc19TcGF0aWFsKHN0X3JlYWQoZHNuID0gJy4vZGF0YS9tYXhpbXVtIGhlaWdodCAyMDAzMjEuZ3BrZycsIGxheWVyID0gJ3BvbnRvc193Z3M4NCcpKQ0KbWF4aW1hc0BkYXRhID0gbWF4aW1hc0BkYXRhICU+JSBzZWxlY3QoMykNCnRtX3NoYXBlKGFtYXopICsgdG1fcG9seWdvbnMoKSArIA0KICB0bV9zaGFwZShtYXhpbWFzKSArIHRtX2RvdHMoImFsdHVyYV9jb3AiLCBzaXplID0gMC4yLCBwYWxldHRlID0gIlJkWWxHbiIpDQpgYGANCg0KIyMjIFdpbmQgc3BlZWQNCg0KYGBge3J9DQp1c3BlZWQgPSByYXN0ZXIoJy4vZGF0YS91c3BlZWQudGlmJykNCnVzcGVlZCA9IHNldE1pbk1heCh1c3BlZWQpDQpyZWYgPSB1c3BlZWQNCg0KI3RtX3NoYXBlKHVzcGVlZCkgKyB0bV9yYXN0ZXIobiA9IDEwKQ0KYGBgDQoNCmBgYHtyfQ0KdnNwZWVkID0gcmFzdGVyKCcuL2RhdGEvdnNwZWVkLnRpZicpICU+JSBjcm9wKHJlZikNCnZzcGVlZCA9IHJhc3Rlcih2YWxzPXZhbHVlcyh2c3BlZWQpLA0KICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIA0KICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSwNCiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pDQp2c3BlZWQgPSBzZXRNaW5NYXgodnNwZWVkKQ0KDQojdG1fc2hhcGUodnNwZWVkKSArIHRtX3Jhc3RlcihuID0gMTApDQpgYGANCg0KIyMjIEVsZXZhdGlvbiBhbmQgZnJlYXRpYyBhY2Nlc3MNCg0KYGBge3J9DQpzcnRtID0gcmFzdGVyKCcuL2RhdGEvc3J0bS50aWYnKSAlPiUgY3JvcChyZWYpDQpzcnRtID0gcmFzdGVyKHZhbHM9dmFsdWVzKHNydG0pLA0KICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIA0KICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSwNCiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pDQoNCnNydG1bc3J0bSA8PSAwXSA9IE5BDQpzcnRtW3NydG0gPj0gMTAwMF0gPSBOQQ0Kc3J0bSA9IHNldE1pbk1heChzcnRtKQ0KDQojdG1fc2hhcGUoc3J0bSkgKyB0bV9yYXN0ZXIobiA9IDEwKQ0KDQpgYGANCg0KDQoNCiMjIyBSYWRpYXRpb24NCg0KYGBge3J9DQpjbGVhckRheXMgPSByYXN0ZXIoJy4vZGF0YS9jbGVhckRheXMudGlmJykgJT4lIGNyb3AocmVmKQ0KY2xlYXJEYXlzID0gcmFzdGVyKHZhbHM9dmFsdWVzKGNsZWFyRGF5cyksDQogICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgDQogICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLA0KICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSkNCmNsZWFyRGF5cyA9IHNldE1pbk1heChjbGVhckRheXMpDQoNCiN0bV9zaGFwZShjbGVhckRheXMpICsgdG1fcmFzdGVyKG4gPSAxMCkNCmBgYA0KDQpgYGB7cn0NCmZhcGFyID0gcmFzdGVyKCcuL2RhdGEvZmFwYXIudGlmJykgJT4lIGNyb3AocmVmKQ0KZmFwYXIgPSByYXN0ZXIodmFscz12YWx1ZXMoZmFwYXIpLA0KICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIA0KICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSwNCiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pDQpmYXBhciA9IHNldE1pbk1heChmYXBhcikNCg0KI3RtX3NoYXBlKGZhcGFyKSArIHRtX3Jhc3RlcihuID0gMTApDQpgYGANCg0KDQpgYGB7cn0NCnBldCA9IHJhc3RlcignLi9kYXRhL3BldC50aWYnKSAlPiUgY3JvcChyZWYpDQpwZXQgPSByYXN0ZXIodmFscz12YWx1ZXMocGV0KSwNCiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCANCiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sDQogICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKQ0KcGV0ID0gc2V0TWluTWF4KHBldCkNCg0KI3RtX3NoYXBlKHBldCkgKyB0bV9yYXN0ZXIobiA9IDEwKQ0KYGBgDQoNCiMjIyBQcmVjaXBpdGF0aW9uDQoNCmBgYHtyfQ0KZGF5czIwID0gcmFzdGVyKCcuL2RhdGEvZGF5czIwLnRpZicpICU+JSBjcm9wKHJlZikNCmRheXMyMCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhkYXlzMjApLA0KICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIA0KICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSwNCiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pDQpkYXlzMjAgPSBzZXRNaW5NYXgoZGF5czIwKQ0KDQojdG1fc2hhcGUoZGF5czIwKSArIHRtX3Jhc3RlcihuID0gMTApDQpgYGANCg0KDQpgYGB7cn0NCm1vbnRoMTAwID0gcmFzdGVyKCcuL2RhdGEvbW9udGgxMDAudGlmJykgJT4lIGNyb3AocmVmKQ0KbW9udGgxMDAgPSByYXN0ZXIodmFscz12YWx1ZXMobW9udGgxMDApLA0KICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIA0KICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSwNCiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pDQptb250aDEwMCA9IHNldE1pbk1heChtb250aDEwMCkNCg0KI3RtX3NoYXBlKG1vbnRoMTAwKSArIHRtX3Jhc3RlcihuID0gMTApDQpgYGANCg0KDQpgYGB7cn0NCnBhbm51YWwgPSByYXN0ZXIoJy4vZGF0YS9wYW5udWFsLnRpZicpICU+JSBjcm9wKHJlZikNCnBhbm51YWwgPSByYXN0ZXIodmFscz12YWx1ZXMocGFubnVhbCksDQogICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgDQogICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLA0KICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSkNCnBhbm51YWwgPSBzZXRNaW5NYXgocGFubnVhbCkNCg0KI3RtX3NoYXBlKHBhbm51YWwpICsgdG1fcmFzdGVyKG4gPSAxMCkNCmBgYA0KDQoNCmBgYHtyfQ0KcGRyaWVzdCA9IHJhc3RlcignLi9kYXRhL3Bkcmllc3QudGlmJykgJT4lIGNyb3AocmVmKQ0KcGRyaWVzdCA9IHJhc3Rlcih2YWxzPXZhbHVlcyhwZHJpZXN0KSwNCiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCANCiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sDQogICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKQ0KcGRyaWVzdCA9IHNldE1pbk1heChwZHJpZXN0KQ0KDQojdG1fc2hhcGUocGRyaWVzdCkgKyB0bV9yYXN0ZXIobiA9IDEwKQ0KYGBgDQoNCg0KYGBge3J9DQpwd2V0dGVzdCA9IHJhc3RlcignLi9kYXRhL3B3ZXR0ZXN0LnRpZicpICU+JSBjcm9wKHJlZikNCnB3ZXR0ZXN0ID0gcmFzdGVyKHZhbHM9dmFsdWVzKHB3ZXR0ZXN0KSwNCiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCANCiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sDQogICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKQ0KcHdldHRlc3QgPSBzZXRNaW5NYXgocHdldHRlc3QpDQoNCiN0bV9zaGFwZShwd2V0dGVzdCkgKyB0bV9yYXN0ZXIobiA9IDEwKQ0KYGBgDQoNCg0KYGBge3J9DQpwc2Vhc29uID0gcmFzdGVyKCcuL2RhdGEvcHNlYXNvbi50aWYnKSAlPiUgY3JvcChyZWYpDQpwc2Vhc29uID0gcmFzdGVyKHZhbHM9dmFsdWVzKHBzZWFzb24pLA0KICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIA0KICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSwNCiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pDQpwc2Vhc29uID0gc2V0TWluTWF4KHBzZWFzb24pDQoNCiN0bV9zaGFwZShwc2Vhc29uKSArIHRtX3Jhc3RlcihuID0gMTApDQpgYGANCg0KDQojIyMgVGVtcGVyYXR1cmUNCg0KYGBge3J9DQp0c2Vhc29uID0gcmFzdGVyKCcuL2RhdGEvdHNlYXNvbi50aWYnKSAlPiUgY3JvcChyZWYpDQp0c2Vhc29uID0gcmFzdGVyKHZhbHM9dmFsdWVzKHRzZWFzb24pLA0KICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIA0KICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSwNCiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pDQp0c2Vhc29uID0gc2V0TWluTWF4KHRzZWFzb24pDQoNCiN0bV9zaGFwZSh0c2Vhc29uKSArIHRtX3Jhc3RlcihuID0gMTApDQpgYGANCg0KDQpgYGB7cn0NCnRhbm51YWwgPSByYXN0ZXIoJy4vZGF0YS90YW5udWFsLnRpZicpICU+JSBjcm9wKHJlZikNCnRhbm51YWwgPSByYXN0ZXIodmFscz12YWx1ZXModGFubnVhbCksDQogICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgDQogICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLA0KICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSkNCnRhbm51YWwgPSBzZXRNaW5NYXgodGFubnVhbCkNCg0KI3RtX3NoYXBlKHRhbm51YWwpICsgdG1fcmFzdGVyKG4gPSAxMCkNCmBgYA0KDQoNCmBgYHtyfQ0KdG1heCA9IHJhc3RlcignLi9kYXRhL3RtYXgudGlmJykgJT4lIGNyb3AocmVmKQ0KdG1heCA9IHJhc3Rlcih2YWxzPXZhbHVlcyh0bWF4KSwNCiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCANCiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sDQogICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKQ0KdG1heCA9IHNldE1pbk1heCh0bWF4KQ0KDQojdG1fc2hhcGUodG1heCkgKyB0bV9yYXN0ZXIobiA9IDEwKQ0KYGBgDQoNCg0KIyMjIFN0b3Jtcw0KDQpgYGB7cn0NCmxpZ2h0bmluZyA9IHJhc3RlcignLi9kYXRhL2xpZ2h0bmluZy50aWYnKSAlPiUgY3JvcChyZWYpDQpsaWdodG5pbmcgPSByYXN0ZXIodmFscz12YWx1ZXMobGlnaHRuaW5nKSwNCiAgICAgICAgICAgICAgZXh0PWV4dGVudChyZWYpLCANCiAgICAgICAgICAgICAgbnJvd3M9ZGltKHJlZilbMV0sDQogICAgICAgICAgICAgIG5jb2xzPWRpbShyZWYpWzJdKQ0KbGlnaHRuaW5nID0gc2V0TWluTWF4KGxpZ2h0bmluZykNCg0KI3RtX3NoYXBlKGxpZ2h0bmluZykgKyB0bV9yYXN0ZXIobiA9IDEwKQ0KYGBgDQoNCg0KIyMjIENsYXkgY29udGVudA0KDQpgYGB7cn0NCmNsYXljb250ZW50ID0gcmFzdGVyKCcuL2RhdGEvY2xheUNvbnRlbnQzMG0udGlmJykgJT4lIGNyb3AocmVmKQ0KY2xheWNvbnRlbnQgPSByYXN0ZXIodmFscz12YWx1ZXMoY2xheWNvbnRlbnQpLA0KICAgICAgICAgICAgICBleHQ9ZXh0ZW50KHJlZiksIA0KICAgICAgICAgICAgICBucm93cz1kaW0ocmVmKVsxXSwNCiAgICAgICAgICAgICAgbmNvbHM9ZGltKHJlZilbMl0pDQpjbGF5Y29udGVudCA9IHNldE1pbk1heChjbGF5Y29udGVudCkNCg0KI3RtX3NoYXBlKGNsYXljb250ZW50KSArIHRtX3Jhc3RlcihuID0gMTApDQpgYGANCg0KIyBXYXRlciBDb250ZW50IGluIHNvaWwgDQoNCmBgYHtyfQ0KDQp3YXRlckNvbnRlbnQgPSByYXN0ZXIoJy4vZGF0YS93YXRlckNvbnRlbnQzMG0udGlmJykgJT4lIGNyb3AocmVmKQ0Kd2F0ZXJDb250ZW50ID0gcmFzdGVyKHZhbHM9dmFsdWVzKHdhdGVyQ29udGVudCksDQogICAgICAgICAgICAgIGV4dD1leHRlbnQocmVmKSwgDQogICAgICAgICAgICAgIG5yb3dzPWRpbShyZWYpWzFdLA0KICAgICAgICAgICAgICBuY29scz1kaW0ocmVmKVsyXSkNCndhdGVyQ29udGVudDMwbSA9IHNldE1pbk1heCh3YXRlckNvbnRlbnQpDQoNCiN0bV9zaGFwZSh3YXRlckNvbnRlbnQpICsgdG1fcmFzdGVyKG4gPSAxMCkNCmBgYA0KDQoNCiMjIFJlc3VsdHMNCg0KIyMjIE1heGltdW0gdHJlZSBoZWlnaHQgZGlzdHJpYnV0aW9uDQoNCmBgYHtyfQ0KdGFsbGVyNTAgPSBtYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcCA+IDUwLF0NCnRtX3NoYXBlKGFtYXopICsgDQogICAgICAgIHRtX3BvbHlnb25zKGNvbD0iZ3JleSIsIGJvcmRlci5jb2w9IndoaXRlIikgKw0KICAgICAgICB0bV9zaGFwZSh0YWxsZXI1MCkgKyB0bV9kb3RzKCJyZWQiLCBzaXplPS4yKSArDQogICAgICAgIHRtX2dyaWQobGFiZWxzLmluc2lkZS5mcmFtZSA9IEZBTFNFLCANCiAgICAgICAgICAgICAgICBwcm9qZWN0aW9uID0gIitwcm9qPWxvbmdsYXQiLCBjb2wgPSAnZ3JheScpDQojcm0odGFsbGVyNTApDQpgYGANCg0KYGBge3J9DQp0YWxsZXI2MCA9IG1heGltYXNbbWF4aW1hcyRhbHR1cmFfY29wID4gNjAsXQ0KdG1fc2hhcGUoYW1heikgKyANCiAgICAgICAgdG1fcG9seWdvbnMoY29sPSJncmV5IiwgYm9yZGVyLmNvbD0id2hpdGUiKSArDQogICAgICAgIHRtX3NoYXBlKHRhbGxlcjYwKSArIHRtX2RvdHMoInJlZCIsIHNpemU9LjIpICsNCiAgICAgICAgdG1fZ3JpZChsYWJlbHMuaW5zaWRlLmZyYW1lID0gRkFMU0UsIA0KICAgICAgICAgICAgICAgIHByb2plY3Rpb24gPSAiK3Byb2o9bG9uZ2xhdCIsIGNvbCA9ICdncmF5JykNCiNybSh0YWxsZXI2MCkNCmBgYA0KDQpgYGB7cn0NCnRhbGxlcjcwID0gbWF4aW1hc1ttYXhpbWFzJGFsdHVyYV9jb3AgPiA3MCxdDQp0bV9zaGFwZShhbWF6KSArIA0KICAgICAgICB0bV9wb2x5Z29ucyhjb2w9ImdyZXkiLCBib3JkZXIuY29sPSJ3aGl0ZSIpICsNCiAgICAgICAgdG1fc2hhcGUodGFsbGVyNzApICsgdG1fZG90cygicmVkIiwgc2l6ZT0uMikgKw0KICAgICAgICB0bV9ncmlkKGxhYmVscy5pbnNpZGUuZnJhbWUgPSBGQUxTRSwgDQogICAgICAgICAgICAgICAgcHJvamVjdGlvbiA9ICIrcHJvaj1sb25nbGF0IiwgY29sID0gJ2dyYXknKQ0Kcm0odGFsbGVyNzApDQpgYGANCg0KYGBge3J9DQp0YWxsZXI4MCA9IG1heGltYXNbbWF4aW1hcyRhbHR1cmFfY29wID4gODAsXQ0KdG1fc2hhcGUoYW1heikgKyANCiAgICAgICAgdG1fcG9seWdvbnMoY29sPSJncmV5IiwgYm9yZGVyLmNvbD0id2hpdGUiKSArDQogICAgICAgIHRtX3NoYXBlKHRhbGxlcjgwKSArIHRtX2RvdHMoInJlZCIsIHNpemU9LjIpICsNCiAgICAgICAgdG1fZ3JpZChsYWJlbHMuaW5zaWRlLmZyYW1lID0gRkFMU0UsIA0KICAgICAgICAgICAgICAgIHByb2plY3Rpb24gPSAiK3Byb2o9bG9uZ2xhdCIsIGNvbCA9ICdncmF5JykNCnJtKHRhbGxlcjgwKQ0KYGBgDQoNCiMjIyBWYXJpYmxlIGltcG9ydGFuY2UNCg0KQ2xpcCBlbnZpcm9ubWVudGFsIHZhcmlhYmxlcyBtYXRjaGluZyBtYXhpbXVtIGhlaWdodCBsb2NhdGlvbi4uLg0KDQpgYGB7cn0NCiMgY3JpYSBzdGFjayBkYXMgdmFyacOhdmVpcyBhbWJpZW50YWlzDQpsYXllcnMgPSBzdGFjayhzcnRtLCB1c3BlZWQsIHZzcGVlZCwgY2xlYXJEYXlzLCBkYXlzMjAsIGZhcGFyLCBsaWdodG5pbmcsIG1vbnRoMTAwLCBwYW5udWFsLCBwZHJpZXN0LCBwZXQsIA0KcHNlYXNvbiwgcHdldHRlc3QsIHRhbm51YWwsIHRzZWFzb24sY2xheWNvbnRlbnQsd2F0ZXJDb250ZW50KQ0KDQojIE5vbWVhw6fDo28gZGFzIHZhcmnDoXZlaXMNCm5hbWVzKGxheWVycykgPSBjKCJzcnRtIiwgInVzcGVlZCIsICJ2c3BlZWQiLCAiY2xlYXJEYXlzIiwgImRheXMyMCIsICJmYXBhciIsICJsaWdodG5pbmciLCAibW9udGgxMDAiLCAicGFubnVhbCIsICJwZHJpZXN0IiwgInBldCIsIA0KInBzZWFzb24iLCAicHdldHRlc3QiLCAidGFubnVhbCIsICJ0c2Vhc29uIiwiY2xheWNvbnRlbnQiLCJ3YXRlckNvbnRlbnQiKQ0KbW9kZWxFbnY8LWxheWVycw0KDQojIEFsdHVyYXMgY29tIGxpbWl0ZXMgZXN0YWJlbGVjaWRvcyAoPjUwbSwgPjYwbSwgPjcwbSBlID43NW0pDQptYXhpbWFzXzUwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD41MCxdDQptYXhpbWFzXzYwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD42MCxdDQptYXhpbWFzXzcwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD43MCxdDQptYXhpbWFzXzc1PC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD43NSxdDQpWaWV3KG1heGltYXMpDQpgYGANCg0KYGBge3J9DQoNCiMgQ29vcmRlbmFkYXMgcGFyYSBhIGV4dGVuc8OjbyBkZSBjb3J0ZSBkbyBtYXBhDQptb2RlbC5leHRlbnQ8LWV4dGVudChtaW4obWF4aW1hc181MCRjb29yZHMueDEpLTEwLG1heChtYXhpbWFzXzUwJGNvb3Jkcy54MSkrMTAsbWluKG1heGltYXNfNTAkY29vcmRzLngyKS0xMCxtYXgobWF4aW1hc181MCRjb29yZHMueDIpKzEwKQ0KDQoNCiMgZGF0YSBmcmFtZSBjb20gbGF0aXR1ZGUgZSBsb25naXR1ZGUNCnJhdHRsZXJvY2M9ZGF0YS5mcmFtZSh4MT1tYXhpbWFzXzUwWywyXSx4Mj1tYXhpbWFzXzUwWywzXSkgI2ZpcnN0LCBqdXN0IG1ha2UgYSBkYXRhIGZyYW1lIG9mIGxhdGl0dWRlcyBhbmQgbG9uZ2l0dWRlcyBmb3IgdGhlIG1vZGVsDQoNCg0KZm9sZCA8LSBrZm9sZChyYXR0bGVyb2NjLCBrPTUpICMgYWRkIGFuIGluZGV4IHRoYXQgbWFrZXMgZml2ZSByYW5kb20gZ3JvdXBzIG9mIG9ic2VydmF0aW9ucw0KDQpvY29fdGVzdGUgPC0gcmF0dGxlcm9jY1tmb2xkID09IDEsIF0gIyBob2xkIG91dCBvbmUgZmlmdGggYXMgdGVzdCBkYXRhDQpvY29fdHJlaW5vIDwtIHJhdHRsZXJvY2NbZm9sZCAhPSAxLCBdICMgdGhlIG90aGVyIGZvdXIgZmlmdGhzIGFyZSB0cmFpbmluZyBkYXRhDQoNCg0KcmF0dGxlci5tZSA8LSBtYXhlbnQobW9kZWxFbnYsIG9jb190cmVpbm8pICNub3RlIHdlIGp1c3QgdXNpbmcgdGhlIHRyYWluaW5nIGRhdGENCg0KcGxvdChyYXR0bGVyLm1lKQ0KcmVzcG9uc2UocmF0dGxlci5tZSkNCg0KDQptb2RlbG9fNTBtIDwtIHByZWRpY3QocmF0dGxlci5tZSwgbW9kZWxFbnYpDQoNCnBsb3QobW9kZWxvXzUwbSwgbWFpbj0iUHJlZGljdGVkIFN1aXRhYmlsaXR5IikNCm1hcCgnd29ybGRIaXJlcycsIGZpbGw9RkFMU0UsIGFkZD1UUlVFKQ0KcG9pbnRzKG1heGltYXNfNTAkY29vcmRzLngxLCBtYXhpbWFzXzUwJGNvb3Jkcy54MiwgcGNoPSIrIiwgY2V4PTEpDQoNCg0KYGBgDQoNCiMgVHJlZSA+NjAgbQ0KYGBge3J9DQoNCiMgZGF0YSBmcmFtZSBjb20gbGF0aXR1ZGUgZSBsb25naXR1ZGUNCnJhdHRsZXJvY2M9ZGF0YS5mcmFtZSh4MT1tYXhpbWFzXzYwWywyXSx4Mj1tYXhpbWFzXzYwWywzXSkgI2ZpcnN0LCBqdXN0IG1ha2UgYSBkYXRhIGZyYW1lIG9mIGxhdGl0dWRlcyBhbmQgbG9uZ2l0dWRlcyBmb3IgdGhlIG1vZGVsDQoNCg0KZm9sZCA8LSBrZm9sZChyYXR0bGVyb2NjLCBrPTUpICMgYWRkIGFuIGluZGV4IHRoYXQgbWFrZXMgZml2ZSByYW5kb20gZ3JvdXBzIG9mIG9ic2VydmF0aW9ucw0KDQpvY29fdGVzdGUgPC0gcmF0dGxlcm9jY1tmb2xkID09IDEsIF0gIyBob2xkIG91dCBvbmUgZmlmdGggYXMgdGVzdCBkYXRhDQpvY29fdHJlaW5vIDwtIHJhdHRsZXJvY2NbZm9sZCAhPSAxLCBdICMgdGhlIG90aGVyIGZvdXIgZmlmdGhzIGFyZSB0cmFpbmluZyBkYXRhDQoNCg0KcmF0dGxlci5tZSA8LSBtYXhlbnQobW9kZWxFbnYsIHJhdHRsZXJ0cmFpbikgI25vdGUgd2UganVzdCB1c2luZyB0aGUgdHJhaW5pbmcgZGF0YQ0KDQpwbG90KHJhdHRsZXIubWUpDQpyZXNwb25zZShyYXR0bGVyLm1lKQ0KDQoNCm1vZGVsb182MG0gPC0gcHJlZGljdChyYXR0bGVyLm1lLCBtb2RlbEVudikNCg0KcGxvdChtb2RlbG9fNjBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc182MCRjb29yZHMueDEsIG1heGltYXNfNjAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KDQpgYGANCg0KIyBUcmVlID43MCBtDQpgYGB7cn0NCg0KIyBkYXRhIGZyYW1lIGNvbSBsYXRpdHVkZSBlIGxvbmdpdHVkZQ0KcmF0dGxlcm9jYz1kYXRhLmZyYW1lKHgxPW1heGltYXNfNzBbLDJdLHgyPW1heGltYXNfNzBbLDNdKSAjZmlyc3QsIGp1c3QgbWFrZSBhIGRhdGEgZnJhbWUgb2YgbGF0aXR1ZGVzIGFuZCBsb25naXR1ZGVzIGZvciB0aGUgbW9kZWwNCg0KDQpmb2xkIDwtIGtmb2xkKHJhdHRsZXJvY2MsIGs9NSkgIyBhZGQgYW4gaW5kZXggdGhhdCBtYWtlcyBmaXZlIHJhbmRvbSBncm91cHMgb2Ygb2JzZXJ2YXRpb25zDQoNCm9jb190ZXN0ZSA8LSByYXR0bGVyb2NjW2ZvbGQgPT0gMSwgXSAjIGhvbGQgb3V0IG9uZSBmaWZ0aCBhcyB0ZXN0IGRhdGENCm9jb190cmVpbm8gPC0gcmF0dGxlcm9jY1tmb2xkICE9IDEsIF0gIyB0aGUgb3RoZXIgZm91ciBmaWZ0aHMgYXJlIHRyYWluaW5nIGRhdGENCg0KDQpyYXR0bGVyLm1lIDwtIG1heGVudChtb2RlbEVudiwgb2NvX3RyZWlubykgI25vdGUgd2UganVzdCB1c2luZyB0aGUgdHJhaW5pbmcgZGF0YQ0KDQpwbG90KHJhdHRsZXIubWUpDQpyZXNwb25zZShyYXR0bGVyLm1lKQ0KDQoNCm1vZGVsb183MG0gPC0gcHJlZGljdChyYXR0bGVyLm1lLCBtb2RlbEVudikNCg0KcGxvdChtb2RlbG9fNzBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc183MCRjb29yZHMueDEsIG1heGltYXNfNzAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KDQpgYGANCg0KIyBUcmVlID43NSBtDQpgYGB7cn0NCg0KIyBkYXRhIGZyYW1lIGNvbSBsYXRpdHVkZSBlIGxvbmdpdHVkZQ0KcmF0dGxlcm9jYz1kYXRhLmZyYW1lKHgxPW1heGltYXNfNzVbLDJdLHgyPW1heGltYXNfNzVbLDNdKSAjZmlyc3QsIGp1c3QgbWFrZSBhIGRhdGEgZnJhbWUgb2YgbGF0aXR1ZGVzIGFuZCBsb25naXR1ZGVzIGZvciB0aGUgbW9kZWwNCg0KDQpmb2xkIDwtIGtmb2xkKHJhdHRsZXJvY2MsIGs9NSkgIyBhZGQgYW4gaW5kZXggdGhhdCBtYWtlcyBmaXZlIHJhbmRvbSBncm91cHMgb2Ygb2JzZXJ2YXRpb25zDQoNCm9jb190ZXN0ZSA8LSByYXR0bGVyb2NjW2ZvbGQgPT0gMSwgXSAjIGhvbGQgb3V0IG9uZSBmaWZ0aCBhcyB0ZXN0IGRhdGENCm9jb190cmVpbm8gPC0gcmF0dGxlcm9jY1tmb2xkICE9IDEsIF0gIyB0aGUgb3RoZXIgZm91ciBmaWZ0aHMgYXJlIHRyYWluaW5nIGRhdGENCg0KDQpyYXR0bGVyLm1lIDwtIG1heGVudChtb2RlbEVudiwgb2NvX3RyZWlubykgI25vdGUgd2UganVzdCB1c2luZyB0aGUgdHJhaW5pbmcgZGF0YQ0KDQpwbG90KHJhdHRsZXIubWUpDQpyZXNwb25zZShyYXR0bGVyLm1lKQ0KDQoNCm1vZGVsb183NW0gPC0gcHJlZGljdChyYXR0bGVyLm1lLCBtb2RlbEVudikNCg0KcGxvdChtb2RlbG9fNzVtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc183NSRjb29yZHMueDEsIG1heGltYXNfNzUkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KDQpgYGANCg0KYGBge3J9DQpwYXIobWZyb3c9YygxLDQpKQ0KcGxvdChtb2RlbG9fNTBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc181MCRjb29yZHMueDEsIG1heGltYXNfNTAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KcGxvdChtb2RlbG9fNjBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc182MCRjb29yZHMueDEsIG1heGltYXNfNjAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KcGxvdChtb2RlbG9fNzBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc183MCRjb29yZHMueDEsIG1heGltYXNfNzAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KbTwtcGxvdChtb2RlbG9fNzVtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc183NSRjb29yZHMueDEsIG1heGltYXNfNzUkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCm0NCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIk1heGltdW0gdHJlZSBoZWlnaHQgaW4gdGhlIEFtYXpvbiINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCmBgYHtyLCBtZXNzYWdlPUZBTFNFfQ0KcmVxdWlyZShnZ3Bsb3QyKQ0KcmVxdWlyZShyYXN0ZXIpDQpyZXF1aXJlKHRpZHl2ZXJzZSkNCnJlcXVpcmUodG1hcCkNCnJlcXVpcmUoc2YpDQpyZXF1aXJlKGxlYWZsZXQpDQpyZXF1aXJlKHNwKQ0KcmVxdWlyZShncmlkRXh0cmEpDQpyZXF1aXJlKG1hZ3JpdHRyKQ0KcmVxdWlyZShmYWN0b2V4dHJhKSANCnJlcXVpcmUocmFuZG9tRm9yZXN0KQ0KcmVxdWlyZShjYXJldCkNCnJlcXVpcmUobWFwdG9vbHMpDQpyZXF1aXJlKGRpc21vKQ0KbGlicmFyeShyZ2RhbCkNCmxpYnJhcnkobWFwcykNCmxpYnJhcnkobWFwZGF0YSkNCmxpYnJhcnkoZGlzbW8pICANCiNsaWJyYXJ5KHJKYXZhKSAgDQpsaWJyYXJ5KGpzb25saXRlKQ0KDQpTeXMuc2V0ZW52KEpBVkFfSE9NRT0nQzpcXFByb2dyYW0gRmlsZXNcXEphdmFcXGpyZTEuOC4wXzI0MScpDQpgYGANCg0KIyMjIEVudmVsb3AgYnkgTWF4RW50DQoNCmBgYHtyfQ0KbW9kZWxFbnY8LWxheWVycw0KDQojIEFsdHVyYXMgY29tIGxpbWl0ZXMgZXN0YWJlbGVjaWRvcyAoPjUwbSwgPjYwbSwgPjcwbSBlID43NW0pDQptYXhpbWFzXzUwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD41MCxdDQptYXhpbWFzXzYwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD42MCxdDQptYXhpbWFzXzcwPC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD43MCxdDQptYXhpbWFzXzc1PC1tYXhpbWFzW21heGltYXMkYWx0dXJhX2NvcD43NSxdDQpWaWV3KG1heGltYXMpDQpgYGANCg0KYGBge3J9DQoNCiMgQ29vcmRlbmFkYXMgcGFyYSBhIGV4dGVuc8OjbyBkZSBjb3J0ZSBkbyBtYXBhDQptb2RlbC5leHRlbnQ8LWV4dGVudChtaW4obWF4aW1hc181MCRjb29yZHMueDEpLTEwLG1heChtYXhpbWFzXzUwJGNvb3Jkcy54MSkrMTAsbWluKG1heGltYXNfNTAkY29vcmRzLngyKS0xMCxtYXgobWF4aW1hc181MCRjb29yZHMueDIpKzEwKQ0KDQoNCiMgZGF0YSBmcmFtZSBjb20gbGF0aXR1ZGUgZSBsb25naXR1ZGUNCnJhdHRsZXJvY2M9ZGF0YS5mcmFtZSh4MT1tYXhpbWFzXzUwWywyXSx4Mj1tYXhpbWFzXzUwWywzXSkgI2ZpcnN0LCBqdXN0IG1ha2UgYSBkYXRhIGZyYW1lIG9mIGxhdGl0dWRlcyBhbmQgbG9uZ2l0dWRlcyBmb3IgdGhlIG1vZGVsDQoNCg0KZm9sZCA8LSBrZm9sZChyYXR0bGVyb2NjLCBrPTUpICMgYWRkIGFuIGluZGV4IHRoYXQgbWFrZXMgZml2ZSByYW5kb20gZ3JvdXBzIG9mIG9ic2VydmF0aW9ucw0KDQpvY29fdGVzdGUgPC0gcmF0dGxlcm9jY1tmb2xkID09IDEsIF0gIyBob2xkIG91dCBvbmUgZmlmdGggYXMgdGVzdCBkYXRhDQpvY29fdHJlaW5vIDwtIHJhdHRsZXJvY2NbZm9sZCAhPSAxLCBdICMgdGhlIG90aGVyIGZvdXIgZmlmdGhzIGFyZSB0cmFpbmluZyBkYXRhDQoNCg0KcmF0dGxlci5tZSA8LSBtYXhlbnQobW9kZWxFbnYsIG9jb190cmVpbm8pICNub3RlIHdlIGp1c3QgdXNpbmcgdGhlIHRyYWluaW5nIGRhdGENCg0KcGxvdChyYXR0bGVyLm1lKQ0KcmVzcG9uc2UocmF0dGxlci5tZSkNCg0KDQptb2RlbG9fNTBtIDwtIHByZWRpY3QocmF0dGxlci5tZSwgbW9kZWxFbnYpDQoNCnBsb3QobW9kZWxvXzUwbSwgbWFpbj0iUHJlZGljdGVkIFN1aXRhYmlsaXR5IikNCm1hcCgnd29ybGRIaXJlcycsIGZpbGw9RkFMU0UsIGFkZD1UUlVFKQ0KcG9pbnRzKG1heGltYXNfNTAkY29vcmRzLngxLCBtYXhpbWFzXzUwJGNvb3Jkcy54MiwgcGNoPSIrIiwgY2V4PTEpDQoNCg0KYGBgDQoNCiMgVHJlZSA+NjAgbQ0KYGBge3J9DQoNCiMgZGF0YSBmcmFtZSBjb20gbGF0aXR1ZGUgZSBsb25naXR1ZGUNCnJhdHRsZXJvY2M9ZGF0YS5mcmFtZSh4MT1tYXhpbWFzXzYwWywyXSx4Mj1tYXhpbWFzXzYwWywzXSkgI2ZpcnN0LCBqdXN0IG1ha2UgYSBkYXRhIGZyYW1lIG9mIGxhdGl0dWRlcyBhbmQgbG9uZ2l0dWRlcyBmb3IgdGhlIG1vZGVsDQoNCg0KZm9sZCA8LSBrZm9sZChyYXR0bGVyb2NjLCBrPTUpICMgYWRkIGFuIGluZGV4IHRoYXQgbWFrZXMgZml2ZSByYW5kb20gZ3JvdXBzIG9mIG9ic2VydmF0aW9ucw0KDQpvY29fdGVzdGUgPC0gcmF0dGxlcm9jY1tmb2xkID09IDEsIF0gIyBob2xkIG91dCBvbmUgZmlmdGggYXMgdGVzdCBkYXRhDQpvY29fdHJlaW5vIDwtIHJhdHRsZXJvY2NbZm9sZCAhPSAxLCBdICMgdGhlIG90aGVyIGZvdXIgZmlmdGhzIGFyZSB0cmFpbmluZyBkYXRhDQoNCg0KcmF0dGxlci5tZSA8LSBtYXhlbnQobW9kZWxFbnYsIHJhdHRsZXJ0cmFpbikgI25vdGUgd2UganVzdCB1c2luZyB0aGUgdHJhaW5pbmcgZGF0YQ0KDQpwbG90KHJhdHRsZXIubWUpDQpyZXNwb25zZShyYXR0bGVyLm1lKQ0KDQoNCm1vZGVsb182MG0gPC0gcHJlZGljdChyYXR0bGVyLm1lLCBtb2RlbEVudikNCg0KcGxvdChtb2RlbG9fNjBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc182MCRjb29yZHMueDEsIG1heGltYXNfNjAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KDQpgYGANCg0KIyBUcmVlID43MCBtDQpgYGB7cn0NCg0KIyBkYXRhIGZyYW1lIGNvbSBsYXRpdHVkZSBlIGxvbmdpdHVkZQ0KcmF0dGxlcm9jYz1kYXRhLmZyYW1lKHgxPW1heGltYXNfNzBbLDJdLHgyPW1heGltYXNfNzBbLDNdKSAjZmlyc3QsIGp1c3QgbWFrZSBhIGRhdGEgZnJhbWUgb2YgbGF0aXR1ZGVzIGFuZCBsb25naXR1ZGVzIGZvciB0aGUgbW9kZWwNCg0KDQpmb2xkIDwtIGtmb2xkKHJhdHRsZXJvY2MsIGs9NSkgIyBhZGQgYW4gaW5kZXggdGhhdCBtYWtlcyBmaXZlIHJhbmRvbSBncm91cHMgb2Ygb2JzZXJ2YXRpb25zDQoNCm9jb190ZXN0ZSA8LSByYXR0bGVyb2NjW2ZvbGQgPT0gMSwgXSAjIGhvbGQgb3V0IG9uZSBmaWZ0aCBhcyB0ZXN0IGRhdGENCm9jb190cmVpbm8gPC0gcmF0dGxlcm9jY1tmb2xkICE9IDEsIF0gIyB0aGUgb3RoZXIgZm91ciBmaWZ0aHMgYXJlIHRyYWluaW5nIGRhdGENCg0KDQpyYXR0bGVyLm1lIDwtIG1heGVudChtb2RlbEVudiwgb2NvX3RyZWlubykgI25vdGUgd2UganVzdCB1c2luZyB0aGUgdHJhaW5pbmcgZGF0YQ0KDQpwbG90KHJhdHRsZXIubWUpDQpyZXNwb25zZShyYXR0bGVyLm1lKQ0KDQoNCm1vZGVsb183MG0gPC0gcHJlZGljdChyYXR0bGVyLm1lLCBtb2RlbEVudikNCg0KcGxvdChtb2RlbG9fNzBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc183MCRjb29yZHMueDEsIG1heGltYXNfNzAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KDQpgYGANCg0KIyBUcmVlID43NSBtDQpgYGB7cn0NCg0KIyBkYXRhIGZyYW1lIGNvbSBsYXRpdHVkZSBlIGxvbmdpdHVkZQ0KcmF0dGxlcm9jYz1kYXRhLmZyYW1lKHgxPW1heGltYXNfNzVbLDJdLHgyPW1heGltYXNfNzVbLDNdKSAjZmlyc3QsIGp1c3QgbWFrZSBhIGRhdGEgZnJhbWUgb2YgbGF0aXR1ZGVzIGFuZCBsb25naXR1ZGVzIGZvciB0aGUgbW9kZWwNCg0KDQpmb2xkIDwtIGtmb2xkKHJhdHRsZXJvY2MsIGs9NSkgIyBhZGQgYW4gaW5kZXggdGhhdCBtYWtlcyBmaXZlIHJhbmRvbSBncm91cHMgb2Ygb2JzZXJ2YXRpb25zDQoNCm9jb190ZXN0ZSA8LSByYXR0bGVyb2NjW2ZvbGQgPT0gMSwgXSAjIGhvbGQgb3V0IG9uZSBmaWZ0aCBhcyB0ZXN0IGRhdGENCm9jb190cmVpbm8gPC0gcmF0dGxlcm9jY1tmb2xkICE9IDEsIF0gIyB0aGUgb3RoZXIgZm91ciBmaWZ0aHMgYXJlIHRyYWluaW5nIGRhdGENCg0KDQpyYXR0bGVyLm1lIDwtIG1heGVudChtb2RlbEVudiwgb2NvX3RyZWlubykgI25vdGUgd2UganVzdCB1c2luZyB0aGUgdHJhaW5pbmcgZGF0YQ0KDQpwbG90KHJhdHRsZXIubWUpDQpyZXNwb25zZShyYXR0bGVyLm1lKQ0KDQoNCm1vZGVsb183NW0gPC0gcHJlZGljdChyYXR0bGVyLm1lLCBtb2RlbEVudikNCg0KcGxvdChtb2RlbG9fNzVtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc183NSRjb29yZHMueDEsIG1heGltYXNfNzUkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KDQpgYGANCg0KYGBge3J9DQpwYXIobWZyb3c9YygxLDQpKQ0KcGxvdChtb2RlbG9fNTBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc181MCRjb29yZHMueDEsIG1heGltYXNfNTAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KcGxvdChtb2RlbG9fNjBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc182MCRjb29yZHMueDEsIG1heGltYXNfNjAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KcGxvdChtb2RlbG9fNzBtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc183MCRjb29yZHMueDEsIG1heGltYXNfNzAkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCg0KbTwtcGxvdChtb2RlbG9fNzVtLCBtYWluPSJQcmVkaWN0ZWQgU3VpdGFiaWxpdHkiKQ0KbWFwKCd3b3JsZEhpcmVzJywgZmlsbD1GQUxTRSwgYWRkPVRSVUUpDQpwb2ludHMobWF4aW1hc183NSRjb29yZHMueDEsIG1heGltYXNfNzUkY29vcmRzLngyLCBwY2g9IisiLCBjZXg9MSkNCm0NCmBgYA0KDQo=</div>
 
 
 
