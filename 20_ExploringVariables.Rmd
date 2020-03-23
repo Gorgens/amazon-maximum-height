@@ -47,7 +47,10 @@ p = fviz_pca_var(res.pca, col.var = "contrib", # Color by contributions to the P
                  gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                  repel = TRUE)     # Avoid text overlapping)
 # adiciona variável dependente no biplot
+png("./plot/pca.png", width = 960, height = 720)
 fviz_add(p, target.coord, color ="black", geom="arrow")
+dev.off()
+
 rm(p, target.coord)
 ```
 
@@ -126,6 +129,8 @@ ggplot(temp, aes(uspeed, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/uspeed_plot.png")
+
 ```
 
 ### v-Speed
@@ -189,6 +194,8 @@ ggplot(temp, aes(vspeed, altura_cop)) +
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
+
+ggsave("./plot/vspeed_plot.png")
 
 ```
 
@@ -254,6 +261,9 @@ ggplot(temp, aes(days20, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/days20_plot.png")
+
+
 ```
 
 ### Lightning
@@ -317,6 +327,9 @@ ggplot(temp, aes(lightning, altura_cop)) +
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
+
+ggsave("./plot/lightning_plot.png")
+
 
 ```
 
@@ -382,6 +395,8 @@ ggplot(temp, aes(srtm, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/srtm_plot.png")
+
 ```
 
 ### Potential Evapotranspiration
@@ -445,6 +460,8 @@ ggplot(temp, aes(pet, altura_cop)) +
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
+
+ggsave("./plot/pet_plot.png")
 
 ```
 
@@ -510,6 +527,8 @@ ggplot(temp, aes(fapar, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/fapar_plot.png")
+
 ```
 
 ### Clear days
@@ -573,6 +592,8 @@ ggplot(temp, aes(clearDays, altura_cop)) +
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
+
+ggsave("./plot/clearDays_plot.png")
 
 ```
 
@@ -638,6 +659,8 @@ ggplot(temp, aes(month100, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/month100_plot.png")
+
 ```
 
 ### Precipitation in the driest month
@@ -702,6 +725,8 @@ ggplot(temp, aes(pdriest, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/pdriest_plot.png")
+
 ```
 
 ### Precipitation in the wettest month
@@ -765,6 +790,8 @@ ggplot(temp, aes(pwettest, altura_cop)) +
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
+
+ggsave("./plot/pwettest_plot.png")
 
 ```
 
@@ -831,6 +858,8 @@ ggplot(temp, aes(pannual, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/pannual_plot.png")
+
 ```
 
 
@@ -895,6 +924,8 @@ ggplot(temp, aes(pseason, altura_cop)) +
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
+
+ggsave("./plot/pseason_plot.png")
 
 ```
 
@@ -961,6 +992,8 @@ ggplot(temp, aes(tannual, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/tannual_plot.png")
+
 ```
 
 
@@ -1025,6 +1058,8 @@ ggplot(temp, aes(tseason, altura_cop)) +
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
+
+ggsave("./plot/tseason_plot.png")
 
 ```
 
@@ -1091,6 +1126,8 @@ ggplot(temp, aes(tmax, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/tmax_plot.png")
+
 ```
 
 ### Clay content at 30 cm
@@ -1155,6 +1192,8 @@ ggplot(temp, aes(clayContent, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+ggsave("./plot/clayContent_plot.png")
+
 ```
 
 ### Water content at 30 cm
@@ -1218,5 +1257,7 @@ ggplot(temp, aes(waterContent, altura_cop)) +
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
+
+ggsave("./plot/waterContent_plot.png")
 
 ```

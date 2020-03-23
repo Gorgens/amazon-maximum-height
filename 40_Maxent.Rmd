@@ -31,14 +31,14 @@ Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_241')
 ### Envelop by MaxEnt
 
 ```{r}
-modelEnv<-layers
+modelEnv<-layers2estimate
 
 # Alturas com limites estabelecidos (>50m, >60m, >70m e >75m)
 maximas_50<-maximas[maximas$altura_cop>50,]
 maximas_60<-maximas[maximas$altura_cop>60,]
 maximas_70<-maximas[maximas$altura_cop>70,]
 maximas_75<-maximas[maximas$altura_cop>75,]
-View(maximas)
+#View(maximas)
 ```
 
 ```{r}
@@ -48,7 +48,7 @@ model.extent<-extent(min(maximas_50$coords.x1)-10,max(maximas_50$coords.x1)+10,m
 
 
 # data frame com latitude e longitude
-rattlerocc=data.frame(x1=maximas_50[,2],x2=maximas_50[,3]) #first, just make a data frame of latitudes and longitudes for the model
+rattlerocc=data.frame(x1=maximas_50$coords.x1,x2=maximas_50$coords.x2) #first, just make a data frame of latitudes and longitudes for the model
 
 
 fold <- kfold(rattlerocc, k=5) # add an index that makes five random groups of observations

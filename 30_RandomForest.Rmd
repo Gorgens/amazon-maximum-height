@@ -20,7 +20,6 @@ require(randomForest)
 require(caret)
 ```
 
-
 ** Run first Exploring variables to create essential variables.**
 
 ## Random Forest
@@ -95,9 +94,17 @@ Aplica Random Forest para stack normalizado...
 ```{r}
 
 #heightRaster = predict(scaledLayers, res.rf)
-heightRaster = predict(layers, res.rf)
+heightRaster = predict(layers2estimate, res.rf)
 heightRaster = setMinMax(heightRaster)
 
-tm_shape(heightRaster) + tm_raster()
+
+map = tm_shape(heightRaster) + 
+  tm_raster(n = 15,
+            palette = "Greens",
+            legend.hist = TRUE) +
+  tm_legend(outside = TRUE, hist.width = 2)
+#print(map)
+tmap_save(map, "./plot/heightRaster_RandomForest.png", width = 1920, height = 1080)
+
 ```
 
