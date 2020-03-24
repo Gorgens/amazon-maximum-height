@@ -22,13 +22,13 @@ library(rgdal)
 library(maps)
 library(mapdata)
 library(dismo)  
-#library(rJava)  
+library(rJava)  
 library(jsonlite)
 
 Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_241')
 ```
 
-### Envelop by MaxEnt
+## Envelop by MaxEnt
 
 ```{r}
 modelEnv<-layers2estimate
@@ -41,7 +41,9 @@ maximas_75<-maximas[maximas$altura_cop>75,]
 #View(maximas)
 ```
 
-```{r}
+### Heigth > 50
+
+```{r maxEnt50}
 
 # Coordenadas para a extensão de corte do mapa
 model.extent<-extent(min(maximas_50$coords.x1)-10,max(maximas_50$coords.x1)+10,min(maximas_50$coords.x2)-10,max(maximas_50$coords.x2)+10)
@@ -65,18 +67,29 @@ response(rattler.me)
 
 modelo_50m <- predict(rattler.me, modelEnv)
 
-plot(modelo_50m, main="Predicted Suitability")
-map('worldHires', fill=FALSE, add=TRUE)
-points(maximas_50$coords.x1, maximas_50$coords.x2, pch="+", cex=1)
 
+map = tm_shape(modelo_50m) + 
+  tm_raster(n = 15,
+            palette = "Greens",
+            legend.hist = TRUE) +
+  tm_shape(maximas_50) + 
+  tm_dots("black", size = 0.07) +
+  tm_legend(outside = TRUE, hist.width = 2)
+
+tmap_save(map, "./plot/height50_maxent.png", width = 1920, height = 1080)
 
 ```
 
-# Tree >60 m
-```{r}
+### Heigth > 60
+
+```{r maxEnt60}
+
+# Coordenadas para a extensão de corte do mapa
+model.extent<-extent(min(maximas_60$coords.x1)-10,max(maximas_60$coords.x1)+10,min(maximas_60$coords.x2)-10,max(maximas_60$coords.x2)+10)
+
 
 # data frame com latitude e longitude
-rattlerocc=data.frame(x1=maximas_60[,2],x2=maximas_60[,3]) #first, just make a data frame of latitudes and longitudes for the model
+rattlerocc=data.frame(x1=maximas_60$coords.x1,x2=maximas_60$coords.x2) #first, just make a data frame of latitudes and longitudes for the model
 
 
 fold <- kfold(rattlerocc, k=5) # add an index that makes five random groups of observations
@@ -85,7 +98,7 @@ oco_teste <- rattlerocc[fold == 1, ] # hold out one fifth as test data
 oco_treino <- rattlerocc[fold != 1, ] # the other four fifths are training data
 
 
-rattler.me <- maxent(modelEnv, rattlertrain) #note we just using the training data
+rattler.me <- maxent(modelEnv, oco_treino) #note we just using the training data
 
 plot(rattler.me)
 response(rattler.me)
@@ -93,18 +106,29 @@ response(rattler.me)
 
 modelo_60m <- predict(rattler.me, modelEnv)
 
-plot(modelo_60m, main="Predicted Suitability")
-map('worldHires', fill=FALSE, add=TRUE)
-points(maximas_60$coords.x1, maximas_60$coords.x2, pch="+", cex=1)
 
+map = tm_shape(modelo_60m) + 
+  tm_raster(n = 15,
+            palette = "Greens",
+            legend.hist = TRUE) +
+  tm_shape(maximas_60) + 
+  tm_dots("black", size = 0.07) +
+  tm_legend(outside = TRUE, hist.width = 2)
+
+tmap_save(map, "./plot/height60_maxent.png", width = 1920, height = 1080)
 
 ```
 
-# Tree >70 m
-```{r}
+### Heigth > 70
+
+```{r maxEnt70}
+
+# Coordenadas para a extensão de corte do mapa
+model.extent<-extent(min(maximas_70$coords.x1)-10,max(maximas_70$coords.x1)+10,min(maximas_70$coords.x2)-10,max(maximas_70$coords.x2)+10)
+
 
 # data frame com latitude e longitude
-rattlerocc=data.frame(x1=maximas_70[,2],x2=maximas_70[,3]) #first, just make a data frame of latitudes and longitudes for the model
+rattlerocc=data.frame(x1=maximas_70$coords.x1,x2=maximas_70$coords.x2) #first, just make a data frame of latitudes and longitudes for the model
 
 
 fold <- kfold(rattlerocc, k=5) # add an index that makes five random groups of observations
@@ -121,18 +145,29 @@ response(rattler.me)
 
 modelo_70m <- predict(rattler.me, modelEnv)
 
-plot(modelo_70m, main="Predicted Suitability")
-map('worldHires', fill=FALSE, add=TRUE)
-points(maximas_70$coords.x1, maximas_70$coords.x2, pch="+", cex=1)
 
+map = tm_shape(modelo_70m) + 
+  tm_raster(n = 15,
+            palette = "Greens",
+            legend.hist = TRUE) +
+  tm_shape(maximas_70) + 
+  tm_dots("black", size = 0.07) +
+  tm_legend(outside = TRUE, hist.width = 2)
+
+tmap_save(map, "./plot/height70_maxent.png", width = 1920, height = 1080)
 
 ```
 
-# Tree >75 m
-```{r}
+### Heigth > 75
+
+```{r maxEnt75}
+
+# Coordenadas para a extensão de corte do mapa
+model.extent<-extent(min(maximas_75$coords.x1)-10,max(maximas_75$coords.x1)+10,min(maximas_75$coords.x2)-10,max(maximas_75$coords.x2)+10)
+
 
 # data frame com latitude e longitude
-rattlerocc=data.frame(x1=maximas_75[,2],x2=maximas_75[,3]) #first, just make a data frame of latitudes and longitudes for the model
+rattlerocc=data.frame(x1=maximas_75$coords.x1,x2=maximas_75$coords.x2) #first, just make a data frame of latitudes and longitudes for the model
 
 
 fold <- kfold(rattlerocc, k=5) # add an index that makes five random groups of observations
@@ -149,30 +184,16 @@ response(rattler.me)
 
 modelo_75m <- predict(rattler.me, modelEnv)
 
-plot(modelo_75m, main="Predicted Suitability")
-map('worldHires', fill=FALSE, add=TRUE)
-points(maximas_75$coords.x1, maximas_75$coords.x2, pch="+", cex=1)
 
+map = tm_shape(modelo_75m) + 
+  tm_raster(n = 15,
+            palette = "Greens",
+            legend.hist = TRUE) +
+  tm_shape(maximas_75) + 
+  tm_dots("black", size = 0.07) +
+  tm_legend(outside = TRUE, hist.width = 2)
 
-```
+tmap_save(map, "./plot/height75_maxent.png", width = 1920, height = 1080)
 
-```{r}
-par(mfrow=c(1,4))
-plot(modelo_50m, main="Predicted Suitability")
-map('worldHires', fill=FALSE, add=TRUE)
-points(maximas_50$coords.x1, maximas_50$coords.x2, pch="+", cex=1)
-
-plot(modelo_60m, main="Predicted Suitability")
-map('worldHires', fill=FALSE, add=TRUE)
-points(maximas_60$coords.x1, maximas_60$coords.x2, pch="+", cex=1)
-
-plot(modelo_70m, main="Predicted Suitability")
-map('worldHires', fill=FALSE, add=TRUE)
-points(maximas_70$coords.x1, maximas_70$coords.x2, pch="+", cex=1)
-
-m<-plot(modelo_75m, main="Predicted Suitability")
-map('worldHires', fill=FALSE, add=TRUE)
-points(maximas_75$coords.x1, maximas_75$coords.x2, pch="+", cex=1)
-m
 ```
 

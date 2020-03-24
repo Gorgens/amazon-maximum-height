@@ -136,13 +136,13 @@ uspeed = raster('./data/uspeed.tif')
 uspeed = setMinMax(uspeed)
 ref = uspeed
 
-map = tm_shape(uspeed) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/uspeed_image.png", width = 1920, height = 1080)
+# map = tm_shape(uspeed) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/uspeed_image.png", width = 1920, height = 1080)
 ```
 
 ```{r}
@@ -153,13 +153,13 @@ vspeed = raster(vals=values(vspeed),
               ncols=dim(ref)[2])
 vspeed = setMinMax(vspeed)
 
-map = tm_shape(vspeed) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/vspeed_image.png", width = 1920, height = 1080)
+# map = tm_shape(vspeed) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/vspeed_image.png", width = 1920, height = 1080)
 ```
 
 ```{}
@@ -219,13 +219,13 @@ lightning = raster(vals=values(lightning),
               ncols=dim(ref)[2])
 lightning = setMinMax(lightning)
 
-map = tm_shape(lightning) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/lightning_image.png", width = 1920, height = 1080)
+# map = tm_shape(lightning) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/lightning_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -237,13 +237,13 @@ days20 = raster(vals=values(days20),
               ncols=dim(ref)[2])
 days20 = setMinMax(days20)
 
-map = tm_shape(days20) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/days20_image.png", width = 1920, height = 1080)
+# map = tm_shape(days20) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/days20_image.png", width = 1920, height = 1080)
 ```
 
 ### Elevation
@@ -308,13 +308,13 @@ srtm[srtm <= 0] = NA
 srtm[srtm >= 1000] = NA
 srtm = setMinMax(srtm)
 
-map = tm_shape(srtm) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("darkolivegreen4","yellow", "brown"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/srtm_image.png", width = 1920, height = 1080)
+# map = tm_shape(srtm) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("darkolivegreen4","yellow", "brown"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/srtm_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -431,13 +431,13 @@ pet = raster(vals=values(pet),
               ncols=dim(ref)[2])
 pet = setMinMax(pet)
 
-map = tm_shape(pet) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/pet_image.png", width = 1920, height = 1080)
+# map = tm_shape(pet) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/pet_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -541,13 +541,13 @@ fapar = raster(vals=values(fapar),
               ncols=dim(ref)[2])
 fapar = setMinMax(fapar)
 
-map = tm_shape(fapar) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/fapar_image.png", width = 1920, height = 1080)
+# map = tm_shape(fapar) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/fapar_image.png", width = 1920, height = 1080)
 
 fapar2 = raster('./data/faparProcessed.tif') %>% crop(ref)
 
@@ -645,13 +645,13 @@ clearDays = raster(vals=values(clearDays),
               ncols=dim(ref)[2])
 clearDays = setMinMax(clearDays)
 
-map = tm_shape(clearDays) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/clearDays_image.png", width = 1920, height = 1080)
+# map = tm_shape(clearDays) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/clearDays_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -786,13 +786,13 @@ month100 = raster(vals=values(month100),
               ncols=dim(ref)[2])
 month100 = setMinMax(month100)
 
-map = tm_shape(month100) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/month100_image.png", width = 1920, height = 1080)
+# map = tm_shape(month100) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/month100_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1077,13 +1077,13 @@ pannual = raster(vals=values(pannual),
               ncols=dim(ref)[2])
 pannual = setMinMax(pannual)
 
-map = tm_shape(pannual) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/pannual_image.png", width = 1920, height = 1080)
+# map = tm_shape(pannual) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/pannual_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1096,13 +1096,13 @@ pdriest = raster(vals=values(pdriest),
               ncols=dim(ref)[2])
 pdriest = setMinMax(pdriest)
 
-map = tm_shape(pdriest) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/pdriest_image.png", width = 1920, height = 1080)
+# map = tm_shape(pdriest) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/pdriest_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1115,13 +1115,13 @@ pwettest = raster(vals=values(pwettest),
               ncols=dim(ref)[2])
 pwettest = setMinMax(pwettest)
 
-map = tm_shape(pwettest) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/pwettest_image.png", width = 1920, height = 1080)
+# map = tm_shape(pwettest) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/pwettest_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1134,13 +1134,13 @@ pseason = raster(vals=values(pseason),
               ncols=dim(ref)[2])
 pseason = setMinMax(pseason)
 
-map = tm_shape(pseason) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/pseason_image.png", width = 1920, height = 1080)
+# map = tm_shape(pseason) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/pseason_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1155,13 +1155,13 @@ tseason = raster(vals=values(tseason),
               ncols=dim(ref)[2])
 tseason = setMinMax(tseason)
 
-map = tm_shape(tseason) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/tseason_image.png", width = 1920, height = 1080)
+# map = tm_shape(tseason) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/tseason_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1174,13 +1174,13 @@ tannual = raster(vals=values(tannual),
               ncols=dim(ref)[2])
 tannual = setMinMax(tannual)
 
-map = tm_shape(tannual) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/tannual_image.png", width = 1920, height = 1080)
+# map = tm_shape(tannual) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/tannual_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1193,13 +1193,13 @@ tmax = raster(vals=values(tmax),
               ncols=dim(ref)[2])
 tmax = setMinMax(tmax)
 
-map = tm_shape(tmax) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/tmax_image.png", width = 1920, height = 1080)
+# map = tm_shape(tmax) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/tmax_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1280,13 +1280,13 @@ clayContent = raster(vals=values(clayContent),
 clayContent = setMinMax(clayContent)
 clayContent[clayContent <= 0] = NA  
 
-map = tm_shape(clayContent) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/clayContent_image.png", width = 1920, height = 1080)
+# map = tm_shape(clayContent) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/clayContent_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1299,13 +1299,13 @@ waterContent = raster(vals=values(waterContent),
 waterContent = setMinMax(waterContent)
 waterContent[waterContent <= 0] = NA  
 
-map = tm_shape(waterContent) + 
-  tm_raster(n = 15,
-            palette = colorRampPalette( c("blue","yellow", "red"))(12),
-            legend.hist = TRUE) +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/waterContent_image.png", width = 1920, height = 1080)
+# map = tm_shape(waterContent) + 
+#   tm_raster(n = 15,
+#             palette = colorRampPalette( c("blue","yellow", "red"))(12),
+#             legend.hist = TRUE) +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/waterContent_image.png", width = 1920, height = 1080)
 
 ```
 
@@ -1347,6 +1347,6 @@ maximas@data = cbind(maximas@data, explanatoryVariables)
 # exclui o stack de camadas originais
 rm(explanatoryVariables)
 rm(layers)
-rm(srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, tmax, clayContent, waterContent, fapar)
+rm(srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, tmax, clayContent, waterContent, fapar, fapar2, ref)
 
 ```
