@@ -43,7 +43,7 @@ maximas_75<-maximas[maximas$altura_cop>75,]
 
 ### Heigth > 50
 
-```{r maxEnt50}
+```{r maxEnt50, eval=FALSE}
 
 # Coordenadas para a extensão de corte do mapa
 model.extent<-extent(min(maximas_50$coords.x1)-10,max(maximas_50$coords.x1)+10,min(maximas_50$coords.x2)-10,max(maximas_50$coords.x2)+10)
@@ -82,7 +82,7 @@ tmap_save(map, "./plot/height50_maxent.png", width = 1920, height = 1080)
 
 ### Heigth > 60
 
-```{r maxEnt60}
+```{r maxEnt60, eval=FALSE}
 
 # Coordenadas para a extensão de corte do mapa
 model.extent<-extent(min(maximas_60$coords.x1)-10,max(maximas_60$coords.x1)+10,min(maximas_60$coords.x2)-10,max(maximas_60$coords.x2)+10)
@@ -149,18 +149,23 @@ modelo_70m <- predict(rattler.me, modelEnv)
 map = tm_shape(modelo_70m) + 
   tm_raster(n = 15,
             palette = "Greens",
-            legend.hist = TRUE) +
+            legend.hist = FALSE,
+            title = "Prob. height > 70 m") +
   tm_shape(maximas_70) + 
   tm_dots("black", size = 0.07) +
-  tm_legend(outside = TRUE, hist.width = 2)
+  tm_shape(amaz) + tm_borders() +
+  tm_legend(outside = TRUE) +
+  tm_grid(lines = FALSE,
+          labels.inside.frame = FALSE, 
+          projection = "+proj=longlat")
 
-tmap_save(map, "./plot/height70_maxent.png", width = 1920, height = 1080)
+tmap_save(map, "./plot/niche_height70_maxent.png", width = 1920, height = 1080)
 
 ```
 
 ### Heigth > 75
 
-```{r maxEnt75}
+```{r maxEnt75, eval = FALSE}
 
 # Coordenadas para a extensão de corte do mapa
 model.extent<-extent(min(maximas_75$coords.x1)-10,max(maximas_75$coords.x1)+10,min(maximas_75$coords.x2)-10,max(maximas_75$coords.x2)+10)

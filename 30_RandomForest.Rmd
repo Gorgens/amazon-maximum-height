@@ -102,7 +102,9 @@ heightRaster = setMinMax(heightRaster)
 map = tm_shape(heightRaster) + 
   tm_raster(n = 15,
             palette = "Greens",
-            legend.hist = TRUE) +
+            legend.hist = TRUE,
+            title = "Maximum height (m)") +
+  tm_shape(amaz) + tm_borders() +
   tm_legend(outside = TRUE, hist.width = 2)
 #print(map)
 tmap_save(map, "./plot/heightRaster_RandomForest.png", width = 1920, height = 1080)
