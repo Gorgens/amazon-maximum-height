@@ -67,48 +67,26 @@ rm(folds, group_fit_control)
 
 ```{r}
 # apresenta importância das variáveis com base nos modelos Random Forest
-a = varImp(rf.intactForest)
-```
-
-```{r}
-# normaliza camada uspeed
-#uspeedScaled = (uspeed - normParam$mean['uspeed']) / normParam$std['uspeed']
-# remove raster original uspeed
-#rm(uspeed)
-
-# normaliza camada vspeed
-#vspeedScaled = (vspeed - normParam$mean['vspeed']) / normParam$std['vspeed']
-# remove raster original uspeed
-#rm(vspeed)
-
-# normaliza camada uspeed
-#srtmScaled = (srtm - normParam$mean['srtm']) / normParam$std['srtm']
-# remove raster original uspeed
-#rm(srtm)
-
-#scaledLayers = stack(srtmScaled, uspeedScaled, vspeedScaled)
-#names(scaledLayers) = c("srtm", "uspeed", "vspeed")
-#rm(srtmScaled, uspeedScaled, vspeedScaled)
-
+varImp(rf.intactForest)
 ```
 
 ```{r}
 
-#heightRaster = predict(scaledLayers, rf.intactForest)
-heightIntactForestRaster = predict(layers2estimate, rf.intactForest)
-heightIntactForestRaster = setMinMax(heightIntactForestRaster)
-#writeRaster(heightIntactForestRaster, filename = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/rfHeightIntactForestRaster.tif')
-
-
-map = tm_shape(heightIntactForestRaster) + 
-  tm_raster(n = 15,
-            palette = "Greens",
-            legend.hist = TRUE,
-            title = "Maximum height (m)") +
-  tm_shape(amaz) + tm_borders() +
-  tm_legend(outside = TRUE, hist.width = 2)
-#print(map)
-tmap_save(map, "./plot/heightRaster_RandomForest_InstactForest.png", width = 1920, height = 1080)
+# #heightRaster = predict(scaledLayers, rf.intactForest)
+# heightIntactForestRaster = predict(layers2estimate, rf.intactForest)
+# heightIntactForestRaster = setMinMax(heightIntactForestRaster)
+# #writeRaster(heightIntactForestRaster, filename = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/rfHeightIntactForestRaster.tif')
+# 
+# 
+# map = tm_shape(heightIntactForestRaster) + 
+#   tm_raster(n = 15,
+#             palette = "Greens",
+#             legend.hist = TRUE,
+#             title = "Maximum height (m)") +
+#   tm_shape(amaz) + tm_borders() +
+#   tm_legend(outside = TRUE, hist.width = 2)
+# #print(map)
+# tmap_save(map, "./plot/heightRaster_RandomForest_InstactForest.png", width = 1920, height = 1080)
 
 ```
 

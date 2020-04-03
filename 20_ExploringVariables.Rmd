@@ -14,6 +14,7 @@ require(sf)
 require(leaflet)
 require(sp)
 require(gridExtra)
+require(grid)
 require(magrittr)
 require(factoextra) 
 require(randomForest)
@@ -25,40 +26,43 @@ require(minpack.lm)
 
 ## Principal components analysis
 
-```{r}
-# separa as variáveis explicativas
-input = maximas@data %>% na.omit() %>% select(-altura_cop)
-# separa a variável altura maxima
-output = maximas@data %>% na.omit() %>% select(altura_cop)
-# renomeia a variável
-names(output) = c("height")
-# normaliza as variáveis explicativas
-inputScaled = input %>% preProcess(method = c("center", "scale")) %>% predict(input)
-# salvar parâmetros da normalização
-normParam = preProcess(input, method = c("center", "scale"))
-
-# ajusta os componentes principais
-res.pca = prcomp(inputScaled)                                           
-#res.pca = prcomp(input)                                           
-# calcula a correlação da variável dependente e componentes
-target.coord = cor(output, res.pca$x) 
-# cria biplot
-p = fviz_pca_var(res.pca, col.var = "contrib", # Color by contributions to the PC
-                 gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                 repel = TRUE)     # Avoid text overlapping)
-# adiciona variável dependente no biplot
-png("./plot/pca.png", width = 960, height = 720)
-fviz_add(p, target.coord, color ="black", geom="arrow")
-dev.off()
-
-rm(p, target.coord)
+```{r, eval=FALSE}
+# # separa as variáveis explicativas
+# input = maximas@data %>% na.omit() %>% select(-altura_cop)
+# # separa a variável altura maxima
+# output = maximas@data %>% na.omit() %>% select(altura_cop)
+# # renomeia a variável
+# names(output) = c("height")
+# # normaliza as variáveis explicativas
+# inputScaled = input %>% preProcess(method = c("center", "scale")) %>% predict(input)
+# # salvar parâmetros da normalização
+# normParam = preProcess(input, method = c("center", "scale"))
+# 
+# # ajusta os componentes principais
+# res.pca = prcomp(inputScaled)                                           
+# #res.pca = prcomp(input)                                           
+# # calcula a correlação da variável dependente e componentes
+# target.coord = cor(output, res.pca$x) 
+# # cria biplot
+# p = fviz_pca_var(res.pca, col.var = "contrib", # Color by contributions to the PC
+#                  gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#                  repel = TRUE)     # Avoid text overlapping)
+# # adiciona variável dependente no biplot
+# png("./plot/pca.png", width = 960, height = 720)
+# fviz_add(p, target.coord, color ="black", geom="arrow")
+# dev.off()
+# 
+# rm(p, target.coord)
 ```
 
-## Covariance
+## Covariance and Correlation
 
 ```{r}
 covMatrix = maximas@data %>% na.omit() %>% cov()
-write.csv(covMatrix, file = './tables/covariance.csv')
+# write.csv(covMatrix, file = './tables/covariance.csv')
+
+corMatrix = maximas@data %>% na.omit() %>% cor()
+# write.csv(corMatrix, file = './tables/correlation.csv')
 ```
 
 ## Efficience frontier by variable
@@ -125,17 +129,17 @@ uspeedWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3]
 estHeight = data.frame(uspeed = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100), altura_cop = uspeedWeibull(x = seq(min(temp$uspeed), max(temp$uspeed), length.out = 100)))
 
 
-ggplot(temp, aes(uspeed, altura_cop)) + 
+uspeedPlot = ggplot(temp, aes(uspeed, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
   geom_line(data = estHeight, aes(uspeed, altura_cop)) +
-  xlab('Speed (m/s)') + ylab('Height (m)') + ylim(c(0, 100)) +
+  xlab('u-Speed (m/s)') + ylab('Height (m)') + ylim(c(0, 100)) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/uspeed_plot.png")
+#ggsave("./plot/uspeed_plot.png")
 
 ```
 
@@ -191,17 +195,17 @@ vspeedWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3]
 
 estHeight = data.frame(vspeed = seq(min(temp$vspeed), max(temp$vspeed), length.out = 100), altura_cop = vspeedWeibull(x = seq(min(temp$vspeed), max(temp$vspeed), length.out = 100)))
 
-ggplot(temp, aes(vspeed, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(vspeed, altura_cop)) +
-  xlab('Speed (m/s)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(vspeed, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(vspeed, altura_cop)) +
+#   xlab('Speed (m/s)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/vspeed_plot.png")
+#ggsave("./plot/vspeed_plot.png")
 
 ```
 
@@ -257,17 +261,17 @@ days20Weibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3]
 
 estHeight = data.frame(days20 = seq(min(temp$days20), max(temp$days20), length.out = 100), altura_cop = days20Weibull(x = seq(min(temp$days20), max(temp$days20), length.out = 100)))
 
-ggplot(temp, aes(days20, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(days20, altura_cop)) +
-  xlab('Number of days > 20 mm (days)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(days20, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(days20, altura_cop)) +
+#   xlab('Number of days > 20 mm (days)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/days20_plot.png")
+#ggsave("./plot/days20_plot.png")
 
 
 ```
@@ -324,7 +328,7 @@ lightningWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)
 
 estHeight = data.frame(lightning = seq(min(temp$lightning), max(temp$lightning), length.out = 100), altura_cop = lightningWeibull(x = seq(min(temp$lightning), max(temp$lightning), length.out = 100)))
 
-ggplot(temp, aes(lightning, altura_cop)) + 
+lightPlot = ggplot(temp, aes(lightning, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
   geom_line(data = estHeight, aes(lightning, altura_cop)) +
@@ -334,7 +338,7 @@ ggplot(temp, aes(lightning, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/lightning_plot.png")
+#ggsave("./plot/lightning_plot.png")
 
 
 ```
@@ -391,7 +395,7 @@ srtmWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], 
 
 estHeight = data.frame(srtm = seq(min(temp$srtm), max(temp$srtm), length.out = 100), altura_cop = srtmWeibull(x = seq(min(temp$srtm), max(temp$srtm), length.out = 100)))
 
-ggplot(temp, aes(srtm, altura_cop)) + 
+srtmPlot = ggplot(temp, aes(srtm, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
   geom_line(data = estHeight, aes(srtm, altura_cop)) +
@@ -401,7 +405,7 @@ ggplot(temp, aes(srtm, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/srtm_plot.png")
+#ggsave("./plot/srtm_plot.png")
 
 ```
 
@@ -457,17 +461,17 @@ petWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], x
 
 estHeight = data.frame(pet = seq(min(temp$pet), max(temp$pet), length.out = 100), altura_cop = petWeibull(x = seq(min(temp$pet), max(temp$pet), length.out = 100)))
 
-ggplot(temp, aes(pet, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(pet, altura_cop)) +
-  xlab('PET (mm)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(pet, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(pet, altura_cop)) +
+#   xlab('PET (mm)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/pet_plot.png")
+#ggsave("./plot/pet_plot.png")
 
 ```
 
@@ -523,7 +527,7 @@ faparWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3],
 
 estHeight = data.frame(fapar = seq(min(temp$fapar), max(temp$fapar), length.out = 100), altura_cop = faparWeibull(x = seq(min(temp$fapar), max(temp$fapar), length.out = 100)))
 
-ggplot(temp, aes(fapar, altura_cop)) + 
+faparPlot = ggplot(temp, aes(fapar, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
   geom_line(data = estHeight, aes(fapar, altura_cop)) +
@@ -533,7 +537,7 @@ ggplot(temp, aes(fapar, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/fapar_plot.png")
+#ggsave("./plot/fapar_plot.png")
 
 ```
 
@@ -589,7 +593,7 @@ clearDaysWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)
 
 estHeight = data.frame(clearDays = seq(min(temp$clearDays), max(temp$clearDays), length.out = 100), altura_cop = clearDaysWeibull(x = seq(min(temp$clearDays), max(temp$clearDays), length.out = 100)))
 
-ggplot(temp, aes(clearDays, altura_cop)) + 
+clearDaysPLot = ggplot(temp, aes(clearDays, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
   geom_line(data = estHeight, aes(clearDays, altura_cop)) +
@@ -599,7 +603,7 @@ ggplot(temp, aes(clearDays, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/clearDays_plot.png")
+#ggsave("./plot/clearDays_plot.png")
 
 ```
 
@@ -655,17 +659,17 @@ month100Weibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[
 
 estHeight = data.frame(month100 = seq(min(temp$month100), max(temp$month100), length.out = 100), altura_cop = month100Weibull(x = seq(min(temp$month100), max(temp$month100), length.out = 100)))
 
-ggplot(temp, aes(month100, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(month100, altura_cop)) +
-  xlab('Number of months < 100 mm (months)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(month100, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(month100, altura_cop)) +
+#   xlab('Number of months < 100 mm (months)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/month100_plot.png")
+#ggsave("./plot/month100_plot.png")
 
 ```
 
@@ -721,17 +725,17 @@ pdriestWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3
 
 estHeight = data.frame(pdriest = seq(min(temp$pdriest), max(temp$pdriest), length.out = 100), altura_cop = pdriestWeibull(x = seq(min(temp$pdriest), max(temp$pdriest), length.out = 100)))
 
-ggplot(temp, aes(pdriest, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(pdriest, altura_cop)) +
-  xlab('Precipitation in the driest month (mm)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(pdriest, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(pdriest, altura_cop)) +
+#   xlab('Precipitation in the driest month (mm)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/pdriest_plot.png")
+#ggsave("./plot/pdriest_plot.png")
 
 ```
 
@@ -787,17 +791,17 @@ pwettestWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[
 
 estHeight = data.frame(pwettest = seq(min(temp$pwettest), max(temp$pwettest), length.out = 100), altura_cop = pwettestWeibull(x = seq(min(temp$pwettest), max(temp$pwettest), length.out = 100)))
 
-ggplot(temp, aes(pwettest, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(pwettest, altura_cop)) +
-  xlab('Precipitation in the wettest month (mm)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(pwettest, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(pwettest, altura_cop)) +
+#   xlab('Precipitation in the wettest month (mm)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/pwettest_plot.png")
+#ggsave("./plot/pwettest_plot.png")
 
 ```
 
@@ -854,7 +858,7 @@ pannualWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3
 
 estHeight = data.frame(pannual = seq(min(temp$pannual), max(temp$pannual), length.out = 100), altura_cop = pannualWeibull(x = seq(min(temp$pannual), max(temp$pannual), length.out = 100)))
 
-ggplot(temp, aes(pannual, altura_cop)) + 
+pannualPlot = ggplot(temp, aes(pannual, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
   geom_line(data = estHeight, aes(pannual, altura_cop)) +
@@ -864,7 +868,7 @@ ggplot(temp, aes(pannual, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/pannual_plot.png")
+#ggsave("./plot/pannual_plot.png")
 
 ```
 
@@ -921,7 +925,7 @@ pseasonWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3
 
 estHeight = data.frame(pseason = seq(min(temp$pseason), max(temp$pseason), length.out = 100), altura_cop = pseasonWeibull(x = seq(min(temp$pseason), max(temp$pseason), length.out = 100)))
 
-ggplot(temp, aes(pseason, altura_cop)) + 
+pseasonPlot = ggplot(temp, aes(pseason, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
   geom_line(data = estHeight, aes(pseason, altura_cop)) +
@@ -931,7 +935,7 @@ ggplot(temp, aes(pseason, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/pseason_plot.png")
+#ggsave("./plot/pseason_plot.png")
 
 ```
 
@@ -988,17 +992,17 @@ tannualWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3
 
 estHeight = data.frame(tannual = seq(min(temp$tannual), max(temp$tannual), length.out = 100), altura_cop = tannualWeibull(x = seq(min(temp$tannual), max(temp$tannual), length.out = 100)))
 
-ggplot(temp, aes(tannual, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(tannual, altura_cop)) +
-  xlab('Annual temperature (°C)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(tannual, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(tannual, altura_cop)) +
+#   xlab('Annual temperature (°C)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/tannual_plot.png")
+#ggsave("./plot/tannual_plot.png")
 
 ```
 
@@ -1055,17 +1059,17 @@ tseasonWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3
 
 estHeight = data.frame(tseason = seq(min(temp$tseason), max(temp$tseason), length.out = 100), altura_cop = tseasonWeibull(x = seq(min(temp$tseason), max(temp$tseason), length.out = 100)))
 
-ggplot(temp, aes(tseason, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(tseason, altura_cop)) +
-  xlab('Temperature seasonality (°C)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(tseason, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(tseason, altura_cop)) +
+#   xlab('Temperature seasonality (°C)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/tseason_plot.png")
+#ggsave("./plot/tseason_plot.png")
 
 ```
 
@@ -1122,17 +1126,17 @@ tmaxWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res2)[3], 
 
 estHeight = data.frame(tmax = seq(min(temp$tmax), max(temp$tmax), length.out = 100), altura_cop = tmaxWeibull(x = seq(min(temp$tmax), max(temp$tmax), length.out = 100)))
 
-ggplot(temp, aes(tmax, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(tmax, altura_cop)) +
-  xlab('Maximum temperature (°C)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(tmax, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(tmax, altura_cop)) +
+#   xlab('Maximum temperature (°C)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/tmax_plot.png")
+#ggsave("./plot/tmax_plot.png")
 
 ```
 
@@ -1188,7 +1192,7 @@ clayContentWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(res
 
 estHeight = data.frame(clayContent = seq(min(temp$clayContent), max(temp$clayContent), length.out = 100), altura_cop = clayContentWeibull(x = seq(min(temp$clayContent), max(temp$clayContent), length.out = 100)))
 
-ggplot(temp, aes(clayContent, altura_cop)) + 
+clayPlot = ggplot(temp, aes(clayContent, altura_cop)) + 
   geom_point(colour = 'darkgray') +
   geom_point(data = efficientBorderFiltered, colour = "black") +
   geom_line(data = estHeight, aes(clayContent, altura_cop)) +
@@ -1198,7 +1202,7 @@ ggplot(temp, aes(clayContent, altura_cop)) +
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/clayContent_plot.png")
+#ggsave("./plot/clayContent_plot.png")
 
 ```
 
@@ -1254,16 +1258,57 @@ waterContentWeibull = function(a = coef(res2)[1], b = coef(res2)[2], d = coef(re
 
 estHeight = data.frame(waterContent = seq(min(temp$waterContent), max(temp$waterContent), length.out = 100), altura_cop = waterContentWeibull(x = seq(min(temp$waterContent), max(temp$waterContent), length.out = 100)))
 
-ggplot(temp, aes(waterContent, altura_cop)) + 
-  geom_point(colour = 'darkgray') +
-  geom_point(data = efficientBorderFiltered, colour = "black") +
-  geom_line(data = estHeight, aes(waterContent, altura_cop)) +
-  xlab('Water Content (%)') + ylab('Height (m)') + ylim(c(0, 100)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black"))
+# ggplot(temp, aes(waterContent, altura_cop)) + 
+#   geom_point(colour = 'darkgray') +
+#   geom_point(data = efficientBorderFiltered, colour = "black") +
+#   geom_line(data = estHeight, aes(waterContent, altura_cop)) +
+#   xlab('Water Content (%)') + ylab('Height (m)') + ylim(c(0, 100)) +
+#   theme_bw() + theme(panel.grid.major = element_blank(), 
+#                      panel.grid.minor = element_blank(),
+#                      panel.background = element_blank(), 
+#                      axis.line = element_line(colour = "black"))
 
-ggsave("./plot/waterContent_plot.png")
+#ggsave("./plot/waterContent_plot.png")
+
+```
+
+### Gráfico com paineis
+
+```{r}
+myplot1 <- arrangeGrob(clearDaysPLot, top = textGrob("A", x = unit(0, "npc")
+         , y   = unit(1, "npc"), just=c("left","top"),
+         gp=gpar(col="black", fontsize=18, fontfamily="Times Roman")))
+
+myplot2 <- arrangeGrob(clayPlot, top = textGrob("B", x = unit(0, "npc")
+         , y = unit(1, "npc"), just=c("left","top"),
+         gp=gpar(col="black", fontsize=18, fontfamily="Times Roman")))
+
+myplot3 <- arrangeGrob(pannualPlot, top = textGrob("C", x = unit(0, "npc")
+        , y  = unit(1, "npc"), just=c("left","top"),
+        gp=gpar(col="black", fontsize=18, fontfamily="Times Roman")))
+
+myplot4 <- arrangeGrob(faparPlot, top = textGrob("D", x = unit(0, "npc")
+        , y = unit(1, "npc"), just=c("left","top"),
+        gp=gpar(col="black",    fontsize=18, fontfamily="Times Roman")))
+
+myplot5 <- arrangeGrob(uspeedPlot, top = textGrob("E", x = unit(0, "npc")
+         , y   = unit(1, "npc"), just=c("left","top"),
+         gp=gpar(col="black", fontsize=18, fontfamily="Times Roman")))
+
+myplot6 <- arrangeGrob(lightPlot, top = textGrob("F", x = unit(0, "npc")
+         , y = unit(1, "npc"), just=c("left","top"),
+         gp=gpar(col="black", fontsize=18, fontfamily="Times Roman")))
+
+myplot7 <- arrangeGrob(pseasonPlot, top = textGrob("G", x = unit(0, "npc")
+        , y  = unit(1, "npc"), just=c("left","top"),
+        gp=gpar(col="black", fontsize=18, fontfamily="Times Roman")))
+
+myplot8 <- arrangeGrob(srtmPlot, top = textGrob("H", x = unit(0, "npc")
+        , y = unit(1, "npc"), just=c("left","top"),
+        gp=gpar(col="black",    fontsize=18, fontfamily="Times Roman")))
+
+png('./plot/marginalFeatures.png', units = 'cm', width = 20, height = 30, res = 300)
+grid.arrange(myplot1, myplot2, myplot3, myplot4, myplot5, myplot6, myplot7, myplot8, ncol=2)
+dev.off()
 
 ```

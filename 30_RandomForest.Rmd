@@ -20,7 +20,7 @@ require(randomForest)
 require(caret)
 ```
 
-** Run first Exploring variables to create essential variables.**
+**Run first Exploring variables to create essential variables.**
 
 ## Random Forest
 
@@ -59,6 +59,7 @@ rf.heightAll = train(height ~ .,
                trControl = group_fit_control) # parâmetros para validação cruzada
 print(rf.heightAll)
 save(rf.heightAll, file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/randomForest.Rdata')
+
 
 # limpa da memória parâmetros para Random Forest
 rm(folds, group_fit_control)
