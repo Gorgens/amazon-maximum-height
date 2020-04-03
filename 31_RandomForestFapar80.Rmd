@@ -25,10 +25,11 @@ require(caret)
 ## Random Forest
 
 ```{r}
+maximas80fapar = subset(maximas, fapar > 80)
 # separa as variáveis explicativas
-input = maximas@data %>% na.omit() %>% select(-altura_cop)
+input = maximas80fapar@data %>% na.omit() %>% select(-altura_cop)
 # separa a variável altura maxima
-output = maximas@data %>% na.omit() %>% select(altura_cop)
+output = maximas80fapar@data %>% na.omit() %>% select(altura_cop)
 # renomeia a variável
 names(output) = c("height")
 # normaliza as variáveis explicativas
@@ -51,14 +52,14 @@ folds = drivers %>% row.names() %>% groupKFold(k = 15)
 # parametriza os parametros de controle da função train do pacote caret
 group_fit_control = trainControl(index = folds, method = "cv")     
 # define variáveis dependentes e independentes
-res.rf = train(height ~ .,                                         
+rf.intactForest = train(height ~ .,                                         
                #data = driversScaled, # define base de dados
                data = drivers,
                method='rf',          # define modelo a ser treinado
                importance=T,         # análise de importancia para as variaveis
                trControl = group_fit_control) # parâmetros para validação cruzada
-print(res.rf)
-save(res.rf, file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/randomForest.Rdata')
+print(rf.intactForest)
+save(rf.intactForest, file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/randomForestIntactForest.Rdata')
 
 # limpa da memória parâmetros para Random Forest
 rm(folds, group_fit_control)
@@ -66,7 +67,7 @@ rm(folds, group_fit_control)
 
 ```{r}
 # apresenta importância das variáveis com base nos modelos Random Forest
-a = varImp(res.rf)
+a = varImp(rf.intactForest)
 ```
 
 ```{r}
@@ -94,11 +95,11 @@ a = varImp(res.rf)
 ```{r}
 
 #heightRaster = predict(scaledLayers, res.rf)
-heightRaster = predict(layers2estimate, res.rf)
-heightRaster = setMinMax(heightRaster)
+heightIntactForestRaster = predict(layers2estimate, rf.intactForest)
+heightIntactForestRaster = setMinMax(heightIntactForestRaster)
 
 
-map = tm_shape(heightRaster) + 
+map = tm_shape(heightIntactForestRaster) + 
   tm_raster(n = 15,
             palette = "Greens",
             legend.hist = TRUE,
@@ -106,7 +107,7 @@ map = tm_shape(heightRaster) +
   tm_shape(amaz) + tm_borders() +
   tm_legend(outside = TRUE, hist.width = 2)
 #print(map)
-tmap_save(map, "./plot/heightRaster_RandomForest.png", width = 1920, height = 1080)
+tmap_save(map, "./plot/heightRaster_RandomForest_InstactForest.png", width = 1920, height = 1080)
 
 ```
 

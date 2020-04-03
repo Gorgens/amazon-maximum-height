@@ -54,6 +54,12 @@ dev.off()
 rm(p, target.coord)
 ```
 
+## Covariance
+
+```{r}
+covMatrix = maximas@data %>% na.omit() %>% cov()
+write.csv(covMatrix, file = './tables/covariance.csv')
+```
 
 ## Efficience frontier by variable
 

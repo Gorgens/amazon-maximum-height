@@ -41,84 +41,6 @@ maximas_75<-maximas[maximas$altura_cop>75,]
 #View(maximas)
 ```
 
-### Heigth > 50
-
-```{r maxEnt50, eval=FALSE}
-
-# Coordenadas para a extensão de corte do mapa
-model.extent<-extent(min(maximas_50$coords.x1)-10,max(maximas_50$coords.x1)+10,min(maximas_50$coords.x2)-10,max(maximas_50$coords.x2)+10)
-
-
-# data frame com latitude e longitude
-rattlerocc=data.frame(x1=maximas_50$coords.x1,x2=maximas_50$coords.x2) #first, just make a data frame of latitudes and longitudes for the model
-
-
-fold <- kfold(rattlerocc, k=5) # add an index that makes five random groups of observations
-
-oco_teste <- rattlerocc[fold == 1, ] # hold out one fifth as test data
-oco_treino <- rattlerocc[fold != 1, ] # the other four fifths are training data
-
-
-rattler.me <- maxent(modelEnv, oco_treino) #note we just using the training data
-
-plot(rattler.me)
-response(rattler.me)
-
-
-modelo_50m <- predict(rattler.me, modelEnv)
-
-
-map = tm_shape(modelo_50m) + 
-  tm_raster(n = 15,
-            palette = "Greens",
-            legend.hist = TRUE) +
-  tm_shape(maximas_50) + 
-  tm_dots("black", size = 0.07) +
-  tm_legend(outside = TRUE, hist.width = 2)
-
-tmap_save(map, "./plot/height50_maxent.png", width = 1920, height = 1080)
-
-```
-
-### Heigth > 60
-
-```{r maxEnt60, eval=FALSE}
-
-# Coordenadas para a extensão de corte do mapa
-model.extent<-extent(min(maximas_60$coords.x1)-10,max(maximas_60$coords.x1)+10,min(maximas_60$coords.x2)-10,max(maximas_60$coords.x2)+10)
-
-
-# data frame com latitude e longitude
-rattlerocc=data.frame(x1=maximas_60$coords.x1,x2=maximas_60$coords.x2) #first, just make a data frame of latitudes and longitudes for the model
-
-
-fold <- kfold(rattlerocc, k=5) # add an index that makes five random groups of observations
-
-oco_teste <- rattlerocc[fold == 1, ] # hold out one fifth as test data
-oco_treino <- rattlerocc[fold != 1, ] # the other four fifths are training data
-
-
-rattler.me <- maxent(modelEnv, oco_treino) #note we just using the training data
-
-plot(rattler.me)
-response(rattler.me)
-
-
-modelo_60m <- predict(rattler.me, modelEnv)
-
-
-map = tm_shape(modelo_60m) + 
-  tm_raster(n = 15,
-            palette = "Greens",
-            legend.hist = TRUE) +
-  tm_shape(maximas_60) + 
-  tm_dots("black", size = 0.07) +
-  tm_legend(outside = TRUE, hist.width = 2)
-
-tmap_save(map, "./plot/height60_maxent.png", width = 1920, height = 1080)
-
-```
-
 ### Heigth > 70
 
 ```{r maxEnt70}
@@ -137,13 +59,14 @@ oco_teste <- rattlerocc[fold == 1, ] # hold out one fifth as test data
 oco_treino <- rattlerocc[fold != 1, ] # the other four fifths are training data
 
 
-rattler.me <- maxent(modelEnv, oco_treino) #note we just using the training data
+nicheHeight70 = maxent(modelEnv, oco_treino) #note we just using the training data
+save(nicheHeight70, file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/maxentHeight70.Rdata')
 
-plot(rattler.me)
-response(rattler.me)
+plot(nicheHeight70)
+response(nicheHeight70)
 
 
-modelo_70m <- predict(rattler.me, modelEnv)
+modelo_70m <- predict(nicheHeight70, modelEnv)
 
 
 map = tm_shape(modelo_70m) + 
@@ -162,43 +85,3 @@ map = tm_shape(modelo_70m) +
 tmap_save(map, "./plot/niche_height70_maxent.png", width = 1920, height = 1080)
 
 ```
-
-### Heigth > 75
-
-```{r maxEnt75, eval = FALSE}
-
-# Coordenadas para a extensão de corte do mapa
-model.extent<-extent(min(maximas_75$coords.x1)-10,max(maximas_75$coords.x1)+10,min(maximas_75$coords.x2)-10,max(maximas_75$coords.x2)+10)
-
-
-# data frame com latitude e longitude
-rattlerocc=data.frame(x1=maximas_75$coords.x1,x2=maximas_75$coords.x2) #first, just make a data frame of latitudes and longitudes for the model
-
-
-fold <- kfold(rattlerocc, k=5) # add an index that makes five random groups of observations
-
-oco_teste <- rattlerocc[fold == 1, ] # hold out one fifth as test data
-oco_treino <- rattlerocc[fold != 1, ] # the other four fifths are training data
-
-
-rattler.me <- maxent(modelEnv, oco_treino) #note we just using the training data
-
-plot(rattler.me)
-response(rattler.me)
-
-
-modelo_75m <- predict(rattler.me, modelEnv)
-
-
-map = tm_shape(modelo_75m) + 
-  tm_raster(n = 15,
-            palette = "Greens",
-            legend.hist = TRUE) +
-  tm_shape(maximas_75) + 
-  tm_dots("black", size = 0.07) +
-  tm_legend(outside = TRUE, hist.width = 2)
-
-tmap_save(map, "./plot/height75_maxent.png", width = 1920, height = 1080)
-
-```
-

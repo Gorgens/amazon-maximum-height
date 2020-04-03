@@ -1325,6 +1325,7 @@ maximas@data = maximas@data %>% select(3)
 layers = stack(fapar, srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, tmax, clayContent, waterContent)
 
 layers2estimate = stack(fapar2, srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, tmax, clayContent, waterContent)
+#save(layers2estimate, file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/layers2estimate.Rdata')
 
 # atualiza nome das camadas
 names(layers) = c("fapar", "srtm", "uspeed", "vspeed", "clearDays", "days20", "lightning", "month100", "pannual", "pdriest", "pet", "pseason", "pwettest", "tannual", "tseason", "tmax", "clayContent", "waterContent")
@@ -1336,7 +1337,6 @@ explanatoryVariables = extract(layers, maximas)
 
 # adiciona no shapefile das alturas máximas os valores das variáveis ambientais extraídas
 maximas@data = cbind(maximas@data, explanatoryVariables)
-
 #writeSpatialShape(maximas, "./data/maximasAndFactors")
 
 # explora graficamente a associação entre altura maxima e variáveis ambientais
