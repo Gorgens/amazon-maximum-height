@@ -51,14 +51,14 @@ folds = drivers %>% row.names() %>% groupKFold(k = 15)
 # parametriza os parametros de controle da função train do pacote caret
 group_fit_control = trainControl(index = folds, method = "cv")     
 # define variáveis dependentes e independentes
-res.rf = train(height ~ .,                                         
+rf.heightAll = train(height ~ .,                                         
                #data = driversScaled, # define base de dados
                data = drivers,
                method='rf',          # define modelo a ser treinado
                importance=T,         # análise de importancia para as variaveis
                trControl = group_fit_control) # parâmetros para validação cruzada
-print(res.rf)
-save(res.rf, file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/randomForest.Rdata')
+print(rf.heightAll)
+save(rf.heightAll, file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/randomForest.Rdata')
 
 # limpa da memória parâmetros para Random Forest
 rm(folds, group_fit_control)
@@ -66,7 +66,7 @@ rm(folds, group_fit_control)
 
 ```{r}
 # apresenta importância das variáveis com base nos modelos Random Forest
-a = varImp(res.rf)
+importanceRF = varImp(rf.heightAll)
 ```
 
 ```{r}
@@ -93,8 +93,8 @@ a = varImp(res.rf)
 
 ```{r}
 
-#heightRaster = predict(scaledLayers, res.rf)
-heightRaster = predict(layers2estimate, res.rf)
+#heightRaster = predict(scaledLayers, rf.heightAll)
+heightRaster = predict(layers2estimate, rf.heightAll)
 heightRaster = setMinMax(heightRaster)
 #writeRaster(heightRaster, filename = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/rfHeightRaster.tif')
 

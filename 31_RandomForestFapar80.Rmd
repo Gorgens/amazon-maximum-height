@@ -94,7 +94,7 @@ a = varImp(rf.intactForest)
 
 ```{r}
 
-#heightRaster = predict(scaledLayers, res.rf)
+#heightRaster = predict(scaledLayers, rf.intactForest)
 heightIntactForestRaster = predict(layers2estimate, rf.intactForest)
 heightIntactForestRaster = setMinMax(heightIntactForestRaster)
 #writeRaster(heightIntactForestRaster, filename = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/rfHeightIntactForestRaster.tif')
