@@ -1,0 +1,58 @@
+---
+title: "Marginal plots for Random Forest"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r, message=FALSE}
+require(ggplot2)
+require(tidyverse)
+require(gridExtra)
+require(magrittr)
+require(factoextra) 
+require(randomForest)
+```
+
+## Random Forest
+
+```{r}
+# load("C:\\Users\\gorge\\Documents\\GIS DataBase\\amazon maximum height extras\\objects\\randomForest.Rdata")
+
+meanVariables = maximas@data %>% na.omit() %>% sapply(mean)
+
+faparPredict = data.frame(fapar = seq(min(na.omit(maximas@data$fapar)),
+                                     max(na.omit(maximas@data$fapar)), 
+                                     length.out = 500),
+                         srtm = rep(meanVariables["srtm"], 500),
+                         uspeed = rep(meanVariables["uspeed"], 500),
+                         vspeed = rep(meanVariables["vspeed"], 500),
+                         clearDays = rep(meanVariables["clearDays"], 500),
+                         days20 = rep(meanVariables["days20"], 500),
+                         lightning = rep(meanVariables["lightning"], 500),
+                         month100 = rep(meanVariables["month100"], 500),
+                         pannual = rep(meanVariables["pannual"], 500),
+                         pdriest = rep(meanVariables["pdriest"], 500),
+                         pet = rep(meanVariables["pet"], 500),
+                         pseason = rep(meanVariables["pseason"], 500),
+                         pwettest = rep(meanVariables["pwettest"], 500),
+                         tannual = rep(meanVariables["tannual"], 500),
+                         tseason = rep(meanVariables["tseason"], 500),
+                         tmax = rep(meanVariables["tmax"], 500),
+                         clayContent = rep(meanVariables["clayContent"], 500),
+                         waterContent = rep(meanVariables["waterContent"], 500))
+
+heightFapar = predict(rf.heightAll, faparPredict)
+
+marginalFapar = ggplot() + 
+  geom_point(aes(faparPredict$fapar, heightFapar)) +
+  xlab('FAPAR (%)') + ylab('Height (m)') +
+  theme_bw() + theme(panel.grid.major = element_blank(), 
+                     panel.grid.minor = element_blank(),
+                     panel.background = element_blank(), 
+                     axis.line = element_line(colour = "black"))
+
+
+```
+
+

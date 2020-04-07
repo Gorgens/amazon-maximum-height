@@ -71,43 +71,20 @@ importanceRF = varImp(rf.heightAll)
 ```
 
 ```{r}
-# normaliza camada uspeed
-#uspeedScaled = (uspeed - normParam$mean['uspeed']) / normParam$std['uspeed']
-# remove raster original uspeed
-#rm(uspeed)
 
-# normaliza camada vspeed
-#vspeedScaled = (vspeed - normParam$mean['vspeed']) / normParam$std['vspeed']
-# remove raster original uspeed
-#rm(vspeed)
+# heightRaster = predict(layers2estimate, rf.heightAll)
+# heightRaster = setMinMax(heightRaster)
+# writeRaster(heightRaster, filename = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/rfHeightRaster.tif')
 
-# normaliza camada uspeed
-#srtmScaled = (srtm - normParam$mean['srtm']) / normParam$std['srtm']
-# remove raster original uspeed
-#rm(srtm)
-
-#scaledLayers = stack(srtmScaled, uspeedScaled, vspeedScaled)
-#names(scaledLayers) = c("srtm", "uspeed", "vspeed")
-#rm(srtmScaled, uspeedScaled, vspeedScaled)
-
-```
-
-```{r}
-
-#heightRaster = predict(scaledLayers, rf.heightAll)
-heightRaster = predict(layers2estimate, rf.heightAll)
-heightRaster = setMinMax(heightRaster)
-#writeRaster(heightRaster, filename = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/rfHeightRaster.tif')
-
-map = tm_shape(heightRaster) + 
-  tm_raster(n = 15,
-            palette = "Greens",
-            legend.hist = TRUE,
-            title = "Maximum height (m)") +
-  tm_shape(amaz) + tm_borders() +
-  tm_legend(outside = TRUE, hist.width = 2)
+# map = tm_shape(heightRaster) + 
+#   tm_raster(n = 15,
+#             palette = "Greens",
+#             legend.hist = TRUE,
+#             title = "Maximum height (m)") +
+#   tm_shape(amaz) + tm_borders() +
+#   tm_legend(outside = TRUE, hist.width = 2)
 #print(map)
-tmap_save(map, "./plot/heightRaster_RandomForest.png", width = 1920, height = 1080)
+#tmap_save(map, "./plot/heightRaster_RandomForest.png", width = 1920, height = 1080)
 
 ```
 
