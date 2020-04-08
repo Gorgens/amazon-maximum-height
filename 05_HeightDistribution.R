@@ -1,9 +1,3 @@
----
-title: "Height Distribution"
-output: html_document
----
-
-```{r, message=FALSE}
 require(ggplot2)
 require(raster)
 require(tidyverse)
@@ -16,11 +10,8 @@ require(magrittr)
 require(factoextra) 
 require(randomForest)
 require(caret)
-```
 
-## Importing maximum height dataset
-
-```{r, message=FALSE}
+## Importing maximum height dataset -------------------------
 amaz = shapefile('./data/amazbioma.shp')
 maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200321.gpkg', layer = 'pontos_wgs84'))
 maximas@data = maximas@data %>% select(3)
@@ -30,19 +21,14 @@ mapAll = tm_shape(amaz) + tm_polygons() +
 
 # tmap_save(mapAll, "./plot/mapAll.png", width = 1920, height = 1080)
 print(mapAll)
-```
 
-## Results
-
-### Maximum tree height distribution
-
-```{r}
+## Maximum tree height distribution -------------------------
 taller50 = maximas[maximas$altura_cop > 50,]
 map50 = tm_shape(amaz) + 
-        tm_polygons(col="grey", border.col="white") +
-        tm_shape(taller50) + tm_dots("black", size=.1) +
-        tm_layout(title = "trees > 50 m")
-        #tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
+  tm_polygons(col="grey", border.col="white") +
+  tm_shape(taller50) + tm_dots("black", size=.1) +
+  tm_layout(title = "trees > 50 m")
+#tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
 rm(taller50)
 
 # tmap_save(map50, "./plot/map50.png", width = 1920, height = 1080)
@@ -51,49 +37,40 @@ rm(taller50)
 
 taller60 = maximas[maximas$altura_cop > 60,]
 map60 = tm_shape(amaz) + 
-        tm_polygons(col="grey", border.col="white") +
-        tm_shape(taller60) + tm_dots("black", size=.1) +
-        tm_layout(title = "trees > 60 m")
-        #tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
+  tm_polygons(col="grey", border.col="white") +
+  tm_shape(taller60) + tm_dots("black", size=.1) +
+  tm_layout(title = "trees > 60 m")
+#tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
 rm(taller60)
 
 # tmap_save(map60, "./plot/map60.png", width = 1920, height = 1080)
 # print(map60)
 
 
-
 taller70 = maximas[maximas$altura_cop > 70,]
 map70 = tm_shape(amaz) + 
-        tm_polygons(col="grey", border.col="white") +
-        tm_shape(taller70) + tm_dots("black", size=.1) +
-        tm_layout(title = "trees > 70 m")
-        #tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
+  tm_polygons(col="grey", border.col="white") +
+  tm_shape(taller70) + tm_dots("black", size=.1) +
+  tm_layout(title = "trees > 70 m")
+#tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
 rm(taller70)
 
 # tmap_save(map70, "./plot/map70.png", width = 1920, height = 1080)
 # print(map70)
 
 
-
 taller80 = maximas[maximas$altura_cop > 80,]
 
 map80 = tm_shape(amaz) + 
-        tm_polygons(col="grey", border.col="white") +
-        tm_shape(taller80) + tm_dots("black", size=.1) +
-        tm_layout(title = "trees > 80 m")
-        #tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
+  tm_polygons(col="grey", border.col="white") +
+  tm_shape(taller80) + tm_dots("black", size=.1) +
+  tm_layout(title = "trees > 80 m")
+#tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
 rm(taller80)
 
 # tmap_save(map80, "./plot/map80.png", width = 1920, height = 1080)
 # print(map80)
 
-```
-
-### Panel map
-
-```{r}
 
 panelHeightDist = tmap_arrange(map50, map60, map70, map80, ncol=2)
 tmap_save(panelHeightDist, "./plot/panelHeightDist.png", width = 25, height = 25, units = "cm")
-
-```
