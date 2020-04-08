@@ -1,19 +1,12 @@
 ## Open required packages
 require(ggplot2)
-require(maptools)
 require(raster)
+require(sf)
+require(rgdal)
 require(tidyverse)
 require(tmap)
-require(sf)
-require(leaflet)
-require(sp)
 require(gridExtra)
-require(magrittr)
 require(factoextra) 
-require(randomForest)
-require(caret)
-require(minpack.lm)
-
 
 ## Importing raster files ---------------------------
 amaz = shapefile('./data/amazbioma.shp')
@@ -452,9 +445,9 @@ maximas@data = maximas@data %>% select(3)
 # tm_shape(amaz) + tm_polygons() + 
 #   tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")
 
-explanatoryVariables = extract(layers, maximas)                                # extrai valor das variáveis ambientais para cada altura máxima mapeada
+explanatoryVariables = raster::extract(layers, maximas)                        # extrai valor das variáveis ambientais para cada altura máxima mapeada
 maximas@data = cbind(maximas@data, explanatoryVariables)                       # adiciona no shapefile das alturas máximas os valores das variáveis ambientais extraídas
-writeSpatialShape(maximas, "./data/maximasAndFactors")                         # salva shapefile com os atributos clipados dos rasters
+#writeSpatialShape(maximas, "./data/maximasAndFactors")                        # salva shapefile com os atributos clipados dos rasters
 
 ## Limpa memória ------------------------------
 rm(explanatoryVariables)
