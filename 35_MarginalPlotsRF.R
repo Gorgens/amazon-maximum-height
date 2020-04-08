@@ -35,7 +35,7 @@ heightfapar = predict(rf.heightAll, faparPredict)
 
 marginalFapar = ggplot() + 
   geom_line(aes(faparPredict$fapar, heightfapar)) +
-  xlab('FAPAR (%)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('FAPAR (%)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -66,7 +66,7 @@ heightsrtm = predict(rf.heightAll, srtmPredict)
 
 marginalSrtm = ggplot() + 
   geom_line(aes(srtmPredict$srtm, heightsrtm)) +
-  xlab('SRTM (m)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('SRTM (m)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -97,7 +97,7 @@ heightuspeed = predict(rf.heightAll, uspeedPredict)
 
 marginalUspeed = ggplot() + 
   geom_line(aes(uspeedPredict$uspeed, heightuspeed)) +
-  xlab('u-Speed (m/s)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('u-Speed (m/s)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -128,7 +128,7 @@ heightvspeed = predict(rf.heightAll, vspeedPredict)
 
 marginalVspeed = ggplot() + 
   geom_line(aes(vspeedPredict$vspeed, heightvspeed)) +
-  xlab('v-Speed (m/s)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('v-Speed (m/s)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -159,7 +159,7 @@ heightclearDays = predict(rf.heightAll, clearDaysPredict)
 
 marginalClearDays = ggplot() + 
   geom_line(aes(clearDaysPredict$clearDays, heightclearDays)) +
-  xlab('Number of clear days (days/yr)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Number of clear days (days/yr)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -190,7 +190,7 @@ heightdays20 = predict(rf.heightAll, days20Predict)
 
 marginalDays20 = ggplot() + 
   geom_line(aes(days20Predict$days20, heightdays20)) +
-  xlab('Days with more then 20 mm (days/yr)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Days with more then 20 mm (days/yr)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -221,7 +221,7 @@ heightlightning = predict(rf.heightAll, lightningPredict)
 
 marginalLightning = ggplot() + 
   geom_line(aes(lightningPredict$lightning, heightlightning)) +
-  xlab('Lightning (rate of lights)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Lightning (rate of lights)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -252,7 +252,7 @@ marginalLightning = ggplot() +
 # 
 # marginalMonth100 = ggplot() + 
 #   geom_line(aes(month100Predict$month100, heightmonth100)) +
-#   xlab('Month with precipitation greater than 100 mm (months/yr)') + ylab('Height (m)') + ylim(52, 62) +
+#   xlab('Month with precipitation greater than 100 mm (months/yr)') + ylab('Height (m)') + ylim(50, 70) +
 #   theme_bw() + theme(panel.grid.major = element_blank(), 
 #                      panel.grid.minor = element_blank(),
 #                      panel.background = element_blank(), 
@@ -284,7 +284,7 @@ heightpannual = predict(rf.heightAll, pannualPredict)
 
 marginalPannual = ggplot() + 
   geom_line(aes(pannualPredict$pannual, heightpannual)) +
-  xlab('Annual precipitation (mm)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Annual precipitation (mm)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -316,7 +316,7 @@ marginalPannual = ggplot() +
 # 
 # marginalPdriest = ggplot() + 
 #   geom_line(aes(pdriestPredict$pdriest, heightpdriest)) +
-#   xlab('Precipitation of the driest month (mm)') + ylab('Height (m)') + ylim(52, 62) +
+#   xlab('Precipitation of the driest month (mm)') + ylab('Height (m)') + ylim(50, 70) +
 #   theme_bw() + theme(panel.grid.major = element_blank(), 
 #                      panel.grid.minor = element_blank(),
 #                      panel.background = element_blank(), 
@@ -348,7 +348,7 @@ heightpet = predict(rf.heightAll, petPredict)
 
 marginalPet = ggplot() + 
   geom_line(aes(petPredict$pet, heightpet)) +
-  xlab('Potential Evapotranspiration (mm)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Potential Evapotranspiration (mm)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -380,7 +380,7 @@ heightpseason = predict(rf.heightAll, pseasonPredict)
 
 marginalPseason = ggplot() + 
   geom_line(aes(pseasonPredict$pseason, heightpseason)) +
-  xlab('Precipitation seasonality (mm)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Precipitation seasonality (mm)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -412,7 +412,7 @@ heightpwettest = predict(rf.heightAll, pwettestPredict)
 
 marginalPwettest = ggplot() + 
   geom_line(aes(pwettestPredict$pwettest, heightpwettest)) +
-  xlab('Precipitation of the wettest month (mm)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Precipitation of the wettest month (mm)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -444,7 +444,7 @@ heighttannual = predict(rf.heightAll, tannualPredict)
 
 marginalTannual = ggplot() + 
   geom_line(aes(tannualPredict$tannual, heighttannual)) +
-  xlab('Annual temperature (°C)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Annual temperature (°C)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -476,7 +476,7 @@ heighttseason = predict(rf.heightAll, tseasonPredict)
 
 marginalTseason = ggplot() + 
   geom_line(aes(tseasonPredict$tseason, heighttseason)) +
-  xlab('Temperature seasonality (°C)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Temperature seasonality (°C)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -508,7 +508,7 @@ heighttmax = predict(rf.heightAll, tmaxPredict)
 
 marginalTmax = ggplot() + 
   geom_line(aes(tmaxPredict$tmax, heighttmax)) +
-  xlab('Maximum temperature (°C)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Maximum temperature (°C)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -540,7 +540,7 @@ heightclayContent = predict(rf.heightAll, clayContentPredict)
 
 marginalClayContent = ggplot() + 
   geom_line(aes(clayContentPredict$clayContent, heightclayContent)) +
-  xlab('Clay content (%)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Clay content (%)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -572,116 +572,126 @@ heightwaterContent = predict(rf.heightAll, waterContentPredict)
 
 marginalWaterContent = ggplot() + 
   geom_line(aes(waterContentPredict$waterContent, heightwaterContent)) +
-  xlab('Water content (%)') + ylab('Height (m)') + ylim(52, 62) +
+  xlab('Water content (%)') + ylab('Height (m)') + ylim(50, 70) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
+## Gráfico com paineis sem letras -------------------------
 
-## Gráfico com paineis -------------------------
-
-myplot1 <- arrangeGrob(marginalFapar, top = textGrob("A", x = unit(0, "npc")
-                                                     , y   = unit(1, "npc"), just=c("left","top"),
-                                                     gp=gpar(col="black", fontsize=18)))
-
-myplot2 <- arrangeGrob(marginalSrtm, top = textGrob("B", x = unit(0, "npc")
-                                                    , y = unit(1, "npc"), just=c("left","top"),
-                                                    gp=gpar(col="black", fontsize=18)))
-
-myplot3 <- arrangeGrob(marginalUspeed, top = textGrob("C", x = unit(0, "npc")
-                                                      , y  = unit(1, "npc"), just=c("left","top"),
-                                                      gp=gpar(col="black", fontsize=18)))
-
-myplot4 <- arrangeGrob(marginalVspeed, top = textGrob("D", x = unit(0, "npc")
-                                                      , y = unit(1, "npc"), just=c("left","top"),
-                                                      gp=gpar(col="black",    fontsize=18)))
-
-myplot5 <- arrangeGrob(marginalClearDays, top = textGrob("E", x = unit(0, "npc")
-                                                         , y   = unit(1, "npc"), just=c("left","top"),
-                                                         gp=gpar(col="black", fontsize=18)))
-
-myplot6 <- arrangeGrob(marginalDays20, top = textGrob("F", x = unit(0, "npc")
-                                                      , y = unit(1, "npc"), just=c("left","top"),
-                                                      gp=gpar(col="black", fontsize=18)))
-
-png('./plot/rfMarginalPlotsP1Cor80.png', units = 'cm', width = 20, height = 30, res = 300)
-grid.arrange(myplot1, 
-             myplot2, 
-             myplot3, 
-             myplot4, 
-             myplot5, 
-             myplot6, 
-             ncol=2)
+png('./plot/rfMarginalPlotsCor80.png', units = 'cm', width = 20, height = 30, res = 300)
+grid.arrange(marginalFapar, 
+             marginalSrtm, 
+             marginalUspeed, 
+             marginalVspeed, 
+             marginalClearDays, 
+             marginalDays20,
+             marginalLightning,
+             marginalPannual,
+             marginalPet,
+             marginalPseason,
+             marginalPwettest,
+             marginalTannual,
+             marginalTseason,
+             marginalTmax,
+             marginalClayContent,
+             marginalWaterContent,
+             ncol=4)
 dev.off()
 
+## Gráfico com paineis com letras -------------------------
 
-myplot1 <- arrangeGrob(marginalLightning, top = textGrob("A", x = unit(0, "npc")
-                                                         , y   = unit(1, "npc"), just=c("left","top"),
-                                                         gp=gpar(col="black", fontsize=18)))
-
-# myplot2 <- arrangeGrob(marginalMonth100, top = textGrob("B", x = unit(0, "npc")
-#                                                         , y = unit(1, "npc"), just=c("left","top"),
-#                                                         gp=gpar(col="black", fontsize=18)))
-
-myplot3 <- arrangeGrob(marginalPannual, top = textGrob("C", x = unit(0, "npc")
-                                                       , y  = unit(1, "npc"), just=c("left","top"),
-                                                       gp=gpar(col="black", fontsize=18)))
-
-# myplot4 <- arrangeGrob(marginalPdriest, top = textGrob("D", x = unit(0, "npc")
+# myplot1 <- arrangeGrob(marginalFapar, top = textGrob("A", x = unit(0, "npc")
+#                                                      , y   = unit(1, "npc"), just=c("left","top"),
+#                                                      gp=gpar(col="black", fontsize=18)))
+# 
+# myplot2 <- arrangeGrob(marginalSrtm, top = textGrob("B", x = unit(0, "npc")
+#                                                     , y = unit(1, "npc"), just=c("left","top"),
+#                                                     gp=gpar(col="black", fontsize=18)))
+# 
+# myplot3 <- arrangeGrob(marginalUspeed, top = textGrob("C", x = unit(0, "npc")
+#                                                       , y  = unit(1, "npc"), just=c("left","top"),
+#                                                       gp=gpar(col="black", fontsize=18)))
+# 
+# myplot4 <- arrangeGrob(marginalVspeed, top = textGrob("D", x = unit(0, "npc")
+#                                                       , y = unit(1, "npc"), just=c("left","top"),
+#                                                       gp=gpar(col="black",    fontsize=18)))
+# 
+# myplot5 <- arrangeGrob(marginalClearDays, top = textGrob("E", x = unit(0, "npc")
+#                                                          , y   = unit(1, "npc"), just=c("left","top"),
+#                                                          gp=gpar(col="black", fontsize=18)))
+# 
+# myplot6 <- arrangeGrob(marginalDays20, top = textGrob("F", x = unit(0, "npc")
+#                                                       , y = unit(1, "npc"), just=c("left","top"),
+#                                                       gp=gpar(col="black", fontsize=18)))
+# 
+# 
+# myplot7 <- arrangeGrob(marginalLightning, top = textGrob("A", x = unit(0, "npc")
+#                                                          , y   = unit(1, "npc"), just=c("left","top"),
+#                                                          gp=gpar(col="black", fontsize=18)))
+# 
+# # myplot2 <- arrangeGrob(marginalMonth100, top = textGrob("B", x = unit(0, "npc")
+# #                                                         , y = unit(1, "npc"), just=c("left","top"),
+# #                                                         gp=gpar(col="black", fontsize=18)))
+# 
+# myplot8 <- arrangeGrob(marginalPannual, top = textGrob("C", x = unit(0, "npc")
+#                                                        , y  = unit(1, "npc"), just=c("left","top"),
+#                                                        gp=gpar(col="black", fontsize=18)))
+# 
+# # myplot4 <- arrangeGrob(marginalPdriest, top = textGrob("D", x = unit(0, "npc")
+# #                                                        , y = unit(1, "npc"), just=c("left","top"),
+# #                                                        gp=gpar(col="black",    fontsize=18)))
+# 
+# myplot9 <- arrangeGrob(marginalPet, top = textGrob("E", x = unit(0, "npc")
+#                                                    , y   = unit(1, "npc"), just=c("left","top"),
+#                                                    gp=gpar(col="black", fontsize=18)))
+# 
+# myplot10 <- arrangeGrob(marginalPseason, top = textGrob("F", x = unit(0, "npc")
 #                                                        , y = unit(1, "npc"), just=c("left","top"),
-#                                                        gp=gpar(col="black",    fontsize=18)))
-
-myplot5 <- arrangeGrob(marginalPet, top = textGrob("E", x = unit(0, "npc")
-                                                   , y   = unit(1, "npc"), just=c("left","top"),
-                                                   gp=gpar(col="black", fontsize=18)))
-
-myplot6 <- arrangeGrob(marginalPseason, top = textGrob("F", x = unit(0, "npc")
-                                                       , y = unit(1, "npc"), just=c("left","top"),
-                                                       gp=gpar(col="black", fontsize=18)))
-
-png('./plot/rfMarginalPlotsP2Cor80.png', units = 'cm', width = 20, height = 30, res = 300)
-grid.arrange(myplot1, 
-             #myplot2, 
-             myplot3, 
-             #myplot4, 
-             myplot5, 
-             myplot6, 
-             ncol=2)
-dev.off()
-
-
-myplot1 <- arrangeGrob(marginalPwettest, top = textGrob("A", x = unit(0, "npc")
-                                                        , y   = unit(1, "npc"), just=c("left","top"),
-                                                        gp=gpar(col="black", fontsize=18)))
-
-myplot2 <- arrangeGrob(marginalTannual, top = textGrob("B", x = unit(0, "npc")
-                                                       , y = unit(1, "npc"), just=c("left","top"),
-                                                       gp=gpar(col="black", fontsize=18)))
-
-myplot3 <- arrangeGrob(marginalTseason, top = textGrob("C", x = unit(0, "npc")
-                                                       , y  = unit(1, "npc"), just=c("left","top"),
-                                                       gp=gpar(col="black", fontsize=18)))
-
-myplot4 <- arrangeGrob(marginalTmax, top = textGrob("D", x = unit(0, "npc")
-                                                    , y = unit(1, "npc"), just=c("left","top"),
-                                                    gp=gpar(col="black",    fontsize=18)))
-
-myplot5 <- arrangeGrob(marginalClayContent, top = textGrob("E", x = unit(0, "npc")
-                                                           , y   = unit(1, "npc"), just=c("left","top"),
-                                                           gp=gpar(col="black", fontsize=18)))
-
-myplot6 <- arrangeGrob(marginalWaterContent, top = textGrob("F", x = unit(0, "npc")
-                                                            , y = unit(1, "npc"), just=c("left","top"),
-                                                            gp=gpar(col="black", fontsize=18)))
-
-png('./plot/rfMarginalPlotsP3Cor80.png', units = 'cm', width = 20, height = 30, res = 300)
-grid.arrange(myplot1, 
-             myplot2, 
-             myplot3, 
-             myplot4, 
-             myplot5, 
-             myplot6, 
-             ncol=2)
-dev.off()
+#                                                        gp=gpar(col="black", fontsize=18)))
+# 
+# myplot11 <- arrangeGrob(marginalPwettest, top = textGrob("A", x = unit(0, "npc")
+#                                                         , y   = unit(1, "npc"), just=c("left","top"),
+#                                                         gp=gpar(col="black", fontsize=18)))
+# 
+# myplot12 <- arrangeGrob(marginalTannual, top = textGrob("B", x = unit(0, "npc")
+#                                                        , y = unit(1, "npc"), just=c("left","top"),
+#                                                        gp=gpar(col="black", fontsize=18)))
+# 
+# myplot13 <- arrangeGrob(marginalTseason, top = textGrob("C", x = unit(0, "npc")
+#                                                        , y  = unit(1, "npc"), just=c("left","top"),
+#                                                        gp=gpar(col="black", fontsize=18)))
+# 
+# myplot14 <- arrangeGrob(marginalTmax, top = textGrob("D", x = unit(0, "npc")
+#                                                     , y = unit(1, "npc"), just=c("left","top"),
+#                                                     gp=gpar(col="black",    fontsize=18)))
+# 
+# myplot15 <- arrangeGrob(marginalClayContent, top = textGrob("E", x = unit(0, "npc")
+#                                                            , y   = unit(1, "npc"), just=c("left","top"),
+#                                                            gp=gpar(col="black", fontsize=18)))
+# 
+# myplot16 <- arrangeGrob(marginalWaterContent, top = textGrob("F", x = unit(0, "npc")
+#                                                             , y = unit(1, "npc"), just=c("left","top"),
+#                                                             gp=gpar(col="black", fontsize=18)))
+# 
+# png('./plot/rfMarginalPlotsCor80.png', units = 'cm', width = 20, height = 30, res = 300)
+# grid.arrange(myplot1, 
+#              myplot2, 
+#              myplot3, 
+#              myplot4, 
+#              myplot5, 
+#              myplot6,
+#              myplot7,
+#              myplot8,
+#              myplot9,
+#              myplot10,
+#              myplot11,
+#              myplot12,
+#              myplot13,
+#              myplot14,
+#              myplot15,
+#              myplot16,
+#              ncol=4)
+# dev.off()
 

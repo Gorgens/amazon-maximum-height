@@ -46,4 +46,3 @@ map = tm_shape(modelo_70m) +
           projection = "+proj=longlat")
 
 tmap_save(map, "./plot/maxentHeight70.png", width = 25, height = 18, units = 'cm')
-rm()
