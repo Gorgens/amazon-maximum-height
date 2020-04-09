@@ -7,7 +7,7 @@ require(rJava)
 require(jsonlite)
 Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_241')
 
-#source('10_ImportingRasters.R')
+source('10_ImportingRasters.R')
 
 ## Envelop by MaxEnt ------------------------
 maximas_70 = maximas[maximas$altura_cop>70,]                                     # filtra pontos com altura superior a 70 metros

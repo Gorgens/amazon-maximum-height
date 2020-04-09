@@ -24,4 +24,4 @@ summary(lm(iglas2$rh100~iglas2$iglasEBA))                               # result
 tm_shape(amaz2) + tm_polygons() + 
   tm_shape(iglas2) + tm_dots("rh100", size = 0.1, palette = "RdYlGn")
 
-rm(iglas, amaz2, iglasEBA)
+rm(iglas, ref, amaz2, iglasEBA)

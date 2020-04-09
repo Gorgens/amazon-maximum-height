@@ -28,8 +28,8 @@ rf.heightAll = train(height ~ .,                                        # define
                      importance=T,                                      # análise de importancia para as variaveis
                      trControl = group_fit_control)                     # parâmetros para validação cruzada
 print(rf.heightAll)
-#save(rf.heightAll, 
-#    file = '../amazon maximum height extras/randomForestCor80.Rdata')
+save(rf.heightAll, 
+    file = '../amazon maximum height extras/randomForestCor80.Rdata')
 
 rm(folds, group_fit_control)                                            # limpa da memória parâmetros para Random Forest
 varImp(rf.heightAll)                                     # apresenta importância das variáveis com base nos modelos Random Forest
