@@ -15,24 +15,32 @@ maximas_70 = maximas[maximas$altura_cop>70,]                                    
 ocorrenciaHeight70 = data.frame(x1=maximas_70$coords.x1,                         # data frame com latitude e longitude
                                 x2=maximas_70$coords.x2)
 
-
 fold = kfold(ocorrenciaHeight70, k=5)                                            # add an index that makes five random groups of observations
 dadosTeste = ocorrenciaHeight70[fold == 1, ]                                     # hold out one fifth as test data
 dadosTreino = ocorrenciaHeight70[fold != 1, ]                                    # the other four fifths are training data
 
-nicheHeight70 = maxent(layers2estimate, dadosTreino)                             # note we just using the training data
-save(nicheHeight70, 
-     file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/maxentHeight70Cor80.Rdata')
+me.height70 = maxent(layers2estimate, dadosTreino)                               # note we just using the training data
+save(me.height70, 
+     file = '../amazon maximum height extras/maxentHeight70Cor80.Rdata')
 
-nicheHeight70$variable.importance                                                # obter valor de importância variaveis
+var_contrib = function(m, df = TRUE, ...) {                                      # extract importance for each variable from maxent plot
+  stopifnot(inherits(m,  "MaxEnt"))
+  res <- m@results[grep("contribution", rownames(m@results)), ]
+  names(res) <- gsub(".contribution", "", names(res))
+  if (df)
+    res <- data.frame(var = names(res), contrib = unname(res))
+  res
+}
+
+var_contrib(me.height70)                                                         # obter valor de importância variaveis
 
 png('./plot/meMarginalPlotsCor80.png', units = 'cm', width = 20, height = 30, res = 300)
-response(nicheHeight70)                                                          # marginal plots maxent
+response(me.height70)                                                            # marginal plots maxent
 dev.off()
 
-modelo_70m = predict(nicheHeight70, layers2estimate)
+probHeightMap70m = predict(me.height70, layers2estimate)                               # criar mapa de probabilidade de existir indivíduos acima de 70 metros.
 
-map = tm_shape(modelo_70m) +
+map = tm_shape(probHeightMap70m) +
   tm_raster(n = 15,
             palette = "Greens",
             legend.hist = FALSE,
@@ -45,4 +53,6 @@ map = tm_shape(modelo_70m) +
           labels.inside.frame = FALSE,
           projection = "+proj=longlat")
 
-tmap_save(map, "./plot/maxentHeight70.png", width = 25, height = 18, units = 'cm')
+tmap_save(map, "./plot/meHeightRasterCor80.png", width = 25, height = 18, units = 'cm')
+
+rm(dadosTeste, dadosTreino, fold, ocorrenciaHeight70, maximas_70)
