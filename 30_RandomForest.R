@@ -30,23 +30,28 @@ rf.heightAll = train(height ~ .,                                        # define
 print(rf.heightAll)
 #save(rf.heightAll, 
 #    file = '../amazon maximum height extras/randomForestCor80.Rdata')
-
+# load('../amazon maximum height extras/randomForestCor80.Rdata')
+     
 rm(folds, group_fit_control)                                            # limpa da memória parâmetros para Random Forest
-varImp(rf.heightAll)                                     # apresenta importância das variáveis com base nos modelos Random Forest
+varImp(rf.heightAll)                                                    # apresenta importância das variáveis com base nos modelos Random Forest
 
 heightRaster = predict(layers2estimate, rf.heightAll)
 heightRaster = setMinMax(heightRaster)
 #writeRaster(heightRaster, filename = '../amazon maximum height extras/rfHeightRasterCor80.tif')
 
 map = tm_shape(heightRaster) +
- tm_raster(n = 15,
-           palette = "Greens",
-           legend.hist = TRUE,
-           title = "Maximum height (m)") +
- tm_shape(amaz) + tm_borders() +
- tm_legend(outside = TRUE, hist.width = 2)
+  tm_raster(breaks = c(0, 40, 50, 60, 70, 80, Inf),
+            #n = 15,
+            palette = "Greens",
+            legend.hist = TRUE,
+            title = "Maximum height (m)") +
+  tm_shape(amaz) + tm_borders() +
+  tm_legend(outside = TRUE, hist.width = 2) +
+  tm_grid(lines = FALSE,
+          labels.inside.frame = FALSE,
+          projection = "+proj=longlat")
 
 #print(map)
-#tmap_save(map, "./plot/rfHeightRasterCor80.png", width = 25, height = 15, units = "cm")
+tmap_save(map, "./plot/rfHeightRasterCor80b.png", width = 25, height = 15, units = "cm")
 
 rm(map, drivers)

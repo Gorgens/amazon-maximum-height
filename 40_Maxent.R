@@ -8,7 +8,6 @@ require(jsonlite)
 Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_241')
 
 #source('10_ImportingRasters.R')
-#load('../amazon maximum height extras/maxentHeight70Cor80.Rdata')
 
 ## Envelop by MaxEnt ------------------------
 maximas_70 = maximas[maximas$altura_cop>70,]                                     # filtra pontos com altura superior a 70 metros
@@ -23,6 +22,7 @@ dadosTreino = ocorrenciaHeight70[fold != 1, ]                                   
 me.height70 = maxent(layers2estimate, dadosTreino)                               # note we just using the training data
 #save(me.height70, 
 #     file = '../amazon maximum height extras/maxentHeight70Cor80b.Rdata')
+#load('../amazon maximum height extras/maxentHeight70Cor80b.Rdata')
 
 var_contrib = function(m, df = TRUE, ...) {                                      # extract importance for each variable from maxent plot
   stopifnot(inherits(m,  "MaxEnt"))
@@ -43,7 +43,8 @@ probHeightMap70m = predict(me.height70, layers2estimate)                        
 #writeRaster(probHeightMap70m, filename = '../amazon maximum height extras/meProbHeightRasterCor80.tif')
 
 map = tm_shape(probHeightMap70m) +
-  tm_raster(n = 15,
+  tm_raster(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1),
+            #n = 15,
             palette = "Greens",
             legend.hist = FALSE,
             title = "Prob. height > 70 m") +
@@ -55,6 +56,6 @@ map = tm_shape(probHeightMap70m) +
           labels.inside.frame = FALSE,
           projection = "+proj=longlat")
 
-tmap_save(map, "./plot/meHeightRasterCor80.png", width = 25, height = 18, units = 'cm')
+tmap_save(map, "./plot/meHeightRasterCor80b.png", width = 25, height = 18, units = 'cm')
 
 rm(dadosTeste, dadosTreino, fold, ocorrenciaHeight70, maximas_70)
