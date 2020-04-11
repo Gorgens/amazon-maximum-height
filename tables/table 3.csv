@@ -1,0 +1,19 @@
+Layer,Related to,Unity,Source,Importance
+uspeed,storms probability - convective winds,m/s,ECM-RWF,5.56
+vspeed,storms probability - convective winds,m/s,ECM-RWF,3.58
+days20,storms probability - convective winds,days,CHIRPS ,5.49
+lightning,storms probability - convective winds,flashes rate,LIS TRMM,3.48
+elevation,distance to water - flooding zones - soil type,m,SRTM,11.23
+pet,energy balance - water balance,mm,TerraClimate,5.19
+fapar,radiation - vegetation health - anthropic regions - soil exposure,%,NOAA AVHRR ,6.30
+clearDays,radiation - temperature - evapotranspiration,days,MODIS ,14.74
+month100,precipitation,months,CHIRPS ,Removed by high correlation
+pannual,precipitation,mm,WorldClim ,8.94
+pdriest,precipitaiton intensity - precipitation distribution,mm,WorldClim ,Removed by high correlation
+pwettest,precipitaiton intensity - precipitation distribution,mm,WorldClim ,5.79
+pseason,precipitaiton intensity - precipitation distribution,mm,WorldClim ,6.86
+tannual,temperature,C,WorldClim ,0.29
+tseason,temperature distribution,C,WorldClim ,4.58
+tmax,storms probability - convective winds,C,WorldClim ,4.19
+clayContent,soil structure - physical properties -  water availability,%,OpenLandMap,13.77
+waterContent,soil structure - physical properties -  water availability,%,OpenLandMap,0.00
