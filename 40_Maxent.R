@@ -8,6 +8,7 @@ require(jsonlite)
 Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_241')
 
 #source('10_ImportingRasters.R')
+#load('../amazon maximum height extras/maxentHeight70Cor80.Rdata')
 
 ## Envelop by MaxEnt ------------------------
 maximas_70 = maximas[maximas$altura_cop>70,]                                     # filtra pontos com altura superior a 70 metros
@@ -20,8 +21,8 @@ dadosTeste = ocorrenciaHeight70[fold == 1, ]                                    
 dadosTreino = ocorrenciaHeight70[fold != 1, ]                                    # the other four fifths are training data
 
 me.height70 = maxent(layers2estimate, dadosTreino)                               # note we just using the training data
-save(me.height70, 
-     file = '../amazon maximum height extras/maxentHeight70Cor80.Rdata')
+#save(me.height70, 
+#     file = '../amazon maximum height extras/maxentHeight70Cor80b.Rdata')
 
 var_contrib = function(m, df = TRUE, ...) {                                      # extract importance for each variable from maxent plot
   stopifnot(inherits(m,  "MaxEnt"))
@@ -39,6 +40,7 @@ response(me.height70)                                                           
 dev.off()
 
 probHeightMap70m = predict(me.height70, layers2estimate)                               # criar mapa de probabilidade de existir indivíduos acima de 70 metros.
+#writeRaster(probHeightMap70m, filename = '../amazon maximum height extras/meProbHeightRasterCor80.tif')
 
 map = tm_shape(probHeightMap70m) +
   tm_raster(n = 15,
