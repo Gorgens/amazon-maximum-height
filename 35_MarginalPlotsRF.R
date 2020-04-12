@@ -13,7 +13,7 @@ meanVariables = maximas@data %>% na.omit() %>% sapply(mean)
 faparPredict = data.frame(fapar = seq(min(na.omit(maximas@data$fapar)),
                                       max(na.omit(maximas@data$fapar)), 
                                       length.out = 500),
-                          srtm = rep(meanVariables["srtm"], 500),
+                          elevation = rep(meanVariables["elevation"], 500),
                           uspeed = rep(meanVariables["uspeed"], 500),
                           vspeed = rep(meanVariables["vspeed"], 500),
                           clearDays = rep(meanVariables["clearDays"], 500),
@@ -35,15 +35,15 @@ heightfapar = predict(rf.heightAll, faparPredict)
 
 marginalFapar = ggplot() + 
   geom_line(aes(faparPredict$fapar, heightfapar), color='red') +
-  xlab('FAPAR (%)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('FAPAR (%)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
-srtmPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                         srtm = seq(min(na.omit(maximas@data$srtm)),
-                                    max(na.omit(maximas@data$srtm)), 
+elevationPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
+                         elevation = seq(min(na.omit(maximas@data$elevation)),
+                                    max(na.omit(maximas@data$elevation)), 
                                     length.out = 500),
                          uspeed = rep(meanVariables["uspeed"], 500),
                          vspeed = rep(meanVariables["vspeed"], 500),
@@ -62,18 +62,18 @@ srtmPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
                          clayContent = rep(meanVariables["clayContent"], 500),
                          waterContent = rep(meanVariables["waterContent"], 500))
 
-heightsrtm = predict(rf.heightAll, srtmPredict)
+heightelevation = predict(rf.heightAll, elevationPredict)
 
-marginalSrtm = ggplot() + 
-  geom_line(aes(srtmPredict$srtm, heightsrtm), color='red') +
-  xlab('SRTM (m)') + ylab('Height (m)') + ylim(50, 70) +
+marginalelevation = ggplot() + 
+  geom_line(aes(elevationPredict$elevation, heightelevation), color='red') +
+  xlab('Elevation (m)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
 uspeedPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                           srtm = rep(meanVariables["srtm"], 500),
+                           elevation = rep(meanVariables["elevation"], 500),
                            uspeed = seq(min(na.omit(maximas@data$uspeed)),
                                         max(na.omit(maximas@data$uspeed)), 
                                         length.out = 500),
@@ -97,14 +97,14 @@ heightuspeed = predict(rf.heightAll, uspeedPredict)
 
 marginalUspeed = ggplot() + 
   geom_line(aes(uspeedPredict$uspeed, heightuspeed), color='red') +
-  xlab('u-Speed (m/s)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('u-Speed (m/s)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
 vspeedPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                           srtm = rep(meanVariables["srtm"], 500),
+                           elevation = rep(meanVariables["elevation"], 500),
                            uspeed = rep(meanVariables["uspeed"], 500),
                            vspeed = seq(min(na.omit(maximas@data$vspeed)),
                                         max(na.omit(maximas@data$vspeed)), 
@@ -128,14 +128,14 @@ heightvspeed = predict(rf.heightAll, vspeedPredict)
 
 marginalVspeed = ggplot() + 
   geom_line(aes(vspeedPredict$vspeed, heightvspeed), color='red') +
-  xlab('v-Speed (m/s)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('v-Speed (m/s)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
 clearDaysPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                              srtm = rep(meanVariables["srtm"], 500),
+                              elevation = rep(meanVariables["elevation"], 500),
                               uspeed = rep(meanVariables["uspeed"], 500),
                               vspeed = rep(meanVariables["vspeed"], 500),
                               clearDays = seq(min(na.omit(maximas@data$clearDays)),
@@ -159,14 +159,14 @@ heightclearDays = predict(rf.heightAll, clearDaysPredict)
 
 marginalClearDays = ggplot() + 
   geom_line(aes(clearDaysPredict$clearDays, heightclearDays), color='red') +
-  xlab('Number of clear days (days/yr)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Clear days (days/yr)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
 days20Predict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                           srtm = rep(meanVariables["srtm"], 500),
+                           elevation = rep(meanVariables["elevation"], 500),
                            uspeed = rep(meanVariables["uspeed"], 500),
                            vspeed = rep(meanVariables["vspeed"], 500),
                            clearDays = rep(meanVariables["clearDays"], 500),
@@ -190,14 +190,14 @@ heightdays20 = predict(rf.heightAll, days20Predict)
 
 marginalDays20 = ggplot() + 
   geom_line(aes(days20Predict$days20, heightdays20), color='red') +
-  xlab('Days with more then 20 mm (days/yr)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Days > 20 mm (days/yr)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
 lightningPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                              srtm = rep(meanVariables["srtm"], 500),
+                              elevation = rep(meanVariables["elevation"], 500),
                               uspeed = rep(meanVariables["uspeed"], 500),
                               vspeed = rep(meanVariables["vspeed"], 500),
                               clearDays = rep(meanVariables["clearDays"], 500),
@@ -221,14 +221,14 @@ heightlightning = predict(rf.heightAll, lightningPredict)
 
 marginalLightning = ggplot() + 
   geom_line(aes(lightningPredict$lightning, heightlightning), color='red') +
-  xlab('Lightning (rate of lights)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Rate of lightnings') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
                      axis.line = element_line(colour = "black"))
 
 # month100Predict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-#                              srtm = rep(meanVariables["srtm"], 500),
+#                              elevation = rep(meanVariables["elevation"], 500),
 #                              uspeed = rep(meanVariables["uspeed"], 500),
 #                              vspeed = rep(meanVariables["vspeed"], 500),
 #                              clearDays = rep(meanVariables["clearDays"], 500),
@@ -252,7 +252,7 @@ marginalLightning = ggplot() +
 # 
 # marginalMonth100 = ggplot() + 
 #   geom_line(aes(month100Predict$month100, heightmonth100), color='red') +
-#   xlab('Month with precipitation greater than 100 mm (months/yr)') + ylab('Height (m)') + ylim(50, 70) +
+#   xlab('Month with precipitation greater than 100 mm (months/yr)') + ylab('Height (m)') + ylim(50, 65) +
 #   theme_bw() + theme(panel.grid.major = element_blank(), 
 #                      panel.grid.minor = element_blank(),
 #                      panel.background = element_blank(), 
@@ -260,7 +260,7 @@ marginalLightning = ggplot() +
 
 
 pannualPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                            srtm = rep(meanVariables["srtm"], 500),
+                            elevation = rep(meanVariables["elevation"], 500),
                             uspeed = rep(meanVariables["uspeed"], 500),
                             vspeed = rep(meanVariables["vspeed"], 500),
                             clearDays = rep(meanVariables["clearDays"], 500),
@@ -284,7 +284,7 @@ heightpannual = predict(rf.heightAll, pannualPredict)
 
 marginalPannual = ggplot() + 
   geom_line(aes(pannualPredict$pannual, heightpannual), color='red') +
-  xlab('Annual precipitation (mm)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Annual precip. (mm)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -292,7 +292,7 @@ marginalPannual = ggplot() +
 
 
 # pdriestPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-#                             srtm = rep(meanVariables["srtm"], 500),
+#                             elevation = rep(meanVariables["elevation"], 500),
 #                             uspeed = rep(meanVariables["uspeed"], 500),
 #                             vspeed = rep(meanVariables["vspeed"], 500),
 #                             clearDays = rep(meanVariables["clearDays"], 500),
@@ -316,7 +316,7 @@ marginalPannual = ggplot() +
 # 
 # marginalPdriest = ggplot() + 
 #   geom_line(aes(pdriestPredict$pdriest, heightpdriest), color='red') +
-#   xlab('Precipitation of the driest month (mm)') + ylab('Height (m)') + ylim(50, 70) +
+#   xlab('Precipitation of the driest month (mm)') + ylab('Height (m)') + ylim(50, 65) +
 #   theme_bw() + theme(panel.grid.major = element_blank(), 
 #                      panel.grid.minor = element_blank(),
 #                      panel.background = element_blank(), 
@@ -324,7 +324,7 @@ marginalPannual = ggplot() +
 
 
 petPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                        srtm = rep(meanVariables["srtm"], 500),
+                        elevation = rep(meanVariables["elevation"], 500),
                         uspeed = rep(meanVariables["uspeed"], 500),
                         vspeed = rep(meanVariables["vspeed"], 500),
                         clearDays = rep(meanVariables["clearDays"], 500),
@@ -348,7 +348,7 @@ heightpet = predict(rf.heightAll, petPredict)
 
 marginalPet = ggplot() + 
   geom_line(aes(petPredict$pet, heightpet), color='red') +
-  xlab('Potential Evapotranspiration (mm)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Potential Evap. (mm)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -356,7 +356,7 @@ marginalPet = ggplot() +
 
 
 pseasonPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                            srtm = rep(meanVariables["srtm"], 500),
+                            elevation = rep(meanVariables["elevation"], 500),
                             uspeed = rep(meanVariables["uspeed"], 500),
                             vspeed = rep(meanVariables["vspeed"], 500),
                             clearDays = rep(meanVariables["clearDays"], 500),
@@ -380,7 +380,7 @@ heightpseason = predict(rf.heightAll, pseasonPredict)
 
 marginalPseason = ggplot() + 
   geom_line(aes(pseasonPredict$pseason, heightpseason), color='red') +
-  xlab('Precipitation seasonality (mm)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Precip. seasonality (mm)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -388,7 +388,7 @@ marginalPseason = ggplot() +
 
 
 pwettestPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                             srtm = rep(meanVariables["srtm"], 500),
+                             elevation = rep(meanVariables["elevation"], 500),
                              uspeed = rep(meanVariables["uspeed"], 500),
                              vspeed = rep(meanVariables["vspeed"], 500),
                              clearDays = rep(meanVariables["clearDays"], 500),
@@ -412,7 +412,7 @@ heightpwettest = predict(rf.heightAll, pwettestPredict)
 
 marginalPwettest = ggplot() + 
   geom_line(aes(pwettestPredict$pwettest, heightpwettest), color='red') +
-  xlab('Precipitation of the wettest month (mm)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Precip. wettest month (mm)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -420,7 +420,7 @@ marginalPwettest = ggplot() +
 
 
 tannualPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                            srtm = rep(meanVariables["srtm"], 500),
+                            elevation = rep(meanVariables["elevation"], 500),
                             uspeed = rep(meanVariables["uspeed"], 500),
                             vspeed = rep(meanVariables["vspeed"], 500),
                             clearDays = rep(meanVariables["clearDays"], 500),
@@ -444,7 +444,7 @@ heighttannual = predict(rf.heightAll, tannualPredict)
 
 marginalTannual = ggplot() + 
   geom_line(aes(tannualPredict$tannual, heighttannual), color='red') +
-  xlab('Annual temperature (°C)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Annual temp. (°C)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -452,7 +452,7 @@ marginalTannual = ggplot() +
 
 
 tseasonPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                            srtm = rep(meanVariables["srtm"], 500),
+                            elevation = rep(meanVariables["elevation"], 500),
                             uspeed = rep(meanVariables["uspeed"], 500),
                             vspeed = rep(meanVariables["vspeed"], 500),
                             clearDays = rep(meanVariables["clearDays"], 500),
@@ -476,7 +476,7 @@ heighttseason = predict(rf.heightAll, tseasonPredict)
 
 marginalTseason = ggplot() + 
   geom_line(aes(tseasonPredict$tseason, heighttseason), color='red') +
-  xlab('Temperature seasonality (°C)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Temp. seasonality (°C)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -484,7 +484,7 @@ marginalTseason = ggplot() +
 
 
 tmaxPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                         srtm = rep(meanVariables["srtm"], 500),
+                         elevation = rep(meanVariables["elevation"], 500),
                          uspeed = rep(meanVariables["uspeed"], 500),
                          vspeed = rep(meanVariables["vspeed"], 500),
                          clearDays = rep(meanVariables["clearDays"], 500),
@@ -508,7 +508,7 @@ heighttmax = predict(rf.heightAll, tmaxPredict)
 
 marginalTmax = ggplot() + 
   geom_line(aes(tmaxPredict$tmax, heighttmax), color='red') +
-  xlab('Maximum temperature (°C)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Maximum temp. (°C)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -516,7 +516,7 @@ marginalTmax = ggplot() +
 
 
 clayContentPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                                srtm = rep(meanVariables["srtm"], 500),
+                                elevation = rep(meanVariables["elevation"], 500),
                                 uspeed = rep(meanVariables["uspeed"], 500),
                                 vspeed = rep(meanVariables["vspeed"], 500),
                                 clearDays = rep(meanVariables["clearDays"], 500),
@@ -540,7 +540,7 @@ heightclayContent = predict(rf.heightAll, clayContentPredict)
 
 marginalClayContent = ggplot() + 
   geom_line(aes(clayContentPredict$clayContent, heightclayContent), color='red') +
-  xlab('Clay content (%)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Clay content (%)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -548,7 +548,7 @@ marginalClayContent = ggplot() +
 
 
 waterContentPredict = data.frame(fapar = rep(meanVariables["fapar"], 500),
-                                 srtm = rep(meanVariables["srtm"], 500),
+                                 elevation = rep(meanVariables["elevation"], 500),
                                  uspeed = rep(meanVariables["uspeed"], 500),
                                  vspeed = rep(meanVariables["vspeed"], 500),
                                  clearDays = rep(meanVariables["clearDays"], 500),
@@ -572,7 +572,7 @@ heightwaterContent = predict(rf.heightAll, waterContentPredict)
 
 marginalWaterContent = ggplot() + 
   geom_line(aes(waterContentPredict$waterContent, heightwaterContent), color='red') +
-  xlab('Water content (%)') + ylab('Height (m)') + ylim(50, 70) +
+  xlab('Water content (%)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -580,9 +580,9 @@ marginalWaterContent = ggplot() +
 
 ## Gráfico com paineis sem letras -------------------------
 
-png('./plot/rfMarginalPlotsCor80.png', units = 'cm', width = 20, height = 30, res = 300)
+png('./plot/rfMarginalPlotsCor80v20042020.png', units = 'cm', width = 20, height = 30, res = 300)
 grid.arrange(marginalFapar, 
-             marginalSrtm, 
+             marginalelevation, 
              marginalUspeed, 
              marginalVspeed, 
              marginalClearDays, 
@@ -606,7 +606,7 @@ dev.off()
 #                                                      , y   = unit(1, "npc"), just=c("left","top"),
 #                                                      gp=gpar(col="black", fontsize=18)))
 # 
-# myplot2 <- arrangeGrob(marginalSrtm, top = textGrob("B", x = unit(0, "npc")
+# myplot2 <- arrangeGrob(marginalelevation, top = textGrob("B", x = unit(0, "npc")
 #                                                     , y = unit(1, "npc"), just=c("left","top"),
 #                                                     gp=gpar(col="black", fontsize=18)))
 # 

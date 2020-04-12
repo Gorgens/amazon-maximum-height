@@ -20,9 +20,9 @@ dadosTeste = ocorrenciaHeight70[fold == 1, ]                                    
 dadosTreino = ocorrenciaHeight70[fold != 1, ]                                    # the other four fifths are training data
 
 me.height70 = maxent(layers2estimate, dadosTreino)                               # note we just using the training data
-#save(me.height70, 
-#     file = '../amazon maximum height extras/maxentHeight70Cor80b.Rdata')
-#load('../amazon maximum height extras/maxentHeight70Cor80b.Rdata')
+# save(me.height70, 
+#     file = '../amazon maximum height extras/maxentHeight70Cor80v20042020.Rdata')
+# load('../amazon maximum height extras/maxentHeight70Cor80v20042020.Rdata')
 
 var_contrib = function(m, df = TRUE, ...) {                                      # extract importance for each variable from maxent plot
   stopifnot(inherits(m,  "MaxEnt"))
@@ -35,9 +35,9 @@ var_contrib = function(m, df = TRUE, ...) {                                     
 
 var_contrib(me.height70)                                                         # obter valor de importância variaveis
 
-png('./plot/meMarginalPlotsCor80.png', units = 'cm', width = 20, height = 30, res = 300)
-response(me.height70)                                                            # marginal plots maxent
-dev.off()
+# png('./plot/meMarginalPlotsCor80v20042020.png', units = 'cm', width = 20, height = 30, res = 300)
+# response(me.height70)                                                            # marginal plots maxent
+# dev.off()
 
 probHeightMap70m = predict(me.height70, layers2estimate)                               # criar mapa de probabilidade de existir indivíduos acima de 70 metros.
 #writeRaster(probHeightMap70m, filename = '../amazon maximum height extras/meProbHeightRasterCor80.tif')
@@ -56,6 +56,6 @@ map = tm_shape(probHeightMap70m) +
           labels.inside.frame = FALSE,
           projection = "+proj=longlat")
 
-tmap_save(map, "./plot/meHeightRasterCor80b.png", width = 25, height = 18, units = 'cm')
+tmap_save(map, "./plot/meHeightRasterCor80v20042020.png", width = 25, height = 18, units = 'cm')
 
 rm(dadosTeste, dadosTreino, fold, ocorrenciaHeight70, maximas_70)

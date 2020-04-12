@@ -13,9 +13,9 @@ amaz = shapefile('./data/amazbioma.shp')
 
 
 ## u-speed ---------------------------
-uspeed = raster('./data/uspeed.tif')
+uspeed = abs(raster('./data/uspeed.tif'))
 uspeed = setMinMax(uspeed)
-ref = uspeed
+ref = abs(uspeed)
 
 # map = tm_shape(uspeed) + 
 #   tm_raster(n = 15,
@@ -28,6 +28,7 @@ ref = uspeed
 ## v-speed ---------------------------
 
 vspeed = raster('./data/vspeed.tif') %>% crop(ref)
+vspeed = abs(vspeed)
 vspeed = raster(vals=values(vspeed),
                 ext=extent(ref), 
                 nrows=dim(ref)[1],
@@ -74,24 +75,24 @@ days20 = setMinMax(days20)
 # #print(map)
 # tmap_save(map, "./plot/days20_image.png", width = 1920, height = 1080)
 
-## SRTM ---------------------------
-srtm = raster('./data/srtm.tif') %>% crop(ref)
-srtm = raster(vals=values(srtm),
+## elevation ---------------------------
+elevation = raster('./data/elevation.tif') %>% crop(ref)
+elevation = raster(vals=values(elevation),
               ext=extent(ref), 
               nrows=dim(ref)[1],
               ncols=dim(ref)[2])
 
-srtm[srtm <= 0] = NA
-srtm[srtm >= 1000] = NA
-srtm = setMinMax(srtm)
+elevation[elevation <= 0] = NA
+elevation[elevation >= 1000] = NA
+elevation = setMinMax(elevation)
 
-# map = tm_shape(srtm) + 
+# map = tm_shape(elevation) + 
 #   tm_raster(n = 15,
 #             palette = colorRampPalette( c("darkolivegreen4","yellow", "brown"))(12),
 #             legend.hist = TRUE) +
 #   tm_legend(outside = TRUE, hist.width = 2)
 # #print(map)
-# tmap_save(map, "./plot/srtm_image.png", width = 1920, height = 1080)
+# tmap_save(map, "./plot/elevation_image.png", width = 1920, height = 1080)
 
 
 ## Potential Evapotranspiration ---------------------------
@@ -359,7 +360,7 @@ waterContent[waterContent <= 0] = NA
 
 ## Stack das variáveis ambientais ---------------------------
 layers = stack(fapar, 
-               srtm, 
+               elevation, 
                uspeed, 
                vspeed, 
                clearDays, 
@@ -378,7 +379,7 @@ layers = stack(fapar,
                waterContent)
 
 layers2estimate = stack(fapar2, 
-                        srtm, 
+                        elevation, 
                         uspeed, 
                         vspeed, 
                         clearDays, 
@@ -401,7 +402,7 @@ layers2estimate = stack(fapar2,
 
 # atualiza nome das camadas
 names(layers) = c("fapar", 
-                  "srtm", 
+                  "elevation", 
                   "uspeed", 
                   "vspeed", 
                   "clearDays", 
@@ -420,7 +421,7 @@ names(layers) = c("fapar",
                   "waterContent")
 
 names(layers2estimate) = c("fapar", 
-                           "srtm",
+                           "elevation",
                            "uspeed", 
                            "vspeed",
                            "clearDays",
@@ -452,4 +453,4 @@ maximas@data = cbind(maximas@data, explanatoryVariables)                       #
 ## Limpa memória ------------------------------
 rm(explanatoryVariables)
 rm(layers)
-rm(srtm, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, tmax, clayContent, waterContent, fapar, fapar2, ref)
+rm(elevation, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, tmax, clayContent, waterContent, fapar, fapar2, ref)

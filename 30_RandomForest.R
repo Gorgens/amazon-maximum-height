@@ -28,16 +28,16 @@ rf.heightAll = train(height ~ .,                                        # define
                      importance=T,                                      # análise de importancia para as variaveis
                      trControl = group_fit_control)                     # parâmetros para validação cruzada
 print(rf.heightAll)
-#save(rf.heightAll, 
-#    file = '../amazon maximum height extras/randomForestCor80.Rdata')
-# load('../amazon maximum height extras/randomForestCor80.Rdata')
+# save(rf.heightAll, 
+#     file = '../amazon maximum height extras/randomForestCor80v20042020.Rdata')
+# load('../amazon maximum height extras/randomForestCor80v20042020.Rdata')
      
 rm(folds, group_fit_control)                                            # limpa da memória parâmetros para Random Forest
 varImp(rf.heightAll)                                                    # apresenta importância das variáveis com base nos modelos Random Forest
 
 heightRaster = predict(layers2estimate, rf.heightAll)
 heightRaster = setMinMax(heightRaster)
-#writeRaster(heightRaster, filename = '../amazon maximum height extras/rfHeightRasterCor80.tif')
+# writeRaster(heightRaster, filename = '../amazon maximum height extras/rfHeightRasterCor80v20042020.tif')
 
 map = tm_shape(heightRaster) +
   tm_raster(breaks = c(0, 40, 50, 60, 70, 80, Inf),
@@ -52,6 +52,6 @@ map = tm_shape(heightRaster) +
           projection = "+proj=longlat")
 
 #print(map)
-tmap_save(map, "./plot/rfHeightRasterCor80b.png", width = 25, height = 15, units = "cm")
+tmap_save(map, "./plot/rfHeightRasterCor80v20042020.png", width = 25, height = 15, units = "cm")
 
 rm(map, drivers)
