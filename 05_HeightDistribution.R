@@ -3,16 +3,23 @@ require(raster)
 require(tidyverse)
 require(tmap)
 require(sf)
-require(leaflet)
+require(rgdal)
 require(sp)
 require(gridExtra)
 require(magrittr)
-require(factoextra) 
-require(randomForest)
-require(caret)
+require(maptools)
 
 ## Importing maximum height dataset -------------------------
 amaz = shapefile('./data/amazbioma.shp')
+amaz = spTransform(amaz, CRS("+proj=longlat +datum=WGS84"))
+
+amazRegions = shapefile('./data/amazRegions.shp',  encoding="UTF-8")
+crs(amazRegions) = crs(amaz)
+
+# tm_shape(amaz) +
+#   tm_polygons(col="grey", border.col="white") +
+#   tm_shape(amazRegions) + tm_borders()
+
 maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200321.gpkg', layer = 'pontos_wgs84'))
 maximas@data = maximas@data %>% select(3)
 
@@ -24,9 +31,10 @@ print(mapAll)
 
 ## Maximum tree height distribution -------------------------
 taller50 = maximas[maximas$altura_cop > 50,]
-map50 = tm_shape(amaz) + 
-  tm_polygons(col="grey", border.col="white") +
+map50 = tm_shape(amazRegions) + tm_polygons(col = "label", title = "Regions", palette = "Pastel1") +
+  #tm_shape(amaz) + tm_polygons(col="grey", border.col="white") +
   tm_shape(taller50) + tm_dots("black", size=.1) +
+  tm_shape(amazRegions) + tm_borders() +
   tm_layout(title = "trees > 50 m")
 #tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
 rm(taller50)
@@ -36,9 +44,10 @@ rm(taller50)
 
 
 taller60 = maximas[maximas$altura_cop > 60,]
-map60 = tm_shape(amaz) + 
-  tm_polygons(col="grey", border.col="white") +
+map60 = tm_shape(amazRegions) + tm_polygons(col = "label", title = "Regions", palette = "Pastel1") +
+  #tm_shape(amaz) + tm_polygons(col="grey", border.col="white") +
   tm_shape(taller60) + tm_dots("black", size=.1) +
+  tm_shape(amazRegions) + tm_borders() +
   tm_layout(title = "trees > 60 m")
 #tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
 rm(taller60)
@@ -48,9 +57,10 @@ rm(taller60)
 
 
 taller70 = maximas[maximas$altura_cop > 70,]
-map70 = tm_shape(amaz) + 
-  tm_polygons(col="grey", border.col="white") +
+map70 = tm_shape(amazRegions) + tm_polygons(col = "label", title = "Regions", palette = "Pastel1") +
+  #tm_shape(amaz) + tm_polygons(col="grey", border.col="white") +
   tm_shape(taller70) + tm_dots("black", size=.1) +
+  tm_shape(amazRegions) + tm_borders() +
   tm_layout(title = "trees > 70 m")
 #tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
 rm(taller70)
@@ -61,9 +71,10 @@ rm(taller70)
 
 taller80 = maximas[maximas$altura_cop > 80,]
 
-map80 = tm_shape(amaz) + 
-  tm_polygons(col="grey", border.col="white") +
+map80 = tm_shape(amazRegions) + tm_polygons(col = "label", title = "Regions", palette = "Pastel1") +
+  #tm_shape(amaz) + tm_polygons(col="grey", border.col="white") +
   tm_shape(taller80) + tm_dots("black", size=.1) +
+  tm_shape(amazRegions) + tm_borders() +
   tm_layout(title = "trees > 80 m")
 #tm_grid(labels.inside.frame = FALSE, projection = "+proj=longlat", col = 'gray')
 rm(taller80)
@@ -73,4 +84,4 @@ rm(taller80)
 
 
 panelHeightDist = tmap_arrange(map50, map60, map70, map80, ncol=2)
-tmap_save(panelHeightDist, "./plot/panelHeightDist.png", width = 25, height = 25, units = "cm")
+tmap_save(panelHeightDist, "./plot/panelHeightDistv15042020.png", width = 25, height = 25, units = "cm")

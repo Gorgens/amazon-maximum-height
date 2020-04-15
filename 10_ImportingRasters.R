@@ -1,5 +1,4 @@
 ## Open required packages
-require(ggplot2)
 require(raster)
 require(sf)
 require(rgdal)
@@ -7,10 +6,11 @@ require(tidyverse)
 require(tmap)
 require(gridExtra)
 require(factoextra) 
+require(maptools)
 
 ## Importing raster files ---------------------------
 amaz = shapefile('./data/amazbioma.shp')
-
+amaz = spTransform(amaz, CRS("+proj=longlat +datum=WGS84"))
 
 ## u-speed ---------------------------
 uspeed = abs(raster('./data/uspeed.tif'))
@@ -454,3 +454,4 @@ maximas@data = cbind(maximas@data, explanatoryVariables)                       #
 rm(explanatoryVariables)
 rm(layers)
 rm(elevation, uspeed, vspeed, clearDays, days20, lightning, month100, pannual, pdriest, pet, pseason, pwettest, tannual, tseason, tmax, clayContent, waterContent, fapar, fapar2, ref)
+gc()
