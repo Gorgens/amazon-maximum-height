@@ -1,19 +1,19 @@
-Layer,Related to,Unity,Source,Importance
-uspeed,storms probability - convective winds,m/s,ECM-RWF,5.56
-vspeed,storms probability - convective winds,m/s,ECM-RWF,3.58
-days20,storms probability - convective winds,days,CHIRPS ,5.49
-lightning,storms probability - convective winds,flashes rate,LIS TRMM,3.48
-elevation,distance to water - flooding zones - soil type,m,SRTM,11.23
-pet,energy balance - water balance,mm,TerraClimate,5.19
-fapar,radiation - vegetation health - anthropic regions - soil exposure,%,NOAA AVHRR ,6.30
-clearDays,radiation - temperature - evapotranspiration,days,MODIS ,14.74
-month100,precipitation,months,CHIRPS ,Removed by high correlation
-pannual,precipitation,mm,WorldClim ,8.94
-pdriest,precipitaiton intensity - precipitation distribution,mm,WorldClim ,Removed by high correlation
-pwettest,precipitaiton intensity - precipitation distribution,mm,WorldClim ,5.79
-pseason,precipitaiton intensity - precipitation distribution,mm,WorldClim ,6.86
-tannual,temperature,C,WorldClim ,0.29
-tseason,temperature distribution,C,WorldClim ,4.58
-tmax,storms probability - convective winds,C,WorldClim ,4.19
-clayContent,soil structure - physical properties -  water availability,%,OpenLandMap,13.77
-waterContent,soil structure - physical properties -  water availability,%,OpenLandMap,0.00
+Layer,Definition,Related to,Unity,Source,Importance
+clearDays,number of clear days per year,energy balance - water balance - radiation,days,MODIS ,14.7 
+clayContent,fraction of clay content,soil structure - physical properties -  water availability,%,OpenLandMap,13.8 
+topography,elevation above sea level,distance to water - flooding zones - soil,m,SRTM,11.2 
+pannual,average annual precipitation,precipitation - precipitation intensity - precipitation distribution,mm,WorldClim ,8.9 
+pseason,precipitation seasonality,precipitation - precipitation intensity - precipitation distribution,mm,WorldClim ,6.9 
+fapar,fraction of absorbed photosynthetically active radiation,radiation - vegetation health - anthropic regions - soil exposure,%,NOAA AVHRR ,6.3 
+pwettest,precipitation of the wettest month,precipitation - precipitation intensity - precipitation distribution,mm,WorldClim ,5.8 
+uspeed,zonal speed (W-E),storms - convective winds,m/s,ECM-RWF,5.6 
+days20,days with precipitasion higher then 20 mm,storms - convective winds,days,CHIRPS ,5.5 
+pet,potential evapotranspiration,energy balance - water balance - radiation - vegetation health - anthropic regions - soil exposure,mm,TerraClimate,5.2 
+tseason,temperature seasonality,temperature - temperature distribution,C,WorldClim ,4.6 
+tmax,maximum temperatura,storms - convective winds,C,WorldClim ,4.2 
+vspeed,meridional speed (N-S),storms - convective winds,m/s,ECM-RWF,3.6 
+lightning,lightining rate,storms - convective winds,flashes rate,LIS TRMM,3.5 
+tannual,daily average annual temperature,temperature - temperature distribution,C,WorldClim ,0.3 
+waterContent,fraction of water content,soil structure - physical properties -  water availability,%,OpenLandMap,0.0 
+month100,month with precipitation bellow 100 mm,precipitation - precipitation intensity - precipitation distribution,months,CHIRPS ,Removed by high correlation
+pdriest,precipitation  of the driest month,precipitation - precipitation intensity - precipitation distribution,mm,WorldClim ,Removed by high correlation
