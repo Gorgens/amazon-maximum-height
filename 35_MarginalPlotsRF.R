@@ -7,7 +7,7 @@ require(factoextra)
 require(randomForest)
 
 ## Random Forest
-#load("C:\\Users\\gorge\\Documents\\GIS DataBase\\amazon maximum height extras\\objects\\randomForestCor80.Rdata")
+load("..\\amazon maximum height extras\\randomForestCor80v14042020.Rdata")
 meanVariables = maximas@data %>% na.omit() %>% sapply(mean)
 
 faparPredict = data.frame(fapar = seq(min(na.omit(maximas@data$fapar)),
@@ -190,7 +190,7 @@ heightdays20 = predict(rf.heightAll, days20Predict)
 
 marginalDays20 = ggplot() + 
   geom_line(aes(days20Predict$days20, heightdays20), color='red') +
-  xlab('Days > 20 mm (days/yr)') + ylab('Height (m)') + ylim(50, 65) +
+  xlab('Days >20 mm (days/yr)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -380,7 +380,7 @@ heightpseason = predict(rf.heightAll, pseasonPredict)
 
 marginalPseason = ggplot() + 
   geom_line(aes(pseasonPredict$pseason, heightpseason), color='red') +
-  xlab('Precip. seasonality (mm)') + ylab('Height (m)') + ylim(50, 65) +
+  xlab('Precip. season. (mm)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -412,7 +412,7 @@ heightpwettest = predict(rf.heightAll, pwettestPredict)
 
 marginalPwettest = ggplot() + 
   geom_line(aes(pwettestPredict$pwettest, heightpwettest), color='red') +
-  xlab('Precip. wettest month (mm)') + ylab('Height (m)') + ylim(50, 65) +
+  xlab('Precip. wettest (mm)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -476,7 +476,7 @@ heighttseason = predict(rf.heightAll, tseasonPredict)
 
 marginalTseason = ggplot() + 
   geom_line(aes(tseasonPredict$tseason, heighttseason), color='red') +
-  xlab('Temp. seasonality (°C)') + ylab('Height (m)') + ylim(50, 65) +
+  xlab('Temp. season. (°C)') + ylab('Height (m)') + ylim(50, 65) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -580,7 +580,7 @@ marginalWaterContent = ggplot() +
 
 ## Gráfico com paineis sem letras -------------------------
 
-png('./plot/rfMarginalPlotsCor80v20042020.png', units = 'cm', width = 20, height = 30, res = 300)
+png('./plot/rfMarginalPlotsCor80v04052020.png', units = 'cm', width = 20, height = 30, res = 300)
 grid.arrange(marginalFapar, 
              marginalelevation, 
              marginalUspeed, 

@@ -7,7 +7,7 @@ require(factoextra)
 require(dismo)
 require(rJava)
 
-load('../amazon maximum height extras/maxentHeight70Cor80v20042020.Rdata')
+load('../amazon maximum height extras/maxentHeight70Cor80v14042020.Rdata')
 
 meanVariables = maximas@data %>% na.omit() %>% sapply(mean)
 
@@ -191,7 +191,7 @@ Probdays20 = predict(me.height70, days20Predict)
 
 marginalDays20 = ggplot() + 
   geom_line(aes(days20Predict$days20, Probdays20), color='red') +
-  xlab('Days > 20 mm (days/yr)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Days >20 mm (days/yr)') + ylab('Prob (m)') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -381,7 +381,7 @@ Probpseason = predict(me.height70, pseasonPredict)
 
 marginalPseason = ggplot() + 
   geom_line(aes(pseasonPredict$pseason, Probpseason), color='red') +
-  xlab('Precip. seasonality (mm)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Precip. season. (mm)') + ylab('Prob (m)') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -413,7 +413,7 @@ Probpwettest = predict(me.height70, pwettestPredict)
 
 marginalPwettest = ggplot() + 
   geom_line(aes(pwettestPredict$pwettest, Probpwettest), color='red') +
-  xlab('Precip. wettest month (mm)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Precip. wettest (mm)') + ylab('Prob (m)') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -477,7 +477,7 @@ Probtseason = predict(me.height70, tseasonPredict)
 
 marginalTseason = ggplot() + 
   geom_line(aes(tseasonPredict$tseason, Probtseason), color='red') +
-  xlab('Temp. seasonality (°C)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Temp. season. (°C)') + ylab('Prob (m)') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -581,7 +581,7 @@ marginalWaterContent = ggplot() +
 
 ## Gráfico com paineis sem letras -------------------------
 
-png('./plot/meMarginalPlotsCor80v20042020.png', units = 'cm', width = 20, height = 30, res = 300)
+png('./plot/meMarginalPlotsCor80v04052020.png', units = 'cm', width = 20, height = 30, res = 300)
 grid.arrange(marginalFapar, 
              marginalelevation, 
              marginalUspeed, 
