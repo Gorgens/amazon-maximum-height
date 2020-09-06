@@ -16,9 +16,9 @@ fold = dismo::kfold(ocorrenciaHeight70, k=5)                                    
 dadosTeste = ocorrenciaHeight70[fold == 1, ]                                     # hold out one fifth as test data
 dadosTreino = ocorrenciaHeight70[fold != 1, ]                                    # the other four fifths are training data
 
-me.height70 = dismo::maxent(layers2estimate, dadosTreino)                               # note we just using the training data
-# save(me.height70, 
-#     file = '../amazon maximum height extras/maxentHeight70Cor80v14042020.Rdata')
+me.height70 = dismo::maxent(layers2maxent, dadosTreino)                               # note we just using the training data
+save(me.height70,
+    file = '../amazon maximum height extras/maxentHeight70Cor80v06092020.Rdata')
 # load('../amazon maximum height extras/maxentHeight70Cor80v14042020.Rdata')
 
 var_contrib = function(m, df = TRUE, ...) {                                      # extract importance for each variable from maxent plot
@@ -32,8 +32,8 @@ var_contrib = function(m, df = TRUE, ...) {                                     
 
 var_contrib(me.height70)                                                         # obter valor de importância variaveis
 
-# png('./plot/meMarginalPlotsCor80v14042020.png', units = 'cm', width = 20, height = 30, res = 300)
-# response(me.height70)                                                            # marginal plots maxent
-# dev.off()
+png('./plot/meMarginalPlotsCor80v06092020.png', units = 'cm', width = 20, height = 30, res = 300)
+response(me.height70)                                                            # marginal plots maxent
+dev.off()
 
 rm(dadosTeste, dadosTreino, fold, ocorrenciaHeight70, maximas_70)

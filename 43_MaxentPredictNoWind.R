@@ -9,16 +9,19 @@ Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_241')
 source('10_ImportingRasters.R')
 print('1 of 4')
 
-load('../amazon maximum height extras/maxentHeight70Cor80v14042020.Rdata')
-probHeightMap70m = predict(me.height70, layers2estimate)   
+load('../amazon maximum height extras/maxentHeight70Cor80v06092020.Rdata')
+probHeightMap70m = predict(me.height70, layers2maxent)   
 print('2 of 4')
 
-# writeRaster(probHeightMap70m, 
-			# filename = '../amazon maximum height extras/meprobHeightMap70mCor80v15042020.tif')
+writeRaster(probHeightMap70m,
+  filename = '../amazon maximum height extras/meNoWindHeight70mCor80v06092020.tif')
 
 ## Criar mapa final -----------------
-amazRegions = shapefile('./data/amazRegions.shp',  encoding="UTF-8")
+amaz = shapefile('./data/amazbioma.shp')
+amaz = spTransform(amaz, CRS("+proj=longlat +datum=WGS84"))
+amazRegions = shapefile('./data/Morrones.shp',  encoding="UTF-8")
 crs(amazRegions) = crs(amaz)
+amazRegions = raster::intersect(amazRegions, amaz)
 
 maximas_70 = maximas[maximas$altura_cop>70,]
 print('3 of 4')
@@ -37,7 +40,7 @@ map = tm_shape(probHeightMap70m) + tm_raster(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1
           labels.inside.frame = FALSE,
           projection = "+proj=longlat")
 
-tmap_save(map, "./plot/meHeightRasterCor80v15042020.png", width = 25, height = 18, units = 'cm')
+tmap_save(map, "./plot/meNoWindHeight70mCor80v06092020.png", width = 25, height = 18, units = 'cm')
 
 rm(dadosTeste, dadosTreino, fold, ocorrenciaHeight70, maximas_70)
 print('4 of 4')
