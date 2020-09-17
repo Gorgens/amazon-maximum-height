@@ -584,21 +584,21 @@ marginalWaterContent = ggplot() +
 
 ## Gráfico com paineis sem letras -------------------------
 
-png('./plot/rfMarginalPlotsCor80v11092020.png', units = 'cm', width = 20, height = 30, res = 300)
+png('./plot/rfMarginalPlotsCor80v17092020.png', units = 'cm', width = 20, height = 30, res = 300)
 grid.arrange(marginalClearDays,
              marginalClayContent,
              marginalelevation,
              marginalPannual,
              marginalPseason,
+             marginalTseason,
+             marginalUspeed, 
+             marginalPet,
              marginalFapar, 
              marginalPwettest, 
-             marginalUspeed, 
-             marginalDays20,
-             marginalPet,
-             marginalTseason,
              marginalTmax,
              marginalVspeed,
              marginalLightning,
+             marginalDays20,
              marginalTannual,
              marginalWaterContent,
              ncol=4)

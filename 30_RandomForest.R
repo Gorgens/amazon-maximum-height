@@ -33,5 +33,6 @@ rf.heightAll = train(height ~ .,                                        # define
      
 rm(folds, group_fit_control, drivers)                                            # limpa da memória parâmetros para Random Forest
 print(rf.heightAll)
-varImp(rf.heightAll)    
+varImp(rf.heightAll)
+importance(rf.heightAll)
                                                 # apresenta importância das variáveis com base nos modelos Random Forest
