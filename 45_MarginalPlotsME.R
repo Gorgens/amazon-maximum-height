@@ -9,6 +9,7 @@ require(rJava)
 
 load('../amazon maximum height extras/maxentHeight70Cor80v14042020.Rdata')
 
+# source('./10_ImportingRasters.R')
 meanVariables = maximas@data %>% na.omit() %>% sapply(mean)
 
 faparPredict = data.frame(fapar = seq(min(na.omit(maximas@data$fapar)),
@@ -36,7 +37,7 @@ Probfapar = predict(me.height70, faparPredict)
 
 marginalFapar = ggplot() + 
   geom_line(aes(faparPredict$fapar, Probfapar), color='red') +
-  xlab('FAPAR (%)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('FAPAR (%)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -67,7 +68,7 @@ Probelevation = predict(me.height70, elevationPredict)
 
 marginalelevation = ggplot() + 
   geom_line(aes(elevationPredict$elevation, Probelevation), color='red') +
-  xlab('Elevation (m)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Elevation (m)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -98,7 +99,7 @@ Probuspeed = predict(me.height70, uspeedPredict)
 
 marginalUspeed = ggplot() + 
   geom_line(aes(uspeedPredict$uspeed, Probuspeed), color='red') +
-  xlab('u-Speed (m/s)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('u-Speed (m/s)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -129,7 +130,7 @@ Probvspeed = predict(me.height70, vspeedPredict)
 
 marginalVspeed = ggplot() + 
   geom_line(aes(vspeedPredict$vspeed, Probvspeed), color='red') +
-  xlab('v-Speed (m/s)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('v-Speed (m/s)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -160,7 +161,7 @@ ProbclearDays = predict(me.height70, clearDaysPredict)
 
 marginalClearDays = ggplot() + 
   geom_line(aes(clearDaysPredict$clearDays, ProbclearDays), color='red') +
-  xlab('Clear days (days/yr)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Clear days (days/yr)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -191,7 +192,7 @@ Probdays20 = predict(me.height70, days20Predict)
 
 marginalDays20 = ggplot() + 
   geom_line(aes(days20Predict$days20, Probdays20), color='red') +
-  xlab('Days >20 mm (days/yr)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Days >20 mm (days/yr)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -222,7 +223,7 @@ Problightning = predict(me.height70, lightningPredict)
 
 marginalLightning = ggplot() + 
   geom_line(aes(lightningPredict$lightning, Problightning), color='red') +
-  xlab('Rate of lightnings') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Rate of lightnings') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -253,7 +254,7 @@ marginalLightning = ggplot() +
 # 
 # marginalMonth100 = ggplot() + 
 #   geom_line(aes(month100Predict$month100, Probmonth100), color='red') +
-#   xlab('Month with precipitation greater than 100 mm (months/yr)') + ylab('Prob (m)') + ylim(0, 1) +
+#   xlab('Month with precipitation greater than 100 mm (months/yr)') + ylab('Probability') + ylim(0, 1) +
 #   theme_bw() + theme(panel.grid.major = element_blank(), 
 #                      panel.grid.minor = element_blank(),
 #                      panel.background = element_blank(), 
@@ -285,7 +286,7 @@ Probpannual = predict(me.height70, pannualPredict)
 
 marginalPannual = ggplot() + 
   geom_line(aes(pannualPredict$pannual, Probpannual), color='red') +
-  xlab('Annual precip. (mm)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Annual precip. (mm)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -317,7 +318,7 @@ marginalPannual = ggplot() +
 # 
 # marginalPdriest = ggplot() + 
 #   geom_line(aes(pdriestPredict$pdriest, Probpdriest), color='red') +
-#   xlab('Precipitation of the driest month (mm)') + ylab('Prob (m)') + ylim(0, 1) +
+#   xlab('Precipitation of the driest month (mm)') + ylab('Probability') + ylim(0, 1) +
 #   theme_bw() + theme(panel.grid.major = element_blank(), 
 #                      panel.grid.minor = element_blank(),
 #                      panel.background = element_blank(), 
@@ -349,7 +350,7 @@ Probpet = predict(me.height70, petPredict)
 
 marginalPet = ggplot() + 
   geom_line(aes(petPredict$pet, Probpet), color='red') +
-  xlab('Potential Evap. (mm)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Potential Evap. (mm)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -381,7 +382,7 @@ Probpseason = predict(me.height70, pseasonPredict)
 
 marginalPseason = ggplot() + 
   geom_line(aes(pseasonPredict$pseason, Probpseason), color='red') +
-  xlab('Precip. season. (mm)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Precip. season. (mm)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -413,7 +414,7 @@ Probpwettest = predict(me.height70, pwettestPredict)
 
 marginalPwettest = ggplot() + 
   geom_line(aes(pwettestPredict$pwettest, Probpwettest), color='red') +
-  xlab('Precip. wettest (mm)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Precip. wettest (mm)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -445,7 +446,7 @@ Probtannual = predict(me.height70, tannualPredict)
 
 marginalTannual = ggplot() + 
   geom_line(aes(tannualPredict$tannual, Probtannual), color='red') +
-  xlab('Annual temp. (°C)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Annual temp. (°C)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -477,7 +478,7 @@ Probtseason = predict(me.height70, tseasonPredict)
 
 marginalTseason = ggplot() + 
   geom_line(aes(tseasonPredict$tseason, Probtseason), color='red') +
-  xlab('Temp. season. (°C)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Temp. season. (°C)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -509,7 +510,7 @@ Probtmax = predict(me.height70, tmaxPredict)
 
 marginalTmax = ggplot() + 
   geom_line(aes(tmaxPredict$tmax, Probtmax), color='red') +
-  xlab('Maximum temp. (°C)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Maximum temp. (°C)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -541,7 +542,7 @@ ProbclayContent = predict(me.height70, clayContentPredict)
 
 marginalClayContent = ggplot() + 
   geom_line(aes(clayContentPredict$clayContent, ProbclayContent), color='red') +
-  xlab('Clay content (%)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Clay content (%)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -573,7 +574,7 @@ ProbwaterContent = predict(me.height70, waterContentPredict)
 
 marginalWaterContent = ggplot() + 
   geom_line(aes(waterContentPredict$waterContent, ProbwaterContent), color='red') +
-  xlab('Water content (%)') + ylab('Prob (m)') + ylim(0, 1) +
+  xlab('Water content (%)') + ylab('Probability') + ylim(0, 1) +
   theme_bw() + theme(panel.grid.major = element_blank(), 
                      panel.grid.minor = element_blank(),
                      panel.background = element_blank(), 
@@ -581,23 +582,23 @@ marginalWaterContent = ggplot() +
 
 ## Gráfico com paineis sem letras -------------------------
 
-png('./plot/meMarginalPlotsCor80v04052020.png', units = 'cm', width = 20, height = 30, res = 300)
-grid.arrange(marginalFapar, 
-             marginalelevation, 
-             marginalUspeed, 
-             marginalVspeed, 
-             marginalClearDays, 
-             marginalDays20,
-             marginalLightning,
+png('./plot/meMarginalPlotsCor80v11092020.png', units = 'cm', width = 20, height = 30, res = 300)
+grid.arrange(marginalUspeed,
+             marginalelevation,
              marginalPannual,
+             marginalWaterContent,
              marginalPet,
-             marginalPseason,
+             marginalLightning,
+             marginalClayContent,
+             marginalFapar, 
+             marginalPseason, 
+             marginalClearDays, 
              marginalPwettest,
+             marginalDays20,
              marginalTannual,
+             marginalVspeed, 
              marginalTseason,
              marginalTmax,
-             marginalClayContent,
-             marginalWaterContent,
              ncol=4)
 dev.off()
 

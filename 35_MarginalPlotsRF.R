@@ -5,9 +5,13 @@ require(grid)
 require(magrittr)
 require(factoextra) 
 require(randomForest)
+require(sf)
 
 ## Random Forest
 load("..\\amazon maximum height extras\\randomForestCor80v14042020.Rdata")
+
+## Cliping stack by maximum height location ---------------------------
+source('./10_ImportingRasters.R')
 meanVariables = maximas@data %>% na.omit() %>% sapply(mean)
 
 faparPredict = data.frame(fapar = seq(min(na.omit(maximas@data$fapar)),
@@ -580,22 +584,22 @@ marginalWaterContent = ggplot() +
 
 ## Gráfico com paineis sem letras -------------------------
 
-png('./plot/rfMarginalPlotsCor80v04052020.png', units = 'cm', width = 20, height = 30, res = 300)
-grid.arrange(marginalFapar, 
-             marginalelevation, 
-             marginalUspeed, 
-             marginalVspeed, 
-             marginalClearDays, 
-             marginalDays20,
-             marginalLightning,
+png('./plot/rfMarginalPlotsCor80v11092020.png', units = 'cm', width = 20, height = 30, res = 300)
+grid.arrange(marginalClearDays,
+             marginalClayContent,
+             marginalelevation,
              marginalPannual,
-             marginalPet,
              marginalPseason,
-             marginalPwettest,
-             marginalTannual,
+             marginalFapar, 
+             marginalPwettest, 
+             marginalUspeed, 
+             marginalDays20,
+             marginalPet,
              marginalTseason,
              marginalTmax,
-             marginalClayContent,
+             marginalVspeed,
+             marginalLightning,
+             marginalTannual,
              marginalWaterContent,
              ncol=4)
 dev.off()

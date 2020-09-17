@@ -25,6 +25,16 @@ amazRegions = raster::intersect(amazRegions, amaz)
 maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200321.gpkg', layer = 'pontos_wgs84'))
 maximas@data = maximas@data %>% select(3)
 
+png(filename = './gcb review/Figure 1 New.png', width = 13, height = 10, units = 'cm', res = 300)
+hist(maximas$altura_cop, breaks = 20, xlab = "Maximum Height (m)", ylab = 'Frequency', main ='')
+dev.off()
+
+# ggplot(data = maximas.df, aes(altura_cop)) + 
+#   geom_histogram(binwidth = 2.5) + 
+#   xlab('Maximum height (m)') + ylab('Frequency') +
+#   theme_bw()
+# ggsave('./gcb review/histogram_height.png', units = 'cm', width = 15, height = 7)
+
 mapAll = tm_shape(amaz) + tm_polygons() + 
   tm_shape(maximas) + tm_dots("altura_cop", size = 0.1, palette = "RdYlGn")
 

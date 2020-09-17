@@ -479,7 +479,8 @@ names(layers2maxent) = c(#"fapar",
 
 ## Cliping stack by maximum height location ---------------------------
 maximas = sf::as_Spatial(st_read(dsn = './data/maximum height 200321.gpkg', layer = 'pontos_wgs84'))
-maximas@data = maximas@data %>% select(3)
+# maximas@data = maximas@data %>% select(3)
+maximas@data = maximas@data['altura_cop']
 
 # tm_shape(amaz) + tm_polygons() + 
 #   tm_shape(maximas) + tm_dots("altura_cop", size = 0.2, palette = "RdYlGn")

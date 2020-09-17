@@ -4,7 +4,7 @@ require(rJava)
 require(jsonlite)
 Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_241')
 
-# source('10_ImportingRasters.R')
+source('10_ImportingRasters.R')
 
 ## Envelop by MaxEnt ------------------------
 maximas_70 = maximas[maximas$altura_cop>70,]                                     # filtra pontos com altura superior a 70 metros
@@ -17,9 +17,9 @@ dadosTeste = ocorrenciaHeight70[fold == 1, ]                                    
 dadosTreino = ocorrenciaHeight70[fold != 1, ]                                    # the other four fifths are training data
 
 me.height70 = dismo::maxent(layers2maxent, dadosTreino)                               # note we just using the training data
-save(me.height70,
-    file = '../amazon maximum height extras/maxentHeight70Cor80v06092020.Rdata')
-# load('../amazon maximum height extras/maxentHeight70Cor80v14042020.Rdata')
+# save(me.height70,
+    # file = '../amazon maximum height extras/maxentHeight70Cor80v06092020.Rdata')
+load('../amazon maximum height extras/maxentHeight70Cor80v14042020.Rdata')
 
 var_contrib = function(m, df = TRUE, ...) {                                      # extract importance for each variable from maxent plot
   stopifnot(inherits(m,  "MaxEnt"))
