@@ -2,7 +2,7 @@ library(randomForest)
 library(randomForestExplainer)
 
 load("C:\\Users\\gorge\\Documents\\GIS DataBase\\amazon maximum height extras\\randomForestCor80v14042020.Rdata")
-load("C:\\Users\\gorge\\Documents\\GIS DataBase\\amazon maximum height extras\\randomForestIntactForest.Rdata")
+# load("C:\\Users\\gorge\\Documents\\GIS DataBase\\amazon maximum height extras\\randomForestIntactForest.Rdata")
 
 importance(rf.heightAll$finalModel)
 

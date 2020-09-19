@@ -34,5 +34,19 @@ rf.heightAll = train(height ~ .,                                        # define
 rm(folds, group_fit_control, drivers)                                            # limpa da memória parâmetros para Random Forest
 print(rf.heightAll)
 varImp(rf.heightAll)
-importance(rf.heightAll)
-                                                # apresenta importância das variáveis com base nos modelos Random Forest
+importance(rf.heightAll) # apresenta importância das variáveis com base nos modelos Random Forest
+
+
+# Gráfico obs vs estimado Random Forest
+
+load('../amazon maximum height extras/randomForestCor80v14042020.Rdata')
+predictions = predict(rf.heightAll, input)
+
+png('./gcb review/SF3 ObservedPredicted.png', 
+    width = 10, height = 10, units = 'cm', res = 300)
+ggplot() + geom_point( aes(x = output$height, y = predictions)) + 
+  xlab('Observed height (m)') + ylab('Predicted height (m)') + 
+  xlim(25, 90) + ylim(25, 90) + theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+dev.off()
