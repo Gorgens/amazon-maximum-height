@@ -10,7 +10,7 @@ require(magrittr)
 require(factoextra) 
 require(randomForest)
 require(caret)
-
+library(randomForestExplainer)
 
 source('10_ImportingRasters.R')
 
@@ -31,26 +31,29 @@ rf.intactForest = train(height ~ .,
                         trControl = group_fit_control) # parâmetros para validação cruzada
 
 print(rf.intactForest)
-# save(rf.intactForest, 
-#      file = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/objects/randomForestIntactForest.Rdata')
+# save(rf.intactForest,
+#      file = '../amazon maximum height extras/randomForestIntactForestv24092020.Rdata')
 
 rm(folds, group_fit_control)
 
+# load('../amazon maximum height extras/randomForestIntactForest.Rdata')
+load('../amazon maximum height extras/randomForestIntactForestv24092020.Rdata')
+
 varImp(rf.intactForest)
+importance(rf.intactForest$finalModel)
 
+# Analisando a importância
+importance_rfAll = measure_importance(rf.intactForest$finalModel)
+png('../amazon maximum height/gcb review/SF Importance IntactForest.png', height = 7, 
+    width = 15, units = 'cm', res = 300)
+plot_multi_way_importance(importance_rfAll, 
+                          x_measure = "mse_increase", 
+                          y_measure = "node_purity_increase")
+dev.off()
 
-# #heightRaster = predict(scaledLayers, rf.intactForest)
-# heightIntactForestRaster = predict(layers2estimate, rf.intactForest)
-# heightIntactForestRaster = setMinMax(heightIntactForestRaster)
-# #writeRaster(heightIntactForestRaster, filename = 'C:/Users/gorge/Documents/GIS DataBase/amazon maximum height extras/rfHeightIntactForestRaster.tif')
-# 
-# 
-# map = tm_shape(heightIntactForestRaster) + 
-#   tm_raster(n = 15,
-#             palette = "Greens",
-#             legend.hist = TRUE,
-#             title = "Maximum height (m)") +
-#   tm_shape(amaz) + tm_borders() +
-#   tm_legend(outside = TRUE, hist.width = 2)
-# #print(map)
-# tmap_save(map, "./plot/heightRaster_RandomForest_InstactForest.png", width = 1920, height = 1080)
+# plot_min_depth_distribution(rf.intactForest$finalModel)
+
+heightIntactForestRaster = predict(layers2estimate, rf.intactForest)
+heightIntactForestRaster = setMinMax(heightIntactForestRaster)
+writeRaster(heightIntactForestRaster, 
+            filename = '../amazon maximum height extras/rfHeightIntactForestRasterv24092020.tif')
