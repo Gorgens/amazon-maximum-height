@@ -42,11 +42,12 @@ importance(rf.heightAll) # apresenta importância das variáveis com base nos mo
 load('../amazon maximum height extras/randomForestCor80v14042020.Rdata')
 predictions = predict(rf.heightAll, input)
 
-png('./gcb review/SF3 ObservedPredicted.png', 
+png('./gcb review/SF3 ObservedPredicted_v2.png', 
     width = 10, height = 10, units = 'cm', res = 300)
-ggplot() + geom_point( aes(x = output$height, y = predictions)) + 
+ggplot() + geom_point(aes(x = output$height, y = predictions)) + 
   xlab('Observed height (m)') + ylab('Predicted height (m)') + 
   xlim(25, 90) + ylim(25, 90) + theme_bw() + 
+  geom_abline(intercept = 0, slope = 1) +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 dev.off()
